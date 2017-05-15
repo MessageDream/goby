@@ -463,7 +463,7 @@ var PackageConfig struct {
 
 func loadPackageConfig() {
 	sec := Cfg.Section("package")
-	PackageConfig.EnableGoogleDiff = sec.Key("ENABLE_GOOLE_DIFF").MustBool(false)
+	PackageConfig.EnableGoogleDiff = sec.Key("ENABLE_GOOGLE_DIFF").MustBool(false)
 	PackageConfig.MAXDiffCount = sec.Key("MAX_DIFF_COUNT").MustInt(1)
 }
 

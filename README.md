@@ -4,12 +4,21 @@
 
 ## INSTALL FROM SOURCE CODE
 
+### Dependency [glide](https://github.com/Masterminds/glide)
+
 ```shell
 $ git clone https://github.com/MessageDream/goby.git
 $ cd goby
+$ glide install
 $ go build goby.go
-$ ./goby server #启动服务 浏览器中打开 http://127.0.0.1:3000
+$ ./goby server #open http://127.0.0.1:3000 in browser
 ```
 
+## DIFF UPDATE
+If you want to client just download the diff code， according to the following steps:
+
+* Edit `conf/app.ini` > `[package]` > `ENABLE_GOOGLE_DIFF = true`
+* Use [react-native-goby](https://github.com/MessageDream/react-native-goby)
+
 ## License
-MIT License [read](https://github.com/MessageDream/LICENSE)
+MIT License [read](https://github.com/MessageDream/goby/LICENSE)
