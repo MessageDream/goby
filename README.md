@@ -21,4 +21,4 @@ If you want to client just download the diff code， according to the following 
 * Use [react-native-goby](https://github.com/MessageDream/react-native-goby)
 
 ## License
-MIT License [read](https://github.com/MessageDream/goby/LICENSE)
+MIT License [read](https://github.com/MessageDream/goby/blob/master/LICENSE)
