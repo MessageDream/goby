@@ -1,0 +1,56 @@
+{{template "base/header" .}}
+<div class="user signup">
+	<div class="ui middle very relaxed page grid">
+		<div class="column">
+			<form class="ui form" action="{{.Link}}" method="post">
+				{{.CsrfTokenHtml}}
+				<h3 class="ui top attached header">
+				注册	
+				</h3>
+				<div class="ui attached segment">
+					{{template "base/alert" .}}
+					{{if .DisableRegistration}}
+						<p>对不起，注册功能已被关闭。请联系网站管理员。</p>
+					{{else}}
+						<div class="required inline field {{if .Err_UserName}}error{{end}}">
+							<label for="user_name">用户名</label>
+							<input id="user_name" name="user_name" value="{{.user_name}}" autofocus required>
+						</div>
+						<div class="required inline field {{if .Err_Email}}error{{end}}">
+							<label for="email">邮箱地址</label>
+							<input id="email" name="email" type="email" value="{{.email}}" required>
+						</div>
+						<div class="required inline field {{if .Err_Password}}error{{end}}">
+							<label for="password">密码</label>
+							<input id="password" name="password" type="password" value="{{.password}}" required>
+						</div>
+						<div class="required inline field {{if .Err_Password}}error{{end}}">
+							<label for="retype">确认密码</label>
+							<input id="retype" name="retype" type="password" value="{{.retype}}" required>
+						</div>
+						{{if .EnableCaptcha}}
+							<div class="inline field">
+								<label></label>
+								{{.Captcha.CreateHtml}}
+							</div>
+							<div class="required inline field {{if .Err_Captcha}}error{{end}}">
+								<label for="captcha">验证码</label>
+								<input id="captcha" name="captcha" value="{{.captcha}}" autocomplete="off">
+							</div>
+						{{end}}
+
+						<div class="inline field">
+							<label></label>
+							<button class="ui green button">创建帐户</button>
+						</div>
+						<div class="inline field">
+							<label></label>
+							<a href="{{AppSubURL}}/web/auth/login">已经注册？立即登录！</a>
+						</div>
+					{{end}}
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}

@@ -1,0 +1,264 @@
+ {{template "base/header" .}}
+<div class="install">
+    <div class="ui middle very relaxed page grid">
+        <div class="sixteen wide center aligned centered column">
+            <h3 class="ui top attached header">
+                首次运行安装程序
+            </h3>
+            <div class="ui attached segment">
+                {{template "base/alert" .}}
+
+                <form class="ui form" action="{{AppSubURL}}/install" method="post">
+
+                    <form class="form form-align panel-body" id="install-form" action="/install" method="post">
+                        {{.CsrfTokenHtml}}
+                        <h4 class="ui dividing header">goby 要求安装 MySQL、PostgreSQL、SQLite3 或 TiDB。</h4>
+                        <p>数据库设置</p>
+                        <div class="inline required field {{if .Err_DbType}}error{{end}}">
+                            <label>数据库类型</label>
+                            <div class="ui selection database type dropdown">
+                                <input type="hidden" id="db_type" name="db_type" value="{{.CurDbOption}}">
+                                <div class="text">{{.CurDbOption}}</div>
+                                <i class="dropdown icon"></i>
+                                <div class="menu">
+                                    {{range .DbOptions}}
+                                    <div class="item" data-value="{{.}}">{{.}}</div>
+                                    {{end}}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="sql_settings {{if eq .CurDbOption " SQLite3 "}}hide{{end}}">
+                            <div class="inline required field {{if .Err_DbHost}}error{{end}}">
+                                <label for="db_host">数据库主机</label>
+                                <input id="db_host" name="db_host" value="{{.db_host}}">
+                            </div>
+
+                            <div class="inline required field {{if .Err_DbUser}}error{{end}}">
+                                <label for="db_user">数据库用户</label>
+                                <input id="db_user" name="db_user" value="{{.db_user}}">
+                            </div>
+                            <div class="inline required field {{if .Err_DbPasswd}}error{{end}}">
+                                <label for="db_passwd">数据库用户密码</label>
+                                <input id="db_passwd" name="db_passwd" value="{{.db_passwd}}">
+                            </div>
+                            <div class="inline required field {{if .Err_DatabaseName}}error{{end}}">
+                                <label for="db_name">数据库名称</label>
+                                <input id="db_name" name="db_name" value="{{.db_name}}">
+                                <span class="help">如果您使用 MySQL，请使用 INNODB 引擎以及 utf8_general_ci 字符集。</span>
+                            </div>
+                        </div>
+
+                        <div id="pgsql_settings" class="{{if not (eq .CurDbOption " PostgreSQL ")}}hide{{end}}">
+                            <div class="inline required field">
+                                <label>SSL 模式</label>
+                                <div class="ui selection database type dropdown">
+                                    <input type="hidden" name="ssl_mode" value="{{if .ssl_mode}}{{.ssl_mode}}{{else}}disable{{end}}">
+                                    <div class="default text">disable</div>
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        <div class="item" data-value="disable">Disable</div>
+                                        <div class="item" data-value="require">Require</div>
+                                        <div class="item" data-value="verify-full">Verify Full</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div id="sqlite_settings" class="{{if not (or (eq .CurDbOption " SQLite3 ") (eq .CurDbOption "TiDB "))}}hide{{end}}">
+                            <div class="inline required field {{if .Err_DatabasePath}}error{{end}}">
+                                <label for="db_path">数据库文件路径</label>
+                                <input id="db_path" name="db_path" value="{{.db_path}}">
+                                <span class="help">SQLite3 数据库文件路径。<br>作为服务启动时，请使用绝对路径。</span>
+                            </div>
+                        </div>
+
+                        <h4 class="ui dividing header">goby 要求使用本地、七牛 或 阿里云OSS 作为包存储服务</h4>
+                        <p>存储服务设置</p>
+                        <div class="inline required field {{if .Err_StorageType}}error{{end}}">
+                            <label>存储服务类型</label>
+                            <div class="ui selection database type dropdown">
+                                <input type="hidden" id="storage_type" name="storage_type" value="{{.storage_type}}">
+                                <div class="text">{{.CurStorageOption}}</div>
+                                <i class="dropdown icon"></i>
+                                <div class="menu">
+                                    {{range .StorageOptions}}
+                                    <div class="item" data-value="{{.}}">{{.}}</div>
+                                    {{end}}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div id="st-remote" class="{{if eq .CurStorageOption "本地"}}hide{{end}}">
+                            <div class="inline required field {{if .Err_StorageAccessKey}}error{{end}}">
+                                <label for="storage_access_key">AccessKey</label>
+                                <input id="storage_access_key" name="storage_access_key" value="{{.storage_access_key}}">
+                            </div>
+
+                            <div class="inline required field {{if .Err_StorageSecretKey}}error{{end}}">
+                                <label for="storage_secret_key">SecretKey</label>
+                                <input id="storage_secret_key" name="storage_secret_key" value="{{.storage_secret_key}}">
+                            </div>
+
+                            <div class="inline required field {{if .Err_StorageBucketName}}error{{end}}">
+                                <label for="storage_bucket_name">Bucket</label>
+                                <input id="storage_bucket_name" name="storage_bucket_name" value="{{.storage_bucket_name}}">
+                            </div>
+
+                             <div class="inline required field {{if .Err_StoragePrefix}}error{{end}}">
+                                <label for="storage_prefix">FilePrefix</label>
+                                <input id="storage_prefix" name="storage_prefix" value="{{.storage_prefix}}">
+                            </div>
+                        </div>
+
+                        <div id="st-oss-setting" class="{{if not (eq .CurStorageOption "阿里云OSS")}}hide{{end}}">
+
+                            <div class="inline required field {{if .Err_StorageEndpoint}}error{{end}}">
+                                <label for="storage_endpoint">OSS-Endpoint</label>
+                                <input id="storage_endpoint" name="storage_endpoint" value="{{.storage_endpoint}}">
+                            </div>
+                        </div>
+
+                        <div id="st-qn-setting" class="{{if not (eq .CurStorageOption "七牛")}}hide{{end}}">
+
+                            <div class="inline required field {{if .Err_StorageZone}}error{{end}}">
+                                <label for="storage_zone">QN-Zone</label>
+                                <input id="storage_zone" name="storage_zone" value="{{.storage_zone}}">
+                            </div>
+                        </div>
+
+                        <div id="st-local-setting" class="{{if not (eq .CurStorageOption "本地")}}hide{{end}}">
+                            <div class="inline required field {{if .Err_StoragePath}}error{{end}}">
+                                <label for="storage_path">包存储路径</label>
+                                <input id="storage_path" name="storage_path" value="{{.storage_path}}">
+                                <span class="help">请使用绝对路径。</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="inline required field {{if .Err_StorageDownloadURL}}error{{end}}">
+                                <label for="storage_download_url">下载连接</label>
+                                <input id="storage_download_url" name="storage_download_url" value="{{.storage_download_url}}">
+                                <span class="help">http://localhost:3000/download</span>
+                            </div>
+                        </div>
+
+                        <h4 class="ui dividing header">应用基本设置</h4>
+                        <div class="inline required field {{if .Err_RunUser}}error{{end}}">
+                            <label for="run_user">运行系统用户</label>
+                            <input id="run_user" name="run_user" value="{{.run_user}}">
+                            <span class="help">该用户必须具有对仓库根目录和运行 goby 的操作权限。</span>
+                        </div>
+
+                        <div class="inline required field {{if .Err_Domain}}error{{end}}">
+                            <label for="domain">域名</label>
+                            <input id="domain" name="domain" value="{{.domain}}">
+                            <span class="help">该设置影响 本地存储的包地址。</span>
+                        </div>
+
+                        <div class="inline required field {{if .Err_AppURL}}error{{end}}">
+                            <label for="app_url">应用 URL</label>
+                            <input id="app_url" name="app_url" value="{{.app_url}}">
+                            <span class="help">该设置影响一些邮箱中的链接。</span>
+                        </div>
+
+
+                        <div class="ui accordion optional field">
+                            <div class="title {{if .Err_SMTP}}text red{{end}}">
+                                <i class="icon dropdown"></i> 邮件服务设置
+                            </div>
+                            <div class="content">
+                                <div class="inline field {{if .Err_SMTPHost}}error{{end}}">
+                                    <label for="smtp_host">SMTP 主机</label>
+                                    <input id="smtp_host" name="smtp_host" value="{{.smtp_host}}">
+                                </div>
+                                <div class="inline  field {{if .Err_SMTPUser}}error{{end}}">
+                                    <label for="mailer_user">邮箱用户名</label>
+                                    <input id="mailer_user" name="mailer_user" value="{{.mailer_user}}">
+                                </div>
+                                <div class="inline  field {{if .Err_SMTPFrom}}error{{end}}">
+                                    <label for="mailer_from">发送邮箱</label>
+                                    <input id="mailer_from" name="mailer_from" value="{{.mailer_from}}">
+                                </div>
+                                <div class="inline  field {{if .Err_SMTPPasswd}}error{{end}}">
+                                    <label for="mailer_pwd">发送邮箱密码</label>
+                                    <input id="mailer_pwd" name="mailer_pwd" type="password" value="{{.mailer_pwd}}">
+                                </div>
+
+                                <div class="inline field">
+                                    <div class="ui checkbox">
+                                        <label><strong>启用注册邮箱确认</strong></label>
+                                        <input name="register_confirm" type="checkbox" {{if .register_confirm}}checked{{end}}>
+                                    </div>
+                                </div>
+                                <div class="inline field">
+                                    <div class="ui checkbox">
+                                        <label><strong>启用邮件通知提醒</strong></label>
+                                        <input name="mail_notify" type="checkbox" {{if .mail_notify}}checked{{end}}>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Server and other services -->
+					<div class="ui accordion optional field">
+						<div class="title {{if .Err_Services}}text red{{end}}">
+							<i class="icon dropdown"></i>
+							服务器和其它服务设置
+						</div>
+						<div class="content">
+							<div class="inline field">
+								<div class="ui checkbox" id="disable-registration">
+									<label class="poping up" data-content="禁止用户自行注册功能，只有管理员可以添加帐号。"><strong>禁止用户自主注册</strong></label>
+									<input name="disable_registration" type="checkbox" {{if .disable_registration}}checked{{end}}>
+								</div>
+							</div>
+							<div class="inline field">
+								<div class="ui checkbox" id="enable-captcha">
+									<label class="poping up" data-content="要求在用户注册时输入预验证码"><strong>启用验证码服务</strong></label>
+									<input name="enable_captcha" type="checkbox" {{if .enable_captcha}}checked{{end}}>
+								</div>
+							</div>
+							<div class="inline field">
+								<div class="ui checkbox">
+									<label class="poping up" data-content="只有已登录的用户才能够访问页面，否则将只能看到登录或注册页面。"><strong>启用登录访问限制</strong></label>
+									<input name="require_sign_in_view" type="checkbox" {{if .require_sign_in_view}}checked{{end}}>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+                        <h4 class="ui dividing header">管理员帐号设置</h4>
+                        <div class="inline required field {{if .Err_AdminName}}error{{end}}">
+                            <label for="admin_name">管理员用户名</label>
+                            <input id="admin_name" name="admin_name" value="{{.admin_name}}">
+                        </div>
+                         <div class="inline required field {{if .Err_AdminEmail}}error{{end}}">
+                            <label for="admin_email">管理员邮箱</label>
+                            <input id="admin_email" name="admin_email" value="{{.admin_email}}">
+                        </div>
+                        <div class="inline required field {{if .Err_AdminPasswd}}error{{end}}">
+                            <label for="admin_pwd">管理员密码</label>
+                            <input id="admin_pwd" name="admin_pwd" type="password" value="{{.admin_pwd}}">
+                        </div>
+                        <div class="inline required field {{if .Err_AdminPasswd}}error{{end}}">
+                            <label for="confirm_passwd">确认密码</label>
+                            <input id="confirm_passwd" name="confirm_passwd" type="password" value="{{.confirm_passwd}}">
+                        </div>
+
+                        <div class="ui divider"></div>
+                        <div class="inline field">
+                            <label></label>
+                            <button class="ui primary button">立即安装</button>
+                        </div>
+
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{{template "base/footer" .}}

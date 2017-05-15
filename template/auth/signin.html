@@ -1,0 +1,44 @@
+{{template "base/header" .}}
+<div class="user signin">
+	<div class="ui middle very relaxed page grid">
+		<div class="column">
+			<form class="ui form" action="{{.Link}}" method="post">
+				{{.CsrfTokenHtml}}
+				<h3 class="ui top attached header">
+					登陆
+				</h3>
+				<div class="ui attached segment">
+					{{template "base/alert" .}}
+					<div class="required inline field {{if .Err_UserName}}error{{end}}">
+						<label for="user_name">用户名或邮箱</label>
+						<input id="user_name" name="user_name" value="{{.user_name}}" autofocus required>
+					</div>
+					<div class="required inline field {{if .Err_Password}}error{{end}}">
+						<label for="password">密码</label>
+						<input id="password" name="password" type="password" value="{{.password}}" required>
+					</div>
+					<div class="inline field">
+						<label></label>
+						<div class="ui checkbox">
+							<label>记住登录</label>
+							<input name="remember" type="checkbox">
+						</div>
+					</div>
+
+					<div class="inline field">
+						<label></label>
+						<button class="ui green button">登陆</button>
+						<a href="{{AppSubURL}}/web/auth/forget_password">忘记密码？</a>
+					</div>
+					{{if .ShowRegistrationButton}}
+						<div class="inline field">
+							<label></label>
+							<a href="{{AppSubURL}}/web/auth/signup">还没帐户？马上注册。</a>
+						</div>
+					{{end}}
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}

@@ -1,0 +1,31 @@
+{{template "base/header" .}}
+<div class="user reset password">
+	<div class="ui middle very relaxed page grid">
+		<div class="column">
+			<form class="ui form" action="{{.Link}}" method="post">
+				{{.CsrfTokenHtml}}
+				<input name="code" type="hidden" value="{{.Code}}">
+				<h2 class="ui top attached header">
+					重置密码
+				</h2>
+				<div class="ui attached segment">
+					{{template "base/alert" .}}
+					{{if .IsResetForm}}
+						<div class="required inline field {{if .Err_Password}}error{{end}}">
+							<label for="password">密码</label>
+							<input id="password" name="password" type="password"  value="{{.password}}" autofocus required>
+						</div>
+						<div class="ui divider"></div>
+						<div class="inline field">
+							<label></label>
+							<button class="ui blue button">单击此处重置密码</button>
+						</div>
+					{{else}}
+						<p class="center">=对不起，您的确认代码已过期或已失效</p>
+					{{end}}
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}

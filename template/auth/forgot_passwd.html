@@ -1,0 +1,34 @@
+{{template "base/header" .}}
+<div class="user forgot password">
+	<div class="ui middle very relaxed page grid">
+		<div class="column">
+			<form class="ui form" action="{{.Link}}" method="post">
+				{{.CsrfTokenHtml}}
+				<h2 class="ui top attached header">
+				忘记密码	
+				</h2>
+				<div class="ui attached segment">
+					{{template "base/alert" .}}
+					{{if .IsResetSent}}
+						<p>一封新的确认邮件已经被发送至 <b>{{.SignedUser.Email}}</b>，请检查您的收件箱并在 {{.Hours | Str2html}} 小时内完成确认注册操作</p>
+					{{else if .IsResetRequest}}
+						<div class="required inline field {{if .Err_Email}}error{{end}}">
+							<label for="email">邮箱</label>
+							<input id="email" name="email" type="email"  value="{{.Email}}" autofocus required>
+						</div>
+						<div class="ui divider"></div>
+						<div class="inline field">
+							<label></label>
+							<button class="ui blue button">单击此处（重新）发送您的密码重置邮件</button>
+						</div>
+					{{else if .IsResetDisable}}
+						<p class="center">对不起，注册邮箱确认功能已被关闭</p>
+					{{else if .ResendLimited}}
+						<p class="center">对不起，您请求发送激活邮件过于频繁，请等待 3 分钟后再试</p>
+					{{end}}
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}

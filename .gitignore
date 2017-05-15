@@ -1,0 +1,8 @@
+.DS_Store
+goby
+data
+custom
+log
+vendor
+debug
+npm-debug.log

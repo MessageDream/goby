@@ -1,0 +1,50 @@
+package: github.com/MessageDream/goby
+import:
+- package: github.com/Unknwon/com
+- package: github.com/go-macaron/binding
+- package: github.com/go-macaron/cache
+  subpackages:
+  - memcache
+  - redis
+- package: github.com/go-macaron/csrf
+- package: github.com/go-macaron/session
+  subpackages:
+  - redis
+- package: github.com/go-macaron/toolbox
+- package: github.com/go-sql-driver/mysql
+  version: v1.3
+- package: github.com/go-xorm/core
+  version: v0.5.6
+- package: github.com/go-xorm/xorm
+  version: v0.5.8
+- package: github.com/jaytaylor/html2text
+- package: github.com/lib/pq
+- package: golang.org/x/crypto
+  subpackages:
+  - pbkdf2
+- package: gopkg.in/ahmetb/go-linq.v3
+  version: v3.0.0
+- package: gopkg.in/clog.v1
+  version: v1.0.2
+- package: gopkg.in/gomail.v2
+  version: 2.0.0
+- package: gopkg.in/ini.v1
+  version: v1.26.0
+- package: gopkg.in/macaron.v1
+  version: v1.2.1
+- package: github.com/go-macaron/captcha
+- package: github.com/go-macaron/gzip
+- package: github.com/klauspost/compress
+  version: v1.2.1
+  subpackages:
+  - gzip
+- package: qiniupkg.com/api.v7
+  version: ~7.0.5
+- package: github.com/sergi/go-diff
+  subpackages:
+  - diffmatchpatch
+- package: github.com/denverdino/aliyungo
+  subpackages:
+  - oss
+- package: gopkg.in/urfave/cli.v1
+  version: ~1.19.1

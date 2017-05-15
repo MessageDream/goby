@@ -1,0 +1,38 @@
+{{template "base/header" .}}
+<div class="user activate">
+	<div class="ui middle very relaxed page grid">
+		<div class="column">
+			<form class="ui form" action="{{AppSubURL}}/auth/activate" method="post">
+				{{.CsrfTokenHtml}}
+				<h2 class="ui top attached header">
+					激活您的帐户
+				</h2>
+				<div class="ui attached segment">
+					{{template "base/alert" .}}
+					{{if .IsActivatePage}}
+						{{if .ServiceNotEnabled}}
+							<p class="center">对不起，注册邮箱确认功能已被关闭}</p>
+						{{else if .ResendLimited}}
+							<p class="center">对不起，您请求发送激活邮件过于频繁，请等待 3 分钟后再试</p>
+						{{else}}
+							<p>一封新的确认邮件已经被发送至 <b>{{.Email}}</b>，请检查您的收件箱并在 {{.Hours}} 小时内完成确认注册操作。 </p>
+						{{end}}
+					{{else}}
+						{{if .IsSendRegisterMail}}
+							<p>一封确认邮件已经被发送至 <b>{{.Email}}</b>，请检查您的收件箱并在 {{.Hours}} 小时内完成确认注册操作。</p>
+						{{else if .IsActivateFailed}}
+							<p>对不起，您的确认代码已过期或已失效。</p>
+						{{else}}
+							<p>{{.SignedUser.UserName}} 您好，系统检测到您有一封发送至 <b>{{.SignedUser.Email}}</b> 但未被确认的邮件。如果您未收到激活邮件，或需要重新发送，请单击下方的按钮。</p>
+							<div class="ui divider"></div>
+							<div class="text right">
+								<button class="ui blue button">单击此处重新发送确认邮件</button>
+							</div>
+						{{end}}
+					{{end}}
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}

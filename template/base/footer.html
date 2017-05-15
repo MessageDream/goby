@@ -1,0 +1,22 @@
+{{/*
+<html>
+<body>
+	<div>
+*/}}
+	</div>
+	<footer>
+		<div class="ui container">
+			<div class="ui left">
+				© 2017 Goby version: {{AppVer}} {{if ShowFooterTemplateLoadTime}}页面: <strong>{{LoadTimes .PageStartTime}}</strong> 模板: <strong>{{call .TmplLoadTimes}}</strong>{{end}}
+			</div>
+			<div class="ui right links">
+				{{if .ShowFooterBranding}}
+					<a target="_blank" href="https://github.com/MessageDream/goby"><i class="fa fa-github-square"></i><span class="sr-only">GitHub</span></a>
+				{{end}}
+				<a target="_blank" href="https://github.com/MessageDream/goby">网址</a>
+				<span class="version">{{GoVer}}</span>
+			</div>
+		</div>
+	</footer>
+</body>
+</html>

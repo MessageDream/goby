@@ -1,0 +1,127 @@
+hash: b27ba6c35f7590aae027d0e3b7a2f7e1f59dcc5e546aef7d338d4070ee947397
+updated: 2017-04-21T09:49:02.750089235+08:00
+imports:
+- name: github.com/bradfitz/gomemcache
+  version: 1952afaa557dc08e8e0d89eafab110fb501c1a2b
+  subpackages:
+  - memcache
+- name: github.com/codegangsta/cli
+  version: 0bdeddeeb0f650497d603c4ad7b20cfe685682f6
+- name: github.com/denverdino/aliyungo
+  version: afcc6903e3f10217da17e315558b3f829718ee04
+  subpackages:
+  - common
+  - oss
+  - util
+- name: github.com/fatih/color
+  version: 9131ab34cf20d2f6d83fdc67168a5430d1c7dc23
+- name: github.com/go-macaron/binding
+  version: 48920167fa152d02f228cfbece7e0f1e452d200a
+- name: github.com/go-macaron/cache
+  version: 56173531277692bc2925924d51fda1cd0a6b8178
+  subpackages:
+  - memcache
+  - redis
+- name: github.com/go-macaron/captcha
+  version: 8aa5919789ab301e865595eb4b1114d6b9847deb
+- name: github.com/go-macaron/csrf
+  version: 428b7c62d7d0034b048b1cd43ba60d87857f5253
+- name: github.com/go-macaron/gzip
+  version: cad1c6580a07c56f5f6bc52d66002a05985c5854
+- name: github.com/go-macaron/inject
+  version: d8a0b8677191f4380287cfebd08e462217bac7ad
+- name: github.com/go-macaron/session
+  version: b8a2b5ef7fb4c91c1c8ca23e2a52e29a4bcbb22f
+  subpackages:
+  - redis
+- name: github.com/go-macaron/toolbox
+  version: 6766b8f16d1b135b250f09ba4dc4e24ab65b1107
+- name: github.com/go-sql-driver/mysql
+  version: a0583e0143b1624142adab07e0e97fe106d99561
+- name: github.com/go-xorm/builder
+  version: c6e604e9c7b7461715091e14ad0c242ec44c26e4
+- name: github.com/go-xorm/core
+  version: 5bf745d7d163f4380e6c2bba8c4afa60534dd087
+- name: github.com/go-xorm/xorm
+  version: d75356fc733fce7683c6d961fc2aeb16ededc8ef
+- name: github.com/jaytaylor/html2text
+  version: f3b8a7ca0a23f0a806b2e1ad1247de39ecde54bf
+- name: github.com/klauspost/compress
+  version: 6c8db69c4b49dd4df1fff66996cf556176d0b9bf
+  subpackages:
+  - flate
+  - gzip
+- name: github.com/klauspost/cpuid
+  version: 09cded8978dc9e80714c4d85b0322337b0a1e5e0
+- name: github.com/klauspost/crc32
+  version: 1bab8b35b6bb565f92cbc97939610af9369f942a
+- name: github.com/lib/pq
+  version: 472a0745531a17dbac346e828b4c60e73ddff30c
+  subpackages:
+  - oid
+- name: github.com/mattn/go-colorable
+  version: 5411d3eea5978e6cdc258b30de592b60df6aba96
+  repo: https://github.com/mattn/go-colorable
+- name: github.com/mattn/go-isatty
+  version: 57fdcb988a5c543893cc61bce354a6e24ab70022
+  repo: https://github.com/mattn/go-isatty
+- name: github.com/sergi/go-diff
+  version: feef008d51ad2b3778f85d387ccf91735543008d
+  subpackages:
+  - diffmatchpatch
+- name: github.com/ssor/bom
+  version: 6ed919a936d5ab554e4b40bc51f7c522488122c6
+- name: github.com/Unknwon/com
+  version: 0db4a625e949e956314d7d1adea9bf82384cc10c
+- name: golang.org/x/crypto
+  version: 459e26527287adbc2adcc5d0d49abff9a5f315a7
+  subpackages:
+  - pbkdf2
+- name: golang.org/x/net
+  version: a6577fac2d73be281a500b310739095313165611
+  subpackages:
+  - context
+  - html
+  - html/atom
+- name: golang.org/x/sys
+  version: e24f485414aeafb646f6fca458b0bf869c0880a1
+  repo: https://go.googlesource.com/sys
+  subpackages:
+  - unix
+- name: gopkg.in/ahmetb/go-linq.v3
+  version: 7e71c124c1f903df09ca08678f145f68b45d125e
+- name: gopkg.in/alexcesaro/quotedprintable.v3
+  version: 2caba252f4dc53eaf6b553000885530023f54623
+- name: gopkg.in/bufio.v1
+  version: 567b2bfa514e796916c4747494d6ff5132a1dfce
+- name: gopkg.in/clog.v1
+  version: bf4bf4a49c663cd0963f8775a4b60d30a75098d1
+- name: gopkg.in/gomail.v2
+  version: 41f3572897373c5538c50a2402db15db079fa4fd
+- name: gopkg.in/ini.v1
+  version: 1730955e3146956d6a087861380f9b4667ed5071
+- name: gopkg.in/macaron.v1
+  version: a325110f8b392bce3e5cdeb8c44bf98078ada3be
+- name: gopkg.in/redis.v2
+  version: e6179049628164864e6e84e973cfb56335748dea
+- name: gopkg.in/urfave/cli.v1
+  version: 0bdeddeeb0f650497d603c4ad7b20cfe685682f6
+- name: qiniupkg.com/api.v7
+  version: e4122ada30952518d4745bb9f8dd87bef65a498f
+  subpackages:
+  - auth/qbox
+  - conf
+  - kodo
+  - kodocli
+- name: qiniupkg.com/x
+  version: f512abcf45ab4e2ba0fd4784c57b53d495997d66
+  subpackages:
+  - bytes.v7
+  - bytes.v7/seekable
+  - ctype.v7
+  - log.v7
+  - reqid.v7
+  - rpc.v7
+  - url.v7
+  - xlog.v7
+testImports: []

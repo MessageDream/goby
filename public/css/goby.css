@@ -1,0 +1,541 @@
+body {
+  font-family: "Helvetica Neue", "Microsoft YaHei", Arial, Helvetica, sans-serif !important;
+  background-color: #fff;
+  overflow-y: scroll;
+}
+img {
+  border-radius: 3px;
+}
+pre,
+pre.raw,
+pre.wrap,
+.dont-break-out {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+.full.height {
+  padding: 0;
+  margin: 0 0 -80px 0;
+  min-height: 100%;
+}
+.ui.left {
+  float: left;
+}
+.ui.right {
+  float: right;
+}
+.ui.container.fluid.padded {
+  padding: 0 10px 0 10px;
+}
+.ui.form .ui.button {
+  font-weight: normal;
+}
+.ui .text.red {
+  color: #d95c5c !important;
+}
+.ui .text.red a {
+  color: #d95c5c !important;
+}
+.ui .text.red a:hover {
+  color: #E67777 !important;
+}
+.ui .text.blue {
+  color: #428bca !important;
+}
+.ui .text.blue a {
+  color: #15c !important;
+}
+.ui .text.blue a:hover {
+  color: #428bca !important;
+}
+.ui .text.black {
+  color: #444;
+}
+.ui .text.black:hover {
+  color: #000;
+}
+.ui .text.grey {
+  color: #767676 !important;
+}
+.ui .text.grey a {
+  color: #444 !important;
+}
+.ui .text.grey a:hover {
+  color: #000 !important;
+}
+.ui .text.light.grey {
+  color: #888 !important;
+}
+.ui .text.green {
+  color: #6cc644 !important;
+}
+.ui .text.purple {
+  color: #6e5494 !important;
+}
+.ui .text.yellow {
+  color: #FBBD08 !important;
+}
+.ui .text.gold {
+  color: #a1882b !important;
+}
+.ui .text.left {
+  text-align: left !important;
+}
+.ui .text.right {
+  text-align: right !important;
+}
+.ui .text.small {
+  font-size: 0.75em;
+}
+.ui .text.normal {
+  font-weight: normal;
+}
+.ui .text.bold {
+  font-weight: bold;
+}
+.ui .text.italic {
+  font-style: italic;
+}
+.ui .text.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+.ui .text.thin {
+  font-weight: normal;
+}
+.ui .text.middle {
+  vertical-align: middle;
+}
+.ui .message {
+  text-align: center;
+}
+.ui .header > i + .content {
+  padding-left: 0.75rem;
+  vertical-align: middle;
+}
+.ui .warning.header {
+  background-color: #F9EDBE !important;
+  border-color: #F0C36D;
+}
+.ui .warning.segment {
+  border-color: #F0C36D;
+}
+.ui .info.segment {
+  border: 1px solid #c5d5dd;
+}
+.ui .info.segment.top {
+  background-color: #e6f1f6 !important;
+}
+.ui .info.segment.top h3,
+.ui .info.segment.top h4 {
+  margin-top: 0;
+}
+.ui .info.segment.top h3:last-child {
+  margin-top: 4px;
+}
+.ui .info.segment.top > :last-child {
+  margin-bottom: 0;
+}
+.ui .normal.header {
+  font-weight: normal;
+}
+.ui .avatar.image {
+  border-radius: 3px;
+}
+.ui .form .fake {
+  display: none !important;
+}
+.ui .form .sub.field {
+  margin-left: 25px;
+}
+.ui .sha.label {
+  font-family: Consolas, Menlo, Monaco, "Lucida Console", monospace;
+  font-size: 13px;
+  padding: 6px 10px 4px 10px;
+  font-weight: normal;
+  margin: 0 6px;
+}
+.ui.status.buttons .octicon {
+  margin-right: 4px;
+}
+.ui.inline.delete-button {
+  padding: 8px 15px;
+  font-weight: normal;
+}
+.overflow.menu .items {
+  max-height: 300px;
+  overflow-y: auto;
+}
+.overflow.menu .items .item {
+  position: relative;
+  cursor: pointer;
+  display: block;
+  border: none;
+  height: auto;
+  border-top: none;
+  line-height: 1em;
+  color: rgba(0, 0, 0, 0.8);
+  padding: .71428571em 1.14285714em !important;
+  font-size: 1rem;
+  text-transform: none;
+  font-weight: 400;
+  box-shadow: none;
+  -webkit-touch-callout: none;
+}
+.overflow.menu .items .item.active {
+  font-weight: 700;
+}
+.overflow.menu .items .item:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.8);
+  z-index: 13;
+}
+.scrolling.menu .item.selected {
+  font-weight: 700 !important;
+}
+footer {
+  margin-top: 54px !important;
+  height: 40px;
+  background-color: white;
+  border-top: 1px solid #d6d6d6;
+  clear: both;
+  width: 100%;
+  color: #888888;
+}
+footer .container {
+  padding-top: 10px;
+}
+footer .container .fa {
+  width: 16px;
+  text-align: center;
+  color: #428bca;
+}
+footer .container .links > * {
+  border-left: 1px solid #d6d6d6;
+  padding-left: 8px;
+  margin-left: 5px;
+}
+footer .container .links > *:first-child {
+  border-left: none;
+}
+footer .ui.language .menu {
+  max-height: 500px;
+  overflow-y: auto;
+  margin-bottom: 7px;
+}
+.hide {
+  display: none;
+}
+.center {
+  text-align: center;
+}
+.img-1 {
+  width: 2px !important;
+  height: 2px !important;
+}
+.img-2 {
+  width: 4px !important;
+  height: 4px !important;
+}
+.img-3 {
+  width: 6px !important;
+  height: 6px !important;
+}
+.img-4 {
+  width: 8px !important;
+  height: 8px !important;
+}
+.img-5 {
+  width: 10px !important;
+  height: 10px !important;
+}
+.img-6 {
+  width: 12px !important;
+  height: 12px !important;
+}
+.img-7 {
+  width: 14px !important;
+  height: 14px !important;
+}
+.img-8 {
+  width: 16px !important;
+  height: 16px !important;
+}
+.img-9 {
+  width: 18px !important;
+  height: 18px !important;
+}
+.img-10 {
+  width: 20px !important;
+  height: 20px !important;
+}
+.img-11 {
+  width: 22px !important;
+  height: 22px !important;
+}
+.img-12 {
+  width: 24px !important;
+  height: 24px !important;
+}
+.img-13 {
+  width: 26px !important;
+  height: 26px !important;
+}
+.img-14 {
+  width: 28px !important;
+  height: 28px !important;
+}
+.img-15 {
+  width: 30px !important;
+  height: 30px !important;
+}
+.img-16 {
+  width: 32px !important;
+  height: 32px !important;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+.sr-only-focusable:active,
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+}
+@media only screen and (max-width: 991px) and (min-width: 768px) {
+  .ui.container {
+    width: 95%;
+  }
+}
+
+.home {
+  padding-bottom: 80px;
+}
+.home .logo {
+  margin-bottom: 20px;
+}
+.home .hero h1 {
+  font-size: 4.5em;
+}
+.home .hero h2 {
+  margin-top: 0;
+  font-size: 2em;
+}
+.home .hero .octicon {
+  color: #d9453d;
+  font-size: 40px;
+  width: 50px;
+}
+.home .hero.header {
+  font-size: 20px;
+}
+.home p.large {
+  font-size: 16px;
+}
+.home .stackable {
+  padding-top: 30px;
+}
+.home a {
+  color: #d9453d;
+}
+.signup {
+  padding-top: 15px;
+  padding-bottom: 80px;
+}
+.install {
+  padding-top: 45px;
+  padding-bottom: 80px;
+}
+.install form label {
+  text-align: right;
+  width: 320px !important;
+}
+.install form input {
+  width: 35% !important;
+}
+.install form .field {
+  text-align: left;
+}
+.install form .field .help {
+  margin-left: 335px !important;
+}
+.install form .field.optional .title {
+  margin-left: 38%;
+}
+.install .ui .checkbox {
+  margin-left: 40% !important;
+}
+.install .ui .checkbox label {
+  width: auto !important;
+}
+.install #use-builtin-ssh-server {
+  margin-top: -1em;
+  margin-left: -15px !important;
+  margin-bottom: 2em;
+}
+.form .help {
+  color: #999999;
+  padding-top: .6em;
+  padding-bottom: .6em;
+  display: inline-block;
+  word-break: break-word;
+}
+.ui.attached.header {
+  background: #f0f0f0;
+}
+.ui.attached.header .right {
+  margin-top: -5px;
+}
+.ui.attached.header .right .button {
+  padding: 8px 10px;
+  font-weight: normal;
+}
+#create-page-form form {
+  margin: auto;
+  width: 800px!important;
+}
+#create-page-form form .ui.message {
+  text-align: center;
+}
+#create-page-form form .header {
+  padding-left: 280px !important;
+}
+#create-page-form form .inline.field > label {
+  text-align: right;
+  width: 250px !important;
+  word-wrap: break-word;
+}
+#create-page-form form .help {
+  margin-left: 265px !important;
+}
+#create-page-form form .optional .title {
+  margin-left: 250px !important;
+}
+#create-page-form form input,
+#create-page-form form textarea {
+  width: 50%!important;
+}
+.user.activate form,
+.user.forgot.password form,
+.user.reset.password form,
+.user.signin form,
+.user.signup form {
+  margin: auto;
+  width: 800px!important;
+}
+.user.activate form .ui.message,
+.user.forgot.password form .ui.message,
+.user.reset.password form .ui.message,
+.user.signin form .ui.message,
+.user.signup form .ui.message {
+  text-align: center;
+}
+.user.activate form .header,
+.user.forgot.password form .header,
+.user.reset.password form .header,
+.user.signin form .header,
+.user.signup form .header {
+  padding-left: 280px !important;
+}
+.user.activate form .inline.field > label,
+.user.forgot.password form .inline.field > label,
+.user.reset.password form .inline.field > label,
+.user.signin form .inline.field > label,
+.user.signup form .inline.field > label {
+  text-align: right;
+  width: 250px !important;
+  word-wrap: break-word;
+}
+.user.activate form .help,
+.user.forgot.password form .help,
+.user.reset.password form .help,
+.user.signin form .help,
+.user.signup form .help {
+  margin-left: 265px !important;
+}
+.user.activate form .optional .title,
+.user.forgot.password form .optional .title,
+.user.reset.password form .optional .title,
+.user.signin form .optional .title,
+.user.signup form .optional .title {
+  margin-left: 250px !important;
+}
+.user.activate form input,
+.user.forgot.password form input,
+.user.reset.password form input,
+.user.signin form input,
+.user.signup form input,
+.user.activate form textarea,
+.user.forgot.password form textarea,
+.user.reset.password form textarea,
+.user.signin form textarea,
+.user.signup form textarea {
+  width: 50%!important;
+}
+.user.activate form,
+.user.forgot.password form,
+.user.reset.password form,
+.user.signin form,
+.user.signup form {
+  width: 700px!important;
+}
+.user.activate form .header,
+.user.forgot.password form .header,
+.user.reset.password form .header,
+.user.signin form .header,
+.user.signup form .header {
+  padding-left: 230px !important;
+}
+.user.activate form .inline.field > label,
+.user.forgot.password form .inline.field > label,
+.user.reset.password form .inline.field > label,
+.user.signin form .inline.field > label,
+.user.signup form .inline.field > label {
+  width: 200px !important;
+}
+
+
+#avatar-arrow:before,
+#avatar-arrow:after {
+  right: 100%;
+  top: 20px;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+#avatar-arrow:before {
+  border-right-color: #D4D4D5;
+  border-width: 9px;
+  margin-top: -9px;
+}
+#avatar-arrow:after {
+  border-right-color: #f7f7f7;
+  border-width: 8px;
+  margin-top: -8px;
+}
