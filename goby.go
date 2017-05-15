@@ -10,7 +10,7 @@ import (
 	"github.com/MessageDream/goby/module/setting"
 )
 
-const APP_VER = "0.0.1 Beta"
+const APP_VER = "0.0.1"
 
 func init() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
