@@ -18,7 +18,7 @@ $ ./goby server #open http://127.0.0.1:3000 in browser
 If you want to client just download the diff code， according to the following steps:
 
 * Edit `conf/app.ini` > `[package]` > `ENABLE_GOOGLE_DIFF = true`
-* Use [react-native-goby](https://github.com/MessageDream/react-native-goby)
+* Use [react-native-goby](https://github.com/MessageDream/react-native-goby) in client project 
 
 ## License
 MIT License [read](https://github.com/MessageDream/goby/blob/master/LICENSE)
