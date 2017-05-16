@@ -6,6 +6,7 @@ As we know microsoft CodePush cloud is slow in China, we can use goby to build o
 
 ### Dependencies:
 
+* [go](https://github.com/golang/go)
 * [glide](https://github.com/Masterminds/glide)
 * [code-push-cli](https://github.com/Microsoft/code-push/tree/master/cli)
 * Use [react-native-code-push](https://github.com/Microsoft/react-native-code-push) or [react-native-goby](https://github.com/MessageDream/react-native-goby) in client project.
