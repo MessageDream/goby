@@ -271,7 +271,7 @@ func InstallPost(ctx *context.Context, form forms.InstallForm) {
 
 	cfg.Section("").Key("RUN_MODE").SetValue("prod")
 
-	cfg.Section("session").Key("PROVIDER").SetValue("file")
+	cfg.Section("session").Key("PROVIDER").SetValue("memory")
 
 	cfg.Section("log").Key("MODE").SetValue("file")
 	cfg.Section("log").Key("LEVEL").SetValue("Info")
