@@ -32,7 +32,6 @@ import (
 	"github.com/MessageDream/goby/router/client"
 	"github.com/MessageDream/goby/router/collaborator"
 	"github.com/MessageDream/goby/router/dev"
-	"github.com/MessageDream/goby/router/session"
 	"github.com/MessageDream/goby/router/web"
 )
 
@@ -170,7 +169,8 @@ func runWeb(cliCtx *cli.Context) {
 
 	m.Get("/tokens", ignSignIn, router.TokensGet)
 
-	m.Delete("/sessions/:machineName", apiReqSignIn, session.Delete)
+	// m.Delete("/sessions/:machineName", apiReqSignIn, session.Delete)
+	m.Delete("/sessions/:machineName", apiReqSignIn, auth.SignOutPost)
 	m.Get("/authenticated", ignSignInAndCsrf, auth.Authenticated)
 
 	m.Get("/updateCheck", ignSignInAndCsrf, client.UpdateGet)

@@ -64,7 +64,10 @@ func checkAccessToken(token string, cache cache.Cache) (*model.User, error) {
 
 	if !cache.IsExist(token) {
 		user, err := tokenService.CheckTokenSession(token)
-		cache.Put(token, user, tokenCacheLiveTimes)
+		if err == nil && user != nil {
+			cache.Put(token, user, tokenCacheLiveTimes)
+		}
+
 		return user, err
 	}
 
