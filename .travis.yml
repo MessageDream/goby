@@ -3,7 +3,6 @@ language: go
 
 os:
   - linux
-  - osx
   
 sudo: required
 
