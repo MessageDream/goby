@@ -11,4 +11,8 @@ before_install:
 install:
   - glide install
 
-script: go test $(glide novendor)
+script: 
+  - go test $(glide novendor)
+  - go build
+
+deploy: off
