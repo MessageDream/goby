@@ -91,7 +91,7 @@ func GlobalInit() {
 	checkRunMode()
 }
 
-func InstallInit(ctx *context.Context) {
+func InstallInit(ctx *context.HTMLContext) {
 	if setting.InstallLock {
 		ctx.Handle(404, "Install", errors.New("Installation is prohibited"))
 		return
@@ -113,7 +113,7 @@ func InstallInit(ctx *context.Context) {
 }
 
 // @router /install [get]
-func Install(ctx *context.Context) {
+func Install(ctx *context.HTMLContext) {
 	form := forms.InstallForm{}
 
 	// Get and assign values to install form.
@@ -152,7 +152,7 @@ func Install(ctx *context.Context) {
 	ctx.HTML(200, INSTALL)
 }
 
-func InstallPost(ctx *context.Context, form forms.InstallForm) {
+func InstallPost(ctx *context.HTMLContext, form forms.InstallForm) {
 	if setting.InstallLock {
 		ctx.Handle(404, "InstallPost", errors.New("Installation is prohibited"))
 		return

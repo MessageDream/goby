@@ -9,15 +9,15 @@ import (
 	"github.com/MessageDream/goby/module/setting"
 )
 
-func SignInGet(ctx *context.Context) {
+func SignInGet(ctx *context.HTMLContext) {
 	ctx.Redirect("/web/auth/signin")
 }
 
-func SignUpGet(ctx *context.Context) {
+func SignUpGet(ctx *context.HTMLContext) {
 	ctx.Redirect("/web/auth/signup")
 }
 
-func SignOutGet(ctx *context.Context) {
+func SignOutGet(ctx *context.HTMLContext) {
 	ctx.Session.Delete("uid")
 	ctx.Session.Delete("uname")
 	// ctx.Session.Delete("socialId")
@@ -29,7 +29,7 @@ func SignOutGet(ctx *context.Context) {
 	ctx.Redirect(path.Join(setting.AppSubURL, "/"))
 }
 
-func LinkGet(ctx *context.Context) {
+func LinkGet(ctx *context.HTMLContext) {
 	ctx.Redirect(path.Join(setting.AppSubURL, "auth/login"))
 }
 

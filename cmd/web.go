@@ -119,6 +119,7 @@ func newMacaron() *macaron.Macaron {
 		},
 	}))
 	m.Use(context.Contexter())
+	m.Use(context.HTMLContexter())
 	m.Use(context.APIContexter())
 
 	return m
@@ -135,10 +136,11 @@ func runWeb(cliCtx *cli.Context) {
 
 	m := newMacaron()
 
-	apiReqSignIn := context.Toggle(&context.ToggleOptions{SignInRequire: true, DisableCSRF: true})
+	apiReqSignIn := context.APIToggle(&context.ToggleOptions{SignInRequire: true, DisableCSRF: true})
+	apiIgnSignIn := context.APIToggle(&context.ToggleOptions{SignInRequire: false})
+
 	reqSignIn := context.Toggle(&context.ToggleOptions{SignInRequire: true})
 	ignSignIn := context.Toggle(&context.ToggleOptions{SignInRequire: setting.Service.RequireSignInView})
-	ignSignInAndCsrf := context.Toggle(&context.ToggleOptions{DisableCSRF: true})
 	reqSignOut := context.Toggle(&context.ToggleOptions{SignOutRequire: true})
 	bindIgnErr := binding.BindIgnErr
 
@@ -165,27 +167,27 @@ func runWeb(cliCtx *cli.Context) {
 
 	})
 
-	m.Get("/README.md", ignSignIn, router.ReadMeGet)
-
-	m.Get("/tokens", ignSignIn, router.TokensGet)
-
-	// m.Delete("/sessions/:machineName", apiReqSignIn, session.Delete)
-	m.Delete("/sessions/:machineName", apiReqSignIn, auth.SignOutPost)
-	m.Get("/authenticated", ignSignInAndCsrf, auth.Authenticated)
-
-	m.Get("/updateCheck", ignSignInAndCsrf, client.UpdateGet)
-
-	m.Group("/reportStatus", func() {
-		m.Post("/download", apiBind(forms.ReportStatus{}), client.Download)
-		m.Post("/deploy", apiBind(forms.ReportStatus{}), client.Deploy)
-	}, ignSignInAndCsrf)
-
 	m.Group("/auth", func() {
 		m.Combo("/login").Get(auth.SignInGet)
 		m.Combo("/register").Get(auth.SignUpGet)
 		m.Post("/logout", auth.SignOutPost)
 		m.Get("/link", auth.LinkGet)
 	}, reqSignOut)
+
+	m.Get("/README.md", ignSignIn, router.ReadMeGet)
+
+	m.Get("/tokens", ignSignIn, router.TokensGet)
+
+	// m.Delete("/sessions/:machineName", apiReqSignIn, session.Delete)
+	m.Delete("/sessions/:machineName", apiReqSignIn, auth.SignOutPost)
+	m.Get("/authenticated", apiIgnSignIn, auth.Authenticated)
+
+	m.Get("/updateCheck", apiIgnSignIn, client.UpdateGet)
+
+	m.Group("/reportStatus", func() {
+		m.Post("/download", apiBind(forms.ReportStatus{}), client.Download)
+		m.Post("/deploy", apiBind(forms.ReportStatus{}), client.Deploy)
+	}, apiIgnSignIn)
 
 	m.Group("/accessKeys", func() {
 		m.Combo("/").Get(accessKey.Get).Post(accessKey.Add)

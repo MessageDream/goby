@@ -2,12 +2,12 @@ package dev
 
 import (
 	"github.com/MessageDream/goby/model"
-	"github.com/MessageDream/goby/module/infrastructure"
 	"github.com/MessageDream/goby/module/context"
+	"github.com/MessageDream/goby/module/infrastructure"
 	"github.com/MessageDream/goby/module/setting"
 )
 
-func TemplatePreview(ctx *context.Context) {
+func TemplatePreview(ctx *context.HTMLContext) {
 	ctx.Data["User"] = model.User{UserName: setting.RunUser}
 	ctx.Data["AppName"] = setting.AppName
 	ctx.Data["AppVer"] = setting.AppVer

@@ -13,7 +13,7 @@ const (
 	ACTIVATE infrastructure.TplName = "auth/activate"
 )
 
-func Home(ctx *context.Context) {
+func Home(ctx *context.HTMLContext) {
 	if ctx.IsSigned {
 		if !ctx.User.IsActive && setting.Service.RegisterEmailConfirm {
 			ctx.Data["Title"] = "激活您的账户"
@@ -45,7 +45,7 @@ func TokensGet(ctx *context.APIContext) {
 
 }
 
-func NotFound(ctx *context.Context) {
+func NotFound(ctx *context.HTMLContext) {
 	ctx.Data["Title"] = "Page Not Found"
 	ctx.Handle(404, "home.NotFound", nil)
 }
