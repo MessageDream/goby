@@ -14,7 +14,7 @@ build: off
 install:
   - go version
   - go env
-  - set PATH=%PATH%;%GOPATH%  
+  - set PATH=%PATH%;%GOPATH%/bin  
   - go get github.com/Masterminds/glide
   - go install github.com/Masterminds/glide
   - glide install
