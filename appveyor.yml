@@ -1,0 +1,24 @@
+version: build-{build}.{branch}
+
+clone_folder: C:\gopath\src\github.com\MessageDream\goby
+shallow_clone: true
+
+environment:
+  GOPATH: C:\gopath
+
+platform:
+  - x64
+
+build: off
+
+install:
+  - go version
+  - go env
+  - go install github.com/Masterminds/glide
+  - glide install
+
+test_script:
+  - go test $(glide novendor)
+  - go build
+
+deploy: off
