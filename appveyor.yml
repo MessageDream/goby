@@ -20,7 +20,7 @@ install:
   - glide install
 
 test_script:
-  - go test $(glide novendor)
+  - go test %(glide novendor)%
   - go build
 
 deploy: off
