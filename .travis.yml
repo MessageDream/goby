@@ -11,8 +11,11 @@ go:
   - 1.8.1
 
 before_install:
-  - mkdir -p $GOPATH/bin
-  - curl https://glide.sh/get | sh
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install glide; fi
+
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then mkdir -p $GOPATH/bin; fi  
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl https://glide.sh/get | sh; fi 
 
 install:
   - glide install
