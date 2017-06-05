@@ -5,7 +5,7 @@ import (
 	"path"
 	"strings"
 
-	"9fbank.com/goby/module/infrastructure"
+	"github.com/MessageDream/goby/module/infrastructure"
 
 	"github.com/go-macaron/csrf"
 	"gopkg.in/macaron.v1"
