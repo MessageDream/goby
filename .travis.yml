@@ -3,6 +3,7 @@ language: go
 
 os:
   - linux
+  - osx
   
 sudo: required
 
@@ -10,9 +11,12 @@ go:
   - 1.8.1
 
 before_install:
-  - echo -e "\n" | add-apt-repository ppa:masterminds/glide 
-  - apt-get update
-  - apt-get install glide
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install glide; fi
+
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo -e "\n" | sudo add-apt-repository ppa:masterminds/glide; fi  
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; sudo then apt-get update; fi 
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; sudo then apt-get install glide; fi 
 
 install:
   - glide install
