@@ -3,6 +3,8 @@
 As we know microsoft CodePush cloud is slow in China, we can use goby to build our's. We can use [qiniu](http://www.qiniu.com/) or [OSS](https://www.aliyun.com/product/oss) to store the files, because it's simple and quick!  Or you can use local storage, just modify conf/app.ini file, it's simple configure.
 
 [![Build Status](https://travis-ci.org/MessageDream/goby.svg?branch=master)](https://travis-ci.org/MessageDream/goby)
+[![Build status](https://ci.appveyor.com/api/projects/status/7f1h1vkrs1f6n9qi/branch/master?svg=true&passingText=windows%20build%20passing&failingText=windows%20build%20failing)](https://ci.appveyor.com/project/MessageDream/goby)
+[![Go Report Card](https://goreportcard.com/badge/github.com/MessageDream/goby)](https://goreportcard.com/report/github.com/MessageDream/goby)
 ## INSTALL FROM SOURCE CODE
 
 ### Dependencies:
