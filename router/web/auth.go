@@ -25,7 +25,7 @@ const (
 	ACTIVATE infrastructure.TplName = "auth/activate"
 )
 
-func SignUpGet(ctx *context.Context) {
+func SignUpGet(ctx *context.HTMLContext) {
 	ctx.Data["Title"] = "注册"
 
 	ctx.Data["EnableCaptcha"] = setting.Service.EnableCaptcha
@@ -39,7 +39,7 @@ func SignUpGet(ctx *context.Context) {
 	ctx.HTML(200, SIGNUP)
 }
 
-func SignUpPost(ctx *context.Context, cpt *captcha.Captcha, form forms.SignUpForm) {
+func SignUpPost(ctx *context.HTMLContext, cpt *captcha.Captcha, form forms.SignUpForm) {
 
 	ctx.Data["Title"] = "注册"
 
@@ -94,7 +94,7 @@ func SignUpPost(ctx *context.Context, cpt *captcha.Captcha, form forms.SignUpFor
 	log.Trace("Account created: %s", u.UserName)
 
 	if setting.Service.RegisterEmailConfirm && u.ID > 1 {
-		mailer.SendActivateAccountMail(ctx.Context, model.NewMailerUser(u, setting.Service.ActiveCodeLives))
+		mailer.SendActivateAccountMail(ctx.Context.Context, model.NewMailerUser(u, setting.Service.ActiveCodeLives))
 		ctx.Data["IsSendRegisterMail"] = true
 		ctx.Data["Email"] = u.Email
 		ctx.Data["Hours"] = setting.Service.ActiveCodeLives / 60
@@ -113,7 +113,7 @@ func SignUpPost(ctx *context.Context, cpt *captcha.Captcha, form forms.SignUpFor
 	ctx.Redirect(path.Join(setting.AppSubURL, "web/auth/signin"))
 }
 
-func SignInGet(ctx *context.Context) {
+func SignInGet(ctx *context.HTMLContext) {
 	ctx.Data["Title"] = "登陆"
 
 	// Check auto-login.
@@ -143,7 +143,7 @@ func SignInGet(ctx *context.Context) {
 	ctx.HTML(200, SIGNIN)
 }
 
-func SignInPost(ctx *context.Context, form forms.SignInForm) {
+func SignInPost(ctx *context.HTMLContext, form forms.SignInForm) {
 	ctx.Data["Title"] = "登陆"
 
 	if ctx.HasError() {
@@ -183,7 +183,7 @@ func SignInPost(ctx *context.Context, form forms.SignInForm) {
 	ctx.Redirect(path.Join(setting.AppSubURL, "/"))
 }
 
-func SignOutGet(ctx *context.Context) {
+func SignOutGet(ctx *context.HTMLContext) {
 	ctx.Session.Delete("u")
 	ctx.Session.Delete("uname")
 	ctx.Session.Delete("socialId")
@@ -195,7 +195,7 @@ func SignOutGet(ctx *context.Context) {
 	ctx.Redirect(path.Join(setting.AppSubURL, "/"))
 }
 
-func ActivateGet(ctx *context.Context) {
+func ActivateGet(ctx *context.HTMLContext) {
 	code := ctx.Query("code")
 	if len(code) == 0 {
 		ctx.Data["IsActivatePage"] = true
@@ -209,7 +209,7 @@ func ActivateGet(ctx *context.Context) {
 				ctx.Data["ResendLimited"] = true
 			} else {
 				ctx.Data["Hours"] = setting.Service.ActiveCodeLives / 60
-				mailer.SendActivateAccountMail(ctx.Context, model.NewMailerUser(ctx.User, setting.Service.ActiveCodeLives))
+				mailer.SendActivateAccountMail(ctx.Context.Context, model.NewMailerUser(ctx.User, setting.Service.ActiveCodeLives))
 
 				if err := ctx.Cache.Put("MailResendLimit_"+ctx.User.LowerName, ctx.User.LowerName, 180); err != nil {
 					log.Error(4, "Set cache(MailResendLimit) fail: %v", err)
@@ -249,7 +249,7 @@ func ActivateGet(ctx *context.Context) {
 	ctx.Redirect(path.Join(setting.AppSubURL, "/"))
 }
 
-func AutoSignIn(ctx *context.Context) (bool, error) {
+func AutoSignIn(ctx *context.HTMLContext) (bool, error) {
 	if !model.HasEngine {
 		return false, nil
 	}
