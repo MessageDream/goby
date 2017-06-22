@@ -475,5 +475,6 @@ func initModulesConfig() {
 	loadStorageConfig()
 	loadServiceConfig()
 	loadAttachmentConfig()
+	loadPackageConfig()
 	loadMailConfig()
 }

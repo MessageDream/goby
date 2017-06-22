@@ -9,6 +9,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -18,8 +19,6 @@ import (
 	"github.com/go-xorm/xorm"
 	"github.com/sergi/go-diff/diffmatchpatch"
 	. "gopkg.in/ahmetb/go-linq.v3"
-
-	"sort"
 
 	. "github.com/MessageDream/goby/core"
 	"github.com/MessageDream/goby/model"
@@ -34,9 +33,8 @@ var (
 )
 
 const (
-	HOTCODEPUSH_FILE_NAME = "hotcodepush.json"
-	MANIFEST_FILE_NAME    = "manifest.json"
-	CONTENTS_NAME         = "contents"
+	MANIFEST_FILE_NAME = "manifest.json"
+	CONTENTS_NAME      = "contents"
 
 	BUNDLE_IOS     = "main.jsbundle"
 	BUNDLE_ANDROID = "android.bundle"
@@ -381,13 +379,15 @@ func createOneDiffPackage(originalPackage, prePackage *model.Package) (*model.Pa
 
 	diffFiles, originalOnlyFiles, preOnlyFiles := diffManifestMap(originalManifestMap, preManifestMap)
 
-	hotCodePushMap := map[string]interface{}{
+	hotGobyMap := map[string]interface{}{
 		"deletedFiles": preOnlyFiles,
 	}
 
 	var remainFiles []string
+	var hotGobyFileName = "hotcodepush.json"
 
 	if setting.PackageConfig.EnableGoogleDiff {
+		hotGobyFileName = "hotgoby.json"
 		needRemovedFileIndexies := make([]int, 0, len(diffFiles))
 		patchFiles := make([]string, 0, len(diffFiles))
 		for idx, fi := range diffFiles {
@@ -432,21 +432,21 @@ func createOneDiffPackage(originalPackage, prePackage *model.Package) (*model.Pa
 
 		From(diffFiles).Concat(From(patchFiles)).Concat(From(originalOnlyFiles)).ToSlice(&remainFiles)
 
-		hotCodePushMap["patchedFiles"] = patchFiles
+		hotGobyMap["patchedFiles"] = patchFiles
 	} else {
 		From(diffFiles).Concat(From(originalOnlyFiles)).ToSlice(&remainFiles)
 	}
-	hotCodePushText, err := json.Marshal(hotCodePushMap)
+	hotGobyText, err := json.Marshal(hotGobyMap)
 	if err != nil {
 		return nil, err
 	}
-	codePushFilePath := path.Join(localOriginalPkgContentDir, HOTCODEPUSH_FILE_NAME)
+	gobyFilePath := path.Join(localOriginalPkgContentDir, hotGobyFileName)
 
-	if err := writeTextContentToFile(codePushFilePath, hotCodePushText); err != nil {
+	if err := writeTextContentToFile(gobyFilePath, hotGobyText); err != nil {
 		return nil, err
 	}
 
-	remainFiles = append(remainFiles, HOTCODEPUSH_FILE_NAME)
+	remainFiles = append(remainFiles, hotGobyFileName)
 
 	zipTo := path.Join(os.TempDir(), infrastructure.GetRandomString(32), infrastructure.GetRandomString(16)+".zip")
 	if err := infrastructure.Compress(localOriginalPkgContentDir, remainFiles, zipTo); err != nil {
@@ -469,7 +469,7 @@ func createOneDiffPackage(originalPackage, prePackage *model.Package) (*model.Pa
 		return nil, err
 	}
 	defer func() {
-		os.Remove(codePushFilePath)
+		os.Remove(gobyFilePath)
 		os.RemoveAll(path.Join(zipTo, "../"))
 	}()
 
