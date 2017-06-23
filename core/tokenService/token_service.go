@@ -19,7 +19,7 @@ func List(user *model.User) ([]*model.UserToken, error) {
 func Create(user *model.User, createdBy, friendlyName, description string, ttl int64) (*model.UserToken, error) {
 
 	if ttl == 0 {
-		ttl = 2 * 30 * 24 * 60 * 60 * 1000
+		ttl = 6 * 30 * 24 * 60 * 60 * 1000
 	}
 
 	token := &model.UserToken{
