@@ -62,31 +62,12 @@
 									<a class="item{{if .PageIsApps}} active{{end}}" href="{{AppSubURL}}/web/app/list">应用管理</a>
 									<a class="item{{if .PageIsAccessKeys}} active{{end}}" href="{{AppSubURL}}/web/access_key/list">我的密钥</a>
 								{{if .IsSigned}}
-									<div class="right menu">
-										<div class="ui dropdown head link jump item poping up" data-content="创建..." data-variation="tiny inverted">
+								
+									<div class="right menu colhidden">
+										<div class="ui dropdown item">
 											<span class="text">
-												<i class="octicon octicon-plus"><span class="sr-only">创建</span></i>
-												<i class="octicon octicon-triangle-down"></i>
-											</span>
-											<div class="menu">
-												<a class="item" href="{{AppSubURL}}/web/app/create">
-													<i class="octicon octicon-device-mobile"></i> 创建应用
-												</a>
-												<a class="item" href="{{AppSubURL}}/web/access_key/create">
-													<i class="octicon octicon-key"></i> 创建密钥
-												</a>
-											</div><!-- end content create new menu -->
-										</div><!-- end dropdown menu create new -->
-
-										<div class="ui dropdown head link jump item poping up" tabindex="-1" data-content="用户信息及更多" data-variation="tiny inverted">
-											<!--<span class="text avatar">
-												<img class="ui small rounded image" src="{{AppSubURL}}/img/avatar_default.jpg">
-												<span class="sr-only">用户信息及更多</span>
-												<i class="octicon octicon-triangle-down" tabindex="-1"></i>
-											</span>-->
-											<span class="text">
-												<i class="octicon octicon-person"></i>
-												<i class="octicon octicon-triangle-down"></i>
+										   		<i class="user icon"></i> 
+										   		<i class="dropdown icon"></i>
 											</span>
 											<div class="menu" tabindex="-1">
 												<div class="ui header">
