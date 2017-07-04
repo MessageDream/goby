@@ -110,7 +110,7 @@ func SignUpPost(ctx *context.HTMLContext, cpt *captcha.Captcha, form forms.SignU
 		createToken(u)
 	}
 
-	ctx.Redirect(path.Join(setting.AppSubURL, "web/auth/signin"))
+	ctx.Redirect("signin")
 }
 
 func SignInGet(ctx *context.HTMLContext) {
@@ -128,7 +128,9 @@ func SignInGet(ctx *context.HTMLContext) {
 		ctx.SetCookie("redirect_to", redirectTo, 0, setting.AppSubURL)
 	} else {
 		redirectTo, _ = url.QueryUnescape(ctx.GetCookie("redirect_to"))
-		ctx.SetCookie("redirect_to", "", -1, setting.AppSubURL)
+		if isSucceed {
+			ctx.SetCookie("redirect_to", "", -1, setting.AppSubURL)
+		}
 	}
 
 	if isSucceed {

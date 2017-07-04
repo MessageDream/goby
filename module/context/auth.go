@@ -80,7 +80,8 @@ func Toggle(options *ToggleOptions) macaron.Handler {
 		if options.SignInRequire {
 
 			if !ctx.IsSigned {
-				ctx.SetCookie("redirect_to", "/"+url.QueryEscape(ctx.Req.RequestURI))
+				es := url.QueryEscape(ctx.Req.RequestURI)
+				ctx.SetCookie("redirect_to", es)
 				ctx.Redirect(path.Join(subURL, "/web/auth/signin"))
 				return
 
