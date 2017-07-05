@@ -27,7 +27,7 @@
 	<script src="{{AppSubURL}}/js/jquery-1.11.3.min.js"></script>
 	<link rel="stylesheet" href="{{AppSubURL}}/assets/font-awesome-4.6.3/css/font-awesome.min.css">
 	<link rel="stylesheet" href="{{AppSubURL}}/assets/octicons-4.3.0/octicons.min.css">
-
+	<link href="{{AppSubURL}}/plugins/lobibox/css/lobibox.css" rel="stylesheet" />
 	<!-- Stylesheet -->
 	<link rel="stylesheet" href="{{AppSubURL}}/css/semantic-2.2.9.min.css">
 	<link rel="stylesheet" href="{{AppSubURL}}/css/goby.css?v={{MD5 AppVer}}">
@@ -35,6 +35,7 @@
 	<!-- JavaScript -->
 	<script src="{{AppSubURL}}/js/semantic-2.2.9.min.js"></script>
 	<script src="{{AppSubURL}}/js/goby.js?v={{MD5 AppVer}}"></script>
+	<script src="{{AppSubURL}}/plugins/lobibox/js/notifications.js"></script>
 
 	<title>{{if .Title}}{{.Title}} - {{end}}{{AppName}}</title>
 
@@ -43,6 +44,7 @@
 <body>
 	<div class="full height">
 		<noscript>Please enable JavaScript in your browser!</noscript>
+		<hidden id="notify" data-type="{{if .NotifyType}}{{.NotifyType}}{{else}}info{{end}}" data-size="normal" data-message="{{if .NotifyMsg}}{{.NotifyMsg}}{{end}}"/>
 
 		{{if not .PageIsInstall}}
 			<div class="following bar light ui dividing header">

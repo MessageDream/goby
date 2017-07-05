@@ -1,19 +1,17 @@
 {{template "base/header" .}}
-<di class="mainWrap navslide">
-  <di class="ui aligned padded five column grid stackable">
+<div class="mainWrap navslide">
+  <div class="ui aligned padded five column grid stackable">
     {{range .Apps}}
-    <di class="column">
-      <a href="{{AppSubURL}}/web/app/{{.Name}}" />
+    <div class="column">
       <div class="ui segment">
-        <div class="ui link card">
+        <a href="{{AppSubURL}}/web/app/{{.Name}}" class="ui link card">
           <div class="content">
             <img class="right floated mini ui image" src="{{AppSubURL}}/img/goby.png">
             <div class="header">
               {{.Name}}
             </div>
             <div class="meta">
-             {{range $k,$v := .Collaborators}} {{if eq .Permission "Owner"}} {{$k}} {{end}}
-              {{end}} 
+              {{range $k,$v := .Collaborators}} {{if eq .Permission "Owner"}} {{$k}} {{end}} {{end}}
             </div>
           </div>
           <div class="content">
@@ -32,10 +30,60 @@
               </div>
             </div>
           </div>
-        </div>
+        </a>
       </div>
-    </di>
+    </div>
     {{end}}
-  </di>
-</di>
+
+    <div class="column">
+      <div id="app_add" class="ui segment button">
+        <img src="{{AppSubURL}}/img/add.png">
+      </div>
+    </div>
+  </div>
+
+  <div class="ui standard modal">
+    <div class="header">
+      创建App
+    </div>
+    <div class="content">
+      <form method='post' action='{{AppSubURL}}/web/app/add' class="ui form form_app_add">
+      {{.CsrfTokenHtml}}
+        <div class="two fields">
+          <div class="field">
+            <label>App Name</label>
+            <input placeholder="App Name" name="name" type="text">
+          </div>
+          <div class="field">
+            <label>Platform</label>
+            <div class="ui dropdown selection" tabindex="0">
+              <select name="platform">
+                  <option value="">Platform</option>
+                  <option value="ios">iOS</option>
+                  <option value="android">Android</option>
+              </select>
+              <i class="dropdown icon"></i>
+              <div class="default text">Platform</div>
+              <div class="menu" tabindex="-1">
+                <div class="item" data-value="ios">iOS</div>
+                <div class="item" data-value="android">Android</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ui error message"></div>
+      </form>
+    </div>
+    <div class="actions">
+      <div class="ui black deny button">
+        取消
+      </div>
+      <div class="ui positive right labeled icon button">
+        提交
+        <i class="checkmark icon"></i>
+      </div>
+    </div>
+  </div>
+</div>
 {{template "base/footer" .}}
+<script src="{{AppSubURL}}/js/app.js?v={{MD5 AppVer}}"></script>
