@@ -160,6 +160,7 @@ func runWeb(cliCtx *cli.Context) {
 		m.Group("/app", func() {
 			m.Combo("/list").Get(web.AppsGet)
 			m.Combo("/add").Post(bindIgnErr(forms.AppAddForm{}), web.AppAdd)
+			m.Combo("/detail/:name").Get(web.AppGet)
 		}, reqSignIn)
 
 		m.Group("/access_key", func() {

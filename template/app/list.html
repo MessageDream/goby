@@ -1,10 +1,9 @@
 {{template "base/header" .}}
-<div class="mainWrap navslide">
   <div class="ui aligned padded five column grid stackable">
     {{range .Apps}}
     <div class="column">
       <div class="ui segment">
-        <a href="{{AppSubURL}}/web/app/{{.Name}}" class="ui link card">
+        <a href="{{AppSubURL}}/web/app/detail/{{.Name}}" class="ui link card">
           <div class="content">
             <img class="right floated mini ui image" src="{{AppSubURL}}/img/goby.png">
             <div class="header">
@@ -84,6 +83,5 @@
       </div>
     </div>
   </div>
-</div>
 {{template "base/footer" .}}
 <script src="{{AppSubURL}}/js/app.js?v={{MD5 AppVer}}"></script>

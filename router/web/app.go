@@ -8,9 +8,11 @@ import (
 )
 
 const (
-	APPS infrastructure.TplName = "app/list"
+	APPS       infrastructure.TplName = "app/list"
+	APP_DETAIL infrastructure.TplName = "app/detail"
 )
 
+//list
 func AppsGet(ctx *context.HTMLContext) {
 	apps, err := appService.List(ctx.User)
 	if err != nil {
@@ -23,6 +25,12 @@ func AppsGet(ctx *context.HTMLContext) {
 	ctx.HTML(200, APPS)
 }
 
+//detail
+func AppGet(ctx *context.HTMLContext) {
+	ctx.HTML(200, APP_DETAIL)
+}
+
+//create app
 func AppAdd(ctx *context.HTMLContext, appForm form.AppAddForm) {
 	name := appForm.Name
 	platform := appForm.Platform

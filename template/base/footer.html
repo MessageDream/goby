@@ -5,7 +5,7 @@
 	<div>
 		*/}}
 	</div>
-	<footer>
+	<!--<footer>
 		<div class="ui container">
 			<div class="ui left">
 				© 2017 Goby version: {{AppVer}} {{if ShowFooterTemplateLoadTime}}页面: <strong>{{LoadTimes .PageStartTime}}</strong> 模板:
@@ -18,8 +18,15 @@
 				<span class="version">{{GoVer}}</span>
 			</div>
 		</div>
-	</footer>
+	</footer>-->
 
+<!-- JavaScript -->
+	<script src="{{AppSubURL}}/js/jquery-1.11.3.min.js"></script>
+	<script src="{{AppSubURL}}/js/semantic-2.2.9.min.js"></script>
+	<script src="{{AppSubURL}}/js/goby.js?v={{MD5 AppVer}}"></script>
+	<script src="{{AppSubURL}}/plugins/lobibox/js/notifications.js"></script>
+	<script src="{{AppSubURL}}/plugins/cookie/js.cookie.js"></script>
+    <script src="{{AppSubURL}}/plugins/nicescrool/jquery.nicescroll.min.js"></script>
 	<script>
 		notifyactions();
 		function notifyactions() {
