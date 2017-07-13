@@ -36,10 +36,21 @@ func (self *DeploymentDetail) Convert() interface{} {
 			UploadTime:         self.Package.CreatedAt.Unix() * 1000,
 		}
 	}
+
+	var metrics *dto.PackageMetrics
+	if self.PackageMetrics.ID > 0 {
+		metrics = &dto.PackageMetrics{
+			Active:     self.PackageMetrics.Active,
+			Downloaded: self.PackageMetrics.Downloaded,
+			Failed:     self.PackageMetrics.Failed,
+			Installed:  self.PackageMetrics.Installed,
+		}
+	}
 	return &dto.Deployment{
-		Key:     self.Key,
-		Name:    self.Name,
-		Package: pkg,
+		Key:            self.Key,
+		Name:           self.Name,
+		Package:        pkg,
+		PackageMetrics: metrics,
 	}
 }
 

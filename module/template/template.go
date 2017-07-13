@@ -99,14 +99,23 @@ func NewFuncMap() []template.FuncMap {
 		},
 		"FileSize": infrastructure.FileSize,
 		"Subtract": infrastructure.Subtract,
-		"Add": func(a, b int) int {
+		"Add": func(a, b uint64) uint64 {
 			return a + b
+		},
+		"Persent": func(a, b uint64) int {
+			if b == 0 {
+				return 0
+			}
+			return int(a / b / 100)
 		},
 		"DateFmtLong": func(t time.Time) string {
 			return t.Format(time.RFC1123Z)
 		},
 		"DateFmtShort": func(t time.Time) string {
 			return t.Format("Jan 02, 2006")
+		},
+		"Time": func(interval int64) time.Time {
+			return time.Unix(interval/1000, interval)
 		},
 		"List": List,
 		"SubStr": func(str string, start, length int) string {

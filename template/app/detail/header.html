@@ -1,0 +1,24 @@
+ <div class="sixteen wide tablet sixteen wide computer column profileheader row no-padding">
+    <div class="column  left floated">
+      <div class="ui items">
+        <div class="item">
+          <a class="ui small circular image">
+              <img src="{{AppSubURL}}/img/goby.png" alt="label-image" />
+              <i class="circle mini red icon avt" data-content="Offline" data-variation="inverted redli"></i>
+          </a>
+          <div class="middle aligned content hiddenui">
+            <div id="app_name" class="header" data-name="{{.AppName}}">
+              {{.AppName}}
+            </div>
+            <div class="meta">
+              Owner<i class="icon map marker"></i> {{.Owner}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui menu fluid no-radius borderless stackable" style="margin-top:0">
+    <a href="{{AppSubURL}}/web/app/detail/{{.AppName}}/deployments" class="item {{if .IsDeploymentPage}}active red{{end}}">Deployments</a>
+    <a href="{{AppSubURL}}/web/app/detail/{{.AppName}}/collaborators" class="item {{if .IsCollaboratorPage}}active red{{end}}">Collaborators</a>
+  </div>

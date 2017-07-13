@@ -2,14 +2,20 @@ package web
 
 import (
 	"github.com/MessageDream/goby/core/appService"
+	"github.com/MessageDream/goby/core/collaboratorService"
+	"github.com/MessageDream/goby/core/deploymentService"
+	"github.com/MessageDream/goby/model"
 	"github.com/MessageDream/goby/module/context"
 	"github.com/MessageDream/goby/module/form"
 	"github.com/MessageDream/goby/module/infrastructure"
+
+	. "gopkg.in/ahmetb/go-linq.v3"
 )
 
 const (
-	APPS       infrastructure.TplName = "app/list"
-	APP_DETAIL infrastructure.TplName = "app/detail"
+	APPS                     infrastructure.TplName = "app/list"
+	APP_DETAIL_COLLABORATORS infrastructure.TplName = "app/detail/collaborators"
+	APP_DETAIL_DEPLOYMENTS   infrastructure.TplName = "app/detail/deployments"
 )
 
 //list
@@ -25,9 +31,39 @@ func AppsGet(ctx *context.HTMLContext) {
 	ctx.HTML(200, APPS)
 }
 
-//detail
-func AppGet(ctx *context.HTMLContext) {
-	ctx.HTML(200, APP_DETAIL)
+//detail of collaborators
+func AppCollaboratorsGet(ctx *context.HTMLContext) {
+	appName := ctx.Params("appName")
+	cols, err := collaboratorService.List(ctx.User.ID, appName)
+	if err != nil {
+		ctx.Error(500, err.Error())
+		return
+	}
+	owner := From(cols).Where(func(col interface{}) bool {
+		co := col.(*model.Collaborator)
+		return co.Role == 1
+	}).First().(*model.Collaborator)
+
+	ctx.Data["AppName"] = appName
+	ctx.Data["IsCollaboratorPage"] = true
+	ctx.Data["Owner"] = owner.Email
+	ctx.Data["Collaborators"] = cols
+	ctx.HTML(200, APP_DETAIL_COLLABORATORS)
+}
+
+//detail of deployments
+func AppDeploymentsGet(ctx *context.HTMLContext) {
+	appName := ctx.Params("appName")
+	deployments, err := deploymentService.GetDeployments(ctx.User.ID, appName)
+	if err != nil {
+		ctx.Error(500, err.Error())
+		return
+	}
+	ctx.Data["AppName"] = appName
+	ctx.Data["IsDeploymentPage"] = true
+	// ctx.Data["Owner"] = owner.Email
+	ctx.Data["Deployments"] = deployments
+	ctx.HTML(200, APP_DETAIL_DEPLOYMENTS)
 }
 
 //create app

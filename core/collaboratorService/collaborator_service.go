@@ -3,48 +3,18 @@ package collaboratorService
 import (
 	"errors"
 
-	. "gopkg.in/ahmetb/go-linq.v3"
-
 	. "github.com/MessageDream/goby/core"
 	"github.com/MessageDream/goby/model"
-	"github.com/MessageDream/goby/model/dto"
 	"github.com/MessageDream/goby/module/infrastructure"
 )
 
-func List(uid uint64, appName string) (map[string]*dto.Collaborator, error) {
+func List(uid uint64, appName string) ([]*model.Collaborator, error) {
 	col, err := CollaboratorOf(uid, appName)
 	if err != nil {
 		return nil, err
 	}
 
-	cols, err := model.FindCollaboratorsByAppIDs([]uint64{col.AppID})
-	if err != nil {
-		return nil, err
-	}
-
-	canOwner := false
-	colsMap := map[string]*dto.Collaborator{}
-	From(cols).Select(func(col interface{}) interface{} {
-		co := col.(*model.Collaborator)
-		isOwner := uid == co.UID
-		if isOwner && co.Role == 1 {
-			canOwner = true
-		}
-		permission := "Member"
-		if co.Role == 1 {
-			permission = "Owner"
-		}
-		return KeyValue{
-			Key: co.Email,
-			Value: &dto.Collaborator{
-				IsCurrentAccount: isOwner,
-				Permission:       permission,
-			},
-		}
-
-	}).ToMap(&colsMap)
-
-	return colsMap, nil
+	return model.FindCollaboratorsByAppIDs([]uint64{col.AppID})
 
 }
 

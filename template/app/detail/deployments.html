@@ -1,0 +1,397 @@
+{{template "base/header" .}}
+<div class="ui equal width left aligned padded grid stackable">
+
+    {{template "app/detail/header" .}}
+    <div class="row">
+        {{$user := .SignedUser}} {{$owner := .Owner}}
+        <div class="sixteen wide tablet seven wide computer column">
+            <div class="ui segments">
+                <div class="ui segment stackable">
+                    <strong>Summary</strong>
+                    <button id="dep_add" class="ui blueli right floated button">
+            <i class="ui add icon"></i>
+            Add
+          </button>
+                </div>
+                <div class="ui segment">
+                    <div class="ui items">
+                        {{range .Deployments}}
+                        <div class="item">
+                            <div class="content">
+                                <a class="header" href="#">{{.Name}}</a>
+                                <div class="meta">
+                                    <span class="cinema">{{.Key}}</span>
+                                </div>
+                                {{$pkg := .Package}} {{$metrics := .PackageMetrics}}
+                                <div class="description">
+                                    <div class="ui equal width left aligned padded grid stackable">
+                                        <div class="row">
+                                            <div class="column">
+                                                <div>Update Metadata</div>
+
+                                                <div class="ui list">
+                                                    <div class="item">
+                                                        <i class="flag icon"></i>
+                                                        <div class="content">
+                                                            Label:&nbsp;&nbsp;{{if $pkg}}{{$pkg.Label}}{{end}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="item">
+                                                        <i class="tag icon"></i>
+                                                        <div class="content">
+                                                            App Version:&nbsp;&nbsp;{{if $pkg}}{{$pkg.AppVersion}}{{end}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="item">
+                                                        <i class="maxcdn icon"></i>
+                                                        <div class="content">
+                                                            Mandatory:&nbsp;&nbsp;{{if $pkg}}{{$pkg.IsMandatory}}{{end}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="item">
+                                                        <i class="clock icon"></i>
+                                                        <div class="content">
+                                                            Release Time:&nbsp;&nbsp; {{if $pkg}} {{$time := Time $pkg.UploadTime}} {{if $pkg}}{{DateFmtShort $time}}{{end}} {{end}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="item">
+                                                        <i class="user icon"></i>
+                                                        <div class="content">
+                                                            Released By:&nbsp;&nbsp;{{if $pkg}}{{$pkg.ReleasedBy}}{{end}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="column">
+                                                <div> Install Metrics</div>
+                                                <div class="ui list">
+                                                    <div class="item">
+                                                        <i class="attach icon"></i>
+                                                        <div class="content">
+                                                            Active:&nbsp;&nbsp;{{if $metrics}}%{{Persent $metrics.Active $metrics.Active}} ({{$metrics.Downloaded}} of {{$metrics.Downloaded}}){{end}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="item">
+                                                        <i class="download icon"></i>
+                                                        <div class="content">
+                                                            Total:&nbsp;&nbsp;{{if $metrics}}{{$metrics.Installed}}{{end}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="item">
+                                                        <i class="undo icon"></i>
+                                                        <div class="content">
+                                                            Rollbacks:&nbsp;&nbsp;{{if $metrics}}{{$metrics.Failed}}{{end}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="extra">
+                                    <button class="ui button redli inverted tiny dep_delete" data-name="{{.Name}}">Delete</button>
+                                    <button class="ui button {{if not $pkg}}disabled{{end}} greenli inverted tiny dep_promote" data-name="{{.Name}}">Promote</button>
+                                    <button class="ui button {{if not $pkg}}disabled{{end}} blueli inverted tiny dep_rollback" data-name="{{.Name}}">Rollback</button>
+                                    <button class="ui button yellowli inverted tiny dep_new_release" data-name="{{.Name}}">New Release</button>
+                                </div>
+                            </div>
+                        </div>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="sixteen wide tablet ten wide computer column">
+      <div class="ui segment">
+        <div class="ui feed timeline">
+          <div class="event">
+            <div class="label">
+              <img src="img/avatar/people/Abraham.png" alt="label-image" />
+            </div>
+            <div class="content">
+              <div class="summary">
+                <a class="user">
+                                                Francis	Baldwin
+                                            </a> added you as a friend
+                <div class="date">
+                  1 Hour Ago
+                </div>
+              </div>
+              <div class="meta">
+                <a class="like">
+                                                <i class="like icon"></i> 4 Likes
+                                            </a>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="label">
+              <img src="img/avatar/people/carol.png" alt="label-image" />
+            </div>
+            <div class="content">
+              <div class="summary">
+                <a>Lindsey Daniels</a> added <a>2 new illustrations</a>
+                <div class="date">
+                  4 days ago
+                </div>
+              </div>
+              <div class="extra images">
+                <a><img src="img/bg/1.png" alt="bg-image" /></a>
+                <a><img src="img/bg/3.png" alt="bg-image" /></a>
+              </div>
+              <div class="meta">
+                <a class="like">
+                                                <i class="like icon"></i> 1 Like
+                                            </a>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="label">
+              <img src="img/avatar/people/Daryl.png" alt="label-image" />
+            </div>
+            <div class="content">
+              <div class="summary">
+                <a class="user">
+                                                Walter	Stewart
+                                            </a> added you as a friend
+                <div class="date">
+                  2 Days Ago
+                </div>
+              </div>
+              <div class="meta">
+                <a class="like">
+                                                <i class="like icon"></i> 8 Likes
+                                            </a>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="label">
+              <img src="img/avatar/people/deana.png" alt="label-image" />
+            </div>
+            <div class="content">
+              <div class="summary">
+                <a>Loretta	Burke</a> posted on his page
+                <div class="date">
+                  3 days ago
+                </div>
+              </div>
+              <div class="extra text">
+                Ours is a life of constant reruns. We're always circling back to where we'd we started, then starting all over again. Even
+                if we don't run extra laps that day, we surely will come back for more of the same another day soon.
+              </div>
+              <div class="meta">
+                <a class="like">
+                                                <i class="like icon"></i> 5 Likes
+                                            </a>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="label">
+              <img src="img/avatar/people/enid.png" alt="label-image" />
+            </div>
+            <div class="content">
+              <div class="summary">
+                <a>Meredith	Barnes</a> added <a>2 new photos</a> of you
+                <div class="date">
+                  4 days ago
+                </div>
+              </div>
+              <div class="extra images">
+                <a><img src="img/bg/5.png" alt="bg-image" /></a>
+                <a><img src="img/bg/6.png" alt="bg-image" /></a>
+              </div>
+              <div class="meta">
+                <a class="like">
+                                                <i class="like icon"></i> 41 Likes
+                                            </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="event">
+            <div class="label">
+              <img src="img/avatar/people/Glenn.png" alt="label-image" />
+            </div>
+            <div class="content">
+              <div class="summary">
+                <a class="user">
+                                                Tami Maxwell
+                                            </a> added you as a friend
+                <div class="date">
+                  1 Hour Ago
+                </div>
+              </div>
+              <div class="meta">
+                <a class="like">
+                                                <i class="like icon"></i> 4 Likes
+                                            </a>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="label">
+              <img src="img/avatar/people/Hershell.png" alt="label-image">
+            </div>
+            <div class="content">
+              <div class="summary">
+                <a>Doris Grant</a> added <a>2 new illustrations</a>
+                <div class="date">
+                  4 days ago
+                </div>
+              </div>
+              <div class="extra images">
+                <a><img src="img/bg/2.png"></a>
+                <a><img src="img/bg/4.png"></a>
+              </div>
+              <div class="meta">
+                <a class="like">
+                                                <i class="like icon"></i> 1 Like
+                                            </a>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="label">
+              <img src="img/avatar/people/Hershell.png" alt="label-image" />
+            </div>
+            <div class="content">
+              <div class="summary">
+                <a class="user">
+                                                Julia Anderson
+                                            </a> added you as a friend
+                <div class="date">
+                  2 Days Ago
+                </div>
+              </div>
+              <div class="meta">
+                <a class="like">
+                                                <i class="like icon"></i> 8 Likes
+                                            </a>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="label">
+              <img src="img/avatar/people/Meggie.png" alt="label-image" />
+            </div>
+            <div class="content">
+              <div class="summary">
+                <a>Jennifer	Clarke</a> posted on his page
+                <div class="date">
+                  3 days ago
+                </div>
+              </div>
+              <div class="extra text">
+                Ours is a life of constant reruns. We're always circling back to where we'd we started, then starting all over again. Even
+                if we don't run extra laps that day, we surely will come back for more of the same another day soon.
+              </div>
+              <div class="meta">
+                <a class="like">
+                                                <i class="like icon"></i> 5 Likes
+                                            </a>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="label">
+              <img src="img/avatar/people/Michonne.png" alt="label-image" />
+            </div>
+            <div class="content">
+              <div class="summary">
+                <a>Elizabeth Weaver</a> added <a>2 new photos</a> of you
+                <div class="date">
+                  4 days ago
+                </div>
+              </div>
+              <div class="extra images">
+                <a><img src="img/bg/7.png"></a>
+                <a><img src="img/bg/1.png" alt="bg-image" /></a>
+              </div>
+              <div class="meta">
+                <a class="like">
+                                                <i class="like icon"></i> 41 Likes
+                                            </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>-->
+    </div>
+
+    <div id="dep_new_release_modal" class="ui standard modal">
+        <div class="header">
+            New Release
+        </div>
+        <div class="content">
+            <form method='post' enctype="multipart/form-data" id="form_dep_release" class="ui form">
+                <div class="two fields">
+                    <div class="field">
+                        <label>App Version</label>
+                        <input placeholder="App Name" name="name" type="text">
+                    </div>
+                    <div class="field">
+                        <label>Rollout</label>
+                        <div class="ui dropdown selection" tabindex="0">
+                            <select name="platform">
+                               <option value="100">100%</option>
+                               <option value="90">90%</option>
+                               <option value="80">80%</option>
+                               <option value="70">70%</option>
+                               <option value="60">60%</option>
+                               <option value="50">50%</option>
+                               <option value="40">40%</option>
+                               <option value="30">30%</option>
+                               <option value="20">20%</option>
+                               <option value="10">10%</option>
+                            </select>
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Platform</div>
+                            <div class="menu" tabindex="0">
+                                <div class="item" data-value="100">100%</div>
+                                <div class="item" data-value="90">90%</div>
+                                <div class="item" data-value="80">80%</div>
+                                <div class="item" data-value="70">70%</div>
+                                <div class="item" data-value="60">60%</div>
+                                <div class="item" data-value="50">50%</div>
+                                <div class="item" data-value="40">40%</div>
+                                <div class="item" data-value="30">30%</div>
+                                <div class="item" data-value="20">20%</div>
+                                <div class="item" data-value="10">10%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="field">
+                    <label>Package File</label>
+                    <input type="file" name="package" />
+                </div>
+                <div class="field">
+                    <label>Description</label>
+                     <textarea name="desc" rows="3" cols="20"></textarea> 
+                </div>
+                <div class="ui error message"></div>
+            </form>
+        </div>
+        <div class="actions">
+            <div class="ui black deny button">
+                取消
+            </div>
+            <div class="ui positive right labeled icon button">
+                提交
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div>
+
+</div>
+{{template "base/footer" .}}
+<link href="{{AppSubURL}}/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+<script src="{{AppSubURL}}/plugins/sweetalert2/sweetalert2.min.js"></script>
+<script src="{{AppSubURL}}/js/app.js?v={{MD5 AppVer}}"></script>

@@ -5,7 +5,6 @@ import (
 	"io"
 	"os"
 	"path"
-	"strconv"
 	"strings"
 
 	"github.com/go-macaron/cache"
@@ -274,7 +273,7 @@ func ReleaseDeployment(user *model.User,
 		manifesURLPath,
 		zipURLPath,
 		"Upload",
-		strconv.FormatUint(user.ID, 10)+"&"+user.Email,
+		user.Email,
 		description,
 		"",
 		"")
@@ -536,7 +535,7 @@ func RollbackDeployment(user *model.User, cache cache.Cache, appName, deployment
 		rollbackPkg.ManifestBlobURL,
 		rollbackPkg.BlobURL,
 		"Rollback",
-		strconv.FormatUint(user.ID, 10)+"&"+user.Email,
+		user.Email,
 		rollbackPkg.Description,
 		rollbackPkg.Label,
 		deployment.Name)
@@ -599,7 +598,7 @@ func PromoteDeployment(user *model.User, cache cache.Cache, appName, sourceDeplo
 		sourcePkg.ManifestBlobURL,
 		sourcePkg.BlobURL,
 		"Promote",
-		strconv.FormatUint(user.ID, 10)+"&"+user.Email,
+		user.Email,
 		sourcePkg.Description,
 		sourcePkg.Label,
 		sourceDeployment.Name)
