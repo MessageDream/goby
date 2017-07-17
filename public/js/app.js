@@ -310,21 +310,50 @@ $(".ui.dep_new_release").on("click", function () {
     $("#dep_new_release_modal").modal({
         blurring: true,
         transition: 'fade up',
-        closable: true,
+        closable: false,
         onApprove: function () {
-            var formData = new FormData($('#form_dep_release'));
-            console.log(formData);
+            var release_form = document.getElementById("form_dep_release");
+            var form_data = new FormData(release_form);
+
+            var version = form_data.get('version');
+            var rollout = form_data.get('rollout');
+            var desc = form_data.get('desc');
+            var file = form_data.get('package');
+            var packageInfo = {
+                appVersion: version,
+                isDisabled: false,
+                isMandatory: true,
+                rollout: parseInt(rollout),
+                description: desc
+            };
+            var up_form = new FormData();
+            up_form.append('package', file);
+            up_form.append('packageInfo', JSON.stringify(packageInfo));
+
             $.ajax({
                 url: '/apps/' + app_name + '/deployments/' + dep_name + '/release',
                 type: 'POST',
-                data:formData,
+                data: up_form,
                 processData: false,  // 不处理数据
                 contentType: false,
                 success: function (data, textStatus) {
+                    $("#dep_new_release_modal").modal('hide');
+                    Lobibox.notify('success', {
+                        delay: 2000,
+                        msg: 'success'
+                    });
+                    var timeOut = setTimeout(function () {
+                        clearTimeout(timeOut);
+                        document.location.reload();
+                    }, 2100);
 
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-
+                    $("#dep_new_release_modal").modal('hide');
+                    Lobibox.notify('error', {
+                        delay: 2000,
+                        msg: errorThrown
+                    });
                 }
             });
 
