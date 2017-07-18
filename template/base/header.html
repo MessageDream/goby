@@ -29,10 +29,9 @@
 	<link rel="stylesheet" href="{{AppSubURL}}/plugins/lobibox/css/lobibox.css"/>
 	<link rel="stylesheet" href="{{AppSubURL}}/plugins/ionicons/css/ionicons.min.css"/>
 	<link rel="stylesheet" href="{{AppSubURL}}/plugins/pacejs/pace.css"/>
+	<link rel="stylesheet" href="{{AppSubURL}}/plugins/sweetalert2/sweetalert2.min.css"/>
 	<link rel="stylesheet" href="{{AppSubURL}}/css/semantic-2.2.9.min.css"/>
 	<link rel="stylesheet" href="{{AppSubURL}}/css/goby.css?v={{MD5 AppVer}}"/>
-
-	
 	<title>{{if .Title}}{{.Title}} - {{end}}{{AppName}}</title>
 
 	<meta name="theme-color" content="{{ThemeColorMetaTag}}">
@@ -42,15 +41,14 @@
 	<div id="contextWrap">
 		<noscript>Please enable JavaScript in your browser!</noscript>
 		<hidden id="notify" data-type="{{if .NotifyType}}{{.NotifyType}}{{else}}info{{end}}" data-size="normal" data-message="{{if .NotifyMsg}}{{.NotifyMsg}}{{end}}"
-		/> 
-		{{if not .PageIsInstall}}
+		/> {{if not .PageIsInstall}}
 		<!--sidebar-->
 		<div class="ui sidebar vertical left menu overlay  borderless visible sidemenu inverted  grey" style="-webkit-transition-duration: 0.1s; transition-duration: 0.1s;"
 		 data-color="grey">
 			<a class="item logo" href="{{AppSubURL}}/">
-                <!--<img src="{{AppSubURL}}/img/favicon.png" alt="{{AppName}}" />
+				<!--<img src="{{AppSubURL}}/img/favicon.png" alt="{{AppName}}" />
 				<img src="{{AppSubURL}}/img/favicon.png" alt="{{AppName}}" class="displaynone" />-->
-            </a>
+			</a>
 			<div class="ui accordion inverted">
 				<a class="title item{{if .PageIsApps}} active{{end}}" href="{{AppSubURL}}/web/app/list">
 					 <i class="ion-ios-lightbulb titleIcon icon"></i> <span class="colhidden">Apps</span></a>
@@ -72,12 +70,7 @@
 				<div class="ui menu icon borderless grid" data-color="inverted white">
 					<a class="item labeled openbtn">
                         <i class="ion-navicon-round big icon"></i>
-                    </a>
-					<a class="item labeled expandit" onclick="toggleFullScreen(document.body)">
-                        <i class="ion-arrow-expand big icon"></i>
-                    </a>
-					 {{if .IsSigned}}
-
+                    </a> {{if .IsSigned}}
 					<div class="right menu colhidden">
 						<div class="ui dropdown item">
 							<span class="text">
@@ -101,15 +94,13 @@
 								<a class="item" target="_blank" href="https://goby.io/docs" rel="noreferrer">
 									<i class="octicon octicon-question"></i>
 									帮助
-								</a> 
-								{{if .IsAdmin}}
+								</a> {{if .IsAdmin}}
 								<div class="divider"></div>
 
 								<a class="{{if .PageIsAdmin}}active{{end}} item" href="{{AppSubURL}}/admin">
 									<i class="icon settings"></i>
                                          管理面板
-								</a>
-								{{end}}
+								</a> {{end}}
 
 								<div class="divider"></div>
 								<a class="item" href="{{AppSubURL}}/web/auth/signout">
@@ -130,8 +121,7 @@
 						<a class="item{{if .PageIsSignUp}} active{{end}}" href="{{AppSubURL}}/web/auth/signup">
 							<i class="octicon octicon-person"></i>
 							 注册
-						</a>
-						{{end}}
+						</a> {{end}}
 						<a class="item{{if .PageIsSignIn}} active{{end}}" href="{{AppSubURL}}/web/auth/signin?redirect_to={{.Link}}">
 							<i class="octicon octicon-sign-in"></i>
 							 登陆
@@ -147,7 +137,7 @@
 		<!--navbar-->
 		<!--maincontent-->
 		<div class="mainWrap navslide">
-		{{/*
+			{{/*
 		</div>
 	</div>
 </body>

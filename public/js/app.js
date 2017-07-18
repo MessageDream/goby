@@ -1,15 +1,4 @@
 'use strict'
-var alertError = function (error) {
-    if (error === 'cancel') {
-        return;
-    }
-    swal({
-        type: 'fail',
-        title: 'Operation error',
-        html: error,
-        showCancelButton: false
-    })
-};
 
 $('.ui.form_app_add').form({
     fields: {

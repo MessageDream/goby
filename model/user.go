@@ -52,7 +52,7 @@ func (self *User) GenerateSalt() {
 
 func (self *User) Tokens() ([]*UserToken, error) {
 	tokens := make([]*UserToken, 0, 10)
-	err := x.Find(&tokens, &UserToken{UID: self.ID})
+	err := x.Desc("created_at").Find(&tokens, &UserToken{UID: self.ID})
 	return tokens, err
 }
 

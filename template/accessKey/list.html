@@ -1,40 +1,92 @@
 {{template "base/header" .}}
-<div class="ui container">
-  <table class="ui  striped table">
-    <thead>
-      <tr>
-          <th >名称 </th>
-          <th >Key</th>
-          <th >创建者</th>
-          <th >是否是Session</th>
-          <th >创建时间 </th>
-          <th >过期时间 </th>
-          <th class="center aligned">操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{range .Keys}}
-      <tr>
-        <td >
-          <h4 class="ui image header">
-            <i class="octicon octicon-key"></i>
-            {{.Name}}
-          </h4>
-        </td>
-        <td >{{.Token}}</td>
-        <td >{{.CreatedBy}}</td>
-        <td >{{.IsSession}}</td>
-        <td >{{TimeSince .CreatedAt}}</td>
-        <td >{{TimeSince .ExpiresAt}}</td>
-        <td class="right aligned">
-          <button class="ui pink icon button">
-              <i class="trash icon"></i>
-              移除
+<div class="ui equal width left aligned padded grid stackable">
+  <div class="row">
+    <div class="sixteen wide tablet sixteen wide computer column">
+      <div class="ui segments">
+        <div class="ui segment stackable">
+          <strong>Access Keys</strong>
+          <button class="ui button blueli inverted tiny right floated" id="key_add" data-creator="{{.SignedUser.UserName}}">
+              <i class="ui add icon"></i>
+              Add One
             </button>
-        </td>
-      </tr>
-      {{end}}
-    </tbody>
-  </table>
+        </div>
+        <div class="ui segment left aligned">
+          <table class="ui very basic center aligned celled table">
+            <thead>
+              <tr>
+                <th class="left aligned">Name </th>
+                <th>Key</th>
+                <th>Creater</th>
+                <th>Is Session</th>
+                <th>Create Time </th>
+                <th>Expire Time </th>
+                <th class="center aligned">Operation</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{range .Keys}}
+              <tr>
+                <td class="left aligned">
+                  <h4 class="ui image header">
+                    <i class="octicon octicon-key"></i> {{.Name}}
+                  </h4>
+                </td>
+                <td>{{.Token}}</td>
+                <td>{{.CreatedBy}}</td>
+                <td>{{.IsSession}}</td>
+                <td>{{TimeSince .CreatedAt}}</td>
+                <td>{{TimeSince .ExpiresAt}}</td>
+                <td class="center aligned">
+                  <button class="ui button redli inverted tiny key_delete" data-name="{{.Name}}">
+                Delete
+              </button>
+                </td>
+              </tr>
+              {{end}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="key_add_modal" class="ui standard modal">
+    <div class="header">
+      Add Key
+    </div>
+    <div class="content">
+      <form method='post' id="form_key_add" class="ui form">
+        {{.CsrfTokenHtml}}
+        <div class="two fields">
+          <div class="field">
+            <label>Key Name</label>
+            <input placeholder="Key Name" name="name" type="text">
+          </div>
+          <div class="field">
+            <label>Expire Date</label>
+            <div class="ui calendar" id="key_calendar">
+              <div class="ui input left icon">
+                <i class="calendar icon"></i>
+                <input name="expire_date" type="text" placeholder="Date">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="form_key_error" class="ui error message"></div>
+      </form>
+    </div>
+    <div class="actions">
+      <div class="ui black deny button">
+        取消
+      </div>
+      <div id="key_confirm" class="ui positive right labeled icon button">
+        提交
+        <i class="checkmark icon"></i>
+      </div>
+    </div>
+  </div>
 </div>
 {{template "base/footer" .}}
+<script src="{{AppSubURL}}/plugins/calendar/calendar.min.js"></script>
+<link rel="stylesheet" href="{{AppSubURL}}/plugins/calendar/calendar.min.css" />
+<script src="{{AppSubURL}}/js/key.js?v={{MD5 AppVer}}"></script>

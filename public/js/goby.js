@@ -3,6 +3,17 @@
 var csrf;
 var suburl;
 
+var alertError = function (error) {
+    if (error === 'cancel') {
+        return;
+    }
+    swal({
+        type: 'fail',
+        title: 'Operation error',
+        html: error,
+        showCancelButton: false
+    })
+};
 
 function initInstall() {
     if ($('.install').length == 0) {
@@ -61,7 +72,7 @@ function initInstall() {
 
     });
 
-     $('#disable-registration input').change(function () {
+    $('#disable-registration input').change(function () {
         if ($(this).is(':checked')) {
             $('#enable-captcha').checkbox('uncheck');
         }
@@ -208,7 +219,7 @@ $(document).ready(function () {
 var sideBarIsHide = false;
 var ManuelSideBarIsHide = false;
 var ManuelSideBarIsState = false;
-$(".openbtn").on("click", function() {
+$(".openbtn").on("click", function () {
     ManuelSideBarIsHide = true;
     if (!ManuelSideBarIsState) {
         resizeSidebar("1");
@@ -220,7 +231,7 @@ $(".openbtn").on("click", function() {
 });
 
 
-$(window).resize(function() {
+$(window).resize(function () {
     if (ManuelSideBarIsHide == false) {
         if ($(window).width() <= 767) {
             if (!sideBarIsHide); {
@@ -314,31 +325,6 @@ function resizeSidebar(op) {
 
 }
 
-
-function toggleFullScreen(elem) {
-    // ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
-    if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
-        if (elem.requestFullScreen) {
-            elem.requestFullScreen();
-        } else if (elem.mozRequestFullScreen) {
-            elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullScreen) {
-            elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-        } else if (elem.msRequestFullscreen) {
-            elem.msRequestFullscreen();
-        }
-    } else {
-        if (document.cancelFullScreen) {
-            document.cancelFullScreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitCancelFullScreen) {
-            document.webkitCancelFullScreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        }
-    }
-}
 $(".ui.dropdown").dropdown({
     allowCategorySelection: true,
     transition: "fade up"
@@ -374,7 +360,7 @@ function colorize() {
 
 
 
-    $(".colorlist li a").on("click", function(b) {
+    $(".colorlist li a").on("click", function (b) {
         var c = $(this).attr("data-addClass");
         if (l == null) {
             l = $(".navslide .menu").attr("data-color");
@@ -384,7 +370,7 @@ function colorize() {
         l = c;
         Cookies.set('headerColor', c);
     });
-    $(".sidecolor li a").on("click", function(a) {
+    $(".sidecolor li a").on("click", function (a) {
         var c = $(this).attr("data-addClass");
         // a.preventDefault();
         if (d == null) {
@@ -398,5 +384,5 @@ function colorize() {
     $(".colorize").popup({
         on: "click"
     });
-}  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');  ga('create', 'UA-96662612-1', 'auto');  ga('send', 'pageview');
+} (function (i, s, o, g, r, a, m) { i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () { (i[r].q = i[r].q || []).push(arguments) }, i[r].l = 1 * new Date(); a = s.createElement(o), m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m) })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga'); ga('create', 'UA-96662612-1', 'auto'); ga('send', 'pageview');
 //Sidebar And Navbar Coloring Function (This button on Footer)

@@ -253,7 +253,11 @@ func timeSince(then time.Time) string {
 	case diff <= 2:
 		return fmt.Sprintf("1 秒%s", lbl)
 	case diff < 1*Minute:
-		return fmt.Sprintf("tool.seconds", diff, lbl)
+		se := float64(diff) / 1000
+		if se < 0.1 {
+			se = 0.1
+		}
+		return fmt.Sprintf("%.1f 秒%s", se, lbl)
 
 	case diff < 2*Minute:
 		return fmt.Sprintf("1 分钟%s", lbl)
