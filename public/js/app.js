@@ -6,7 +6,8 @@ var alertError = function (error) {
     swal({
         type: 'fail',
         title: 'Operation error',
-        html: error
+        html: error,
+        showCancelButton: false
     })
 };
 
@@ -61,7 +62,7 @@ $("#col_add").on("click", function () {
                         resolve()
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        reject(errorThrown)
+                        reject(XMLHttpRequest.responseJSON.message)
                     }
                 });
             })
@@ -100,7 +101,7 @@ $(".ui.col_remove").on("click", function () {
                         resolve(email);
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        reject(errorThrown);
+                        reject(XMLHttpRequest.responseJSON.message);
                     }
                 });
             })
@@ -138,7 +139,7 @@ $(".ui.col_transfer").on("click", function () {
                         resolve(email);
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        reject(errorThrown);
+                        reject(XMLHttpRequest.responseJSON.message);
                     }
                 });
             })
@@ -177,7 +178,7 @@ $("#dep_add").on("click", function () {
                         resolve()
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        reject(errorThrown)
+                        reject(XMLHttpRequest.responseJSON.message)
                     }
                 });
             })
@@ -215,7 +216,7 @@ $(".ui.dep_delete").on("click", function () {
                         resolve(dep_name);
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        reject(errorThrown);
+                        reject(XMLHttpRequest.responseJSON.message);
                     }
                 });
             })
@@ -252,7 +253,7 @@ $(".ui.dep_rollback").on("click", function () {
                         resolve(dep_name);
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        reject(errorThrown);
+                        reject(XMLHttpRequest.responseJSON.message);
                     }
                 });
             })
@@ -287,7 +288,7 @@ $(".ui.dep_promote").on("click", function () {
                         resolve()
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        reject(errorThrown)
+                        reject(XMLHttpRequest.responseJSON.message)
                     }
                 });
             })
@@ -312,6 +313,7 @@ $(".ui.dep_new_release").on("click", function () {
         transition: 'fade up',
         closable: false,
         onApprove: function () {
+            $('#release_confirm').addClass('loading');
             var release_form = document.getElementById("form_dep_release");
             var form_data = new FormData(release_form);
 
@@ -349,11 +351,15 @@ $(".ui.dep_new_release").on("click", function () {
 
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    $("#dep_new_release_modal").modal('hide');
-                    Lobibox.notify('error', {
-                        delay: 2000,
-                        msg: errorThrown
-                    });
+                    $('#release_confirm').removeClass('loading');
+                    // $("#dep_new_release_modal").modal('hide');
+                    $('.ui.error.message.release ul').remove();
+                    $('#form_dep_release').addClass('error');
+                    $('.ui.error.message.release').append('<ul class="list"><li>' + XMLHttpRequest.responseJSON.message + '</li></ul>')
+                    // Lobibox.notify('error', {
+                    //     delay: 2000,
+                    //     msg:XMLHttpRequest.responseJSON.message
+                    // });
                 }
             });
 

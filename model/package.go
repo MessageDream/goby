@@ -74,10 +74,10 @@ func (self *Package) FindPrePackages(number int, isAsc bool) ([]*Package, error)
 
 }
 
-func (self *Package) FindPackagesByVersionIDAndReleaseMethods(methods []string, number int, isAsc bool) ([]*Package, error) {
+func (self *Package) FindPackagesByVersionIDAndReleaseMethods(number int, isAsc bool, methods ...string) ([]*Package, error) {
 
 	packages := make([]*Package, 0, number)
-	sess := x.Where("deploy_version_id = ?", self.DeployVersionID).In("release_method", &methods)
+	sess := x.Where("deploy_version_id = ?", self.DeployVersionID).In("release_method", methods)
 	if isAsc {
 		sess = sess.Asc("id")
 	} else {

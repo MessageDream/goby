@@ -193,10 +193,12 @@ func createPackage(deployment *model.Deployment,
 	}
 
 	if exist, err := pkgCheck.Exist(); err != nil || exist {
-		if exist {
+		if err != nil {
+			return nil, err
+		}
+		if exist && releaseMethod != "Rollback" {
 			return nil, ErrDeploymentPackageAlreadyExist
 		}
-		return nil, err
 	}
 
 	result, err := model.Transaction(func(sess *xorm.Session) (interface{}, error) {

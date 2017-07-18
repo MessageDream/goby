@@ -506,7 +506,7 @@ func RollbackDeployment(user *model.User, cache cache.Cache, appName, deployment
 			DeployVersionID: version.ID,
 		}
 
-		pkgs, err := rollbackPkg.FindPackagesByVersionIDAndReleaseMethods([]string{"Upload", "Promote"}, 2, false)
+		pkgs, err := rollbackPkg.FindPackagesByVersionIDAndReleaseMethods(2, false, "Upload", "Promote")
 		if err != nil {
 			return err
 		}
