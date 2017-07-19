@@ -25,7 +25,6 @@
 
 	<!-- Stylesheet -->
 	<link rel="stylesheet" href="{{AppSubURL}}/assets/font-awesome-4.6.3/css/font-awesome.min.css"/>
-	<link rel="stylesheet" href="{{AppSubURL}}/assets/octicons-4.3.0/octicons.min.css"/>
 	<link rel="stylesheet" href="{{AppSubURL}}/plugins/lobibox/css/lobibox.css"/>
 	<link rel="stylesheet" href="{{AppSubURL}}/plugins/ionicons/css/ionicons.min.css"/>
 	<link rel="stylesheet" href="{{AppSubURL}}/plugins/pacejs/pace.css"/>
@@ -67,10 +66,11 @@
 		<div class="pusher">
 			<!--navbar-->
 			<div class="navslide navwrap">
-				<div class="ui menu icon borderless grid" data-color="inverted white">
+				<div class="ui menu icon borderless grid" style="height: 57px;" data-color="inverted white">
 					<a class="item labeled openbtn">
                         <i class="ion-navicon-round big icon"></i>
-                    </a> {{if .IsSigned}}
+					</a>
+					{{if .IsSigned}}
 					<div class="right menu colhidden">
 						<div class="ui dropdown item">
 							<img class="ui mini circular image" src="{{AppSubURL}}/img/avatar_default.jpg" alt="label-image" />
@@ -80,52 +80,48 @@
 								</div>
 
 								<div class="divider"></div>
-								<a class="item" href="{{AppSubURL}}/{{.SignedUser.UserName}}">
-									<i class="octicon octicon-person"></i>
+								<a class="item" href="{{AppSubURL}}/web/user/{{.SignedUser.UserName}}">
+									<i class="user icon"></i>
 									个人信息
 								</a>
-								<a class="{{if .PageIsUserSettings}}active{{end}} item" href="{{AppSubURL}}/user/settings">
-									<i class="octicon octicon-settings"></i>
+								<a class="{{if .PageIsUserSettings}}active{{end}} item" href="{{AppSubURL}}/web/user/settings">
+									<i class="settings icon"></i>
 									用户设置
 								</a>
 								<a class="item" target="_blank" href="https://github.com/MessageDream/goby/issues" rel="noreferrer">
-									<i class="octicon octicon-question"></i>
+									<i class="help icon"></i>
 									帮助
 								</a> {{if .IsAdmin}}
 								<div class="divider"></div>
 
 								<a class="{{if .PageIsAdmin}}active{{end}} item" href="{{AppSubURL}}/web/admin">
-									<i class="icon settings"></i>
+									<i class="settings icon"></i>
                                     管理面板
 								</a> {{end}}
 
 								<div class="divider"></div>
 								<a class="item" href="{{AppSubURL}}/web/auth/signout">
-									<i class="octicon octicon-sign-out"></i>
+									<i class="sign out icon"></i>
 									登出
 								</a>
 							</div>
-							<!-- end content avatar menu -->
 						</div>
-						<!-- end dropdown avatar menu -->
 					</div>
-					<!-- end signed user right menu -->
 
 					{{else}}
 
 					<div class="right menu">
 						{{if .ShowRegistrationButton}}
 						<a class="item{{if .PageIsSignUp}} active{{end}}" href="{{AppSubURL}}/web/auth/signup">
-							<i class="octicon octicon-person"></i>
-							 注册
-						</a> {{end}}
+							<i class="user icon large"></i>
+							 <strong>注册</strong>
+						</a> 
+						{{end}}
 						<a class="item{{if .PageIsSignIn}} active{{end}}" href="{{AppSubURL}}/web/auth/signin?redirect_to={{.Link}}">
-							<i class="octicon octicon-sign-in"></i>
-							 登陆
+							<i class="large sign in icon "></i>
+							<strong> 登陆 </strong>
 						</a>
 					</div>
-					<!-- end anonymous right menu -->
-
 					{{end}}
 				</div>
 			</div>
