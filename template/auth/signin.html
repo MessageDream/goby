@@ -1,5 +1,4 @@
-{{template "base/header" .}}
-<div class="user signin">
+<!-- <div class="user signin">
 	<div class="ui middle very relaxed page grid">
 		<div class="column">
 			<form class="ui form" action="{{.Link}}" method="post">
@@ -40,5 +39,65 @@
 			</form>
 		</div>
 	</div>
+</div> -->
+
+{{template "base/header_2" .}}
+<div class="ui grid center aligned">
+	<div class="row">
+		<div class="sixteen wide tablet six wide computer column">
+			<div class="ui left aligned segment">
+
+				<form id="form_login" class="ui form {{if or .Err_UserName .Err_Password}}error{{end}}" action="{{.Link}}" method="post">
+
+					<h1 class="ui header center aligned">
+						<img src="{{AppSubURL}}/img/goby.png" alt="stagblogo" class="ui small image">
+
+						<div class="content">
+							{{.CsrfTokenHtml}}
+						</div>
+					</h1>
+
+					<div class="field {{if .Err_UserName}}error{{end}}">
+						<label>
+                                    Email or Username:
+                                </label>
+						<div class="ui fluid icon input ">
+							<input name="user_name" type="email" value="{{.user_name}}" autofocus autocomplete="off" style="width:100%!important;min-width:100%;width:100%;">
+							<i class="icon mail outline"></i>
+						</div>
+					</div>
+					<div class="field {{if .Err_Password}}error{{end}}">
+						<label>
+                                    Password:
+                                </label>
+						<div class="ui fluid icon input ">
+							<input name="password" type="password" value="{{.password}}" autocomplete="off" style="width:100%!important;min-width:100%;width:100%;">
+							<i class="icon key"></i>
+						</div>
+					</div>
+					<div class="field">
+
+						<a class="ui submit teal right labeled icon button fluid" onclick="$('#form_login').submit()">
+                                    Login
+                                    <i class="icon sign in"></i>
+                                </a>
+
+						<a class="ui blue right labeled icon button fluid" href="{{AppSubURL}}/web/auth/signup">
+                                    Sign Up
+                                    <i class="icon spy"></i>
+                                </a>
+					</div>
+					<div class="ui error message">
+						{{if .Flash.ErrorMsg}}
+						<ul class="list">
+							<li>{{.Flash.ErrorMsg}}</li>
+						</ul>
+						{{end}}
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
-{{template "base/footer" .}}
+{{template "base/footer_2" .}}
+{{template "base/background" .}}

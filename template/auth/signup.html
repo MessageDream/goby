@@ -1,56 +1,88 @@
-{{template "base/header" .}}
-<div class="user signup">
-	<div class="ui middle very relaxed page grid">
-		<div class="column">
-			<form class="ui form" action="{{.Link}}" method="post">
-				{{.CsrfTokenHtml}}
-				<h3 class="ui top attached header">
-				注册	
-				</h3>
-				<div class="ui attached segment">
-					{{template "base/alert" .}}
-					{{if .DisableRegistration}}
-						<p>对不起，注册功能已被关闭。请联系网站管理员。</p>
-					{{else}}
-						<div class="required inline field {{if .Err_UserName}}error{{end}}">
-							<label for="user_name">用户名</label>
-							<input id="user_name" name="user_name" value="{{.user_name}}" autofocus required>
-						</div>
-						<div class="required inline field {{if .Err_Email}}error{{end}}">
-							<label for="email">邮箱地址</label>
-							<input id="email" name="email" type="email" value="{{.email}}" required>
-						</div>
-						<div class="required inline field {{if .Err_Password}}error{{end}}">
-							<label for="password">密码</label>
-							<input id="password" name="password" type="password" value="{{.password}}" required>
-						</div>
-						<div class="required inline field {{if .Err_Password}}error{{end}}">
-							<label for="retype">确认密码</label>
-							<input id="retype" name="retype" type="password" value="{{.retype}}" required>
-						</div>
-						{{if .EnableCaptcha}}
-							<div class="inline field">
-								<label></label>
-								{{.Captcha.CreateHtml}}
-							</div>
-							<div class="required inline field {{if .Err_Captcha}}error{{end}}">
-								<label for="captcha">验证码</label>
-								<input id="captcha" name="captcha" value="{{.captcha}}" autocomplete="off">
-							</div>
-						{{end}}
+{{template "base/header_2" .}}
+<div class="ui grid center aligned">
+	<div class="row">
+		<div class="sixteen wide tablet six wide computer column">
+			<div class="ui left aligned segment">
 
-						<div class="inline field">
-							<label></label>
-							<button class="ui green button">创建帐户</button>
+				<form id="form_signup" class="ui form {{if or .Err_UserName .Err_Password}}error{{end}}" action="{{.Link}}" method="post">
+
+					<h1 class="ui header center aligned">
+						<img src="{{AppSubURL}}/img/goby.png" alt="stagblogo" class="ui small image">
+
+						<div class="content">
+							{{.CsrfTokenHtml}}
 						</div>
-						<div class="inline field">
-							<label></label>
-							<a href="{{AppSubURL}}/web/auth/login">已经注册？立即登录！</a>
+					</h1>
+
+					<div class="field {{if .Err_UserName}}error{{end}}">
+						<label>
+                                    Username:
+                                </label>
+						<div class="ui fluid icon input ">
+							<input name="user_name" type="email" value="{{.user_name}}" autofocus autocomplete="off" style="width:100%!important;min-width:100%;width:100%;">
+							<i class="icon spy outline"></i>
 						</div>
-					{{end}}
-				</div>
-			</form>
+					</div>
+
+					<div class="field {{if .Err_Email}}error{{end}}">
+						<label>
+                                    Email:
+                                </label>
+						<div class="ui fluid icon input ">
+							<input name="email" type="email" value="{{.email}}" autofocus autocomplete="off" style="width:100%!important;min-width:100%;width:100%;">
+							<i class="icon mail outline"></i>
+						</div>
+					</div>
+					<div class="field {{if .Err_Password}}error{{end}}">
+						<label>
+                                    Password:
+                                </label>
+						<div class="ui fluid icon input ">
+							<input name="password" type="password" value="{{.password}}" autocomplete="off" style="width:100%!important;min-width:100%;width:100%;">
+							<i class="icon key"></i>
+						</div>
+					</div>
+					<div class="field {{if .Err_Password}}error{{end}}">
+						<label>
+                                   Confirm Password:
+                                </label>
+						<div class="ui fluid icon input ">
+							<input name="retype" type="password" value="{{.retype}}" autocomplete="off" style="width:100%!important;min-width:100%;width:100%;">
+							<i class="icon key"></i>
+						</div>
+					</div>
+					<div class="inline field {{if .Err_Captcha}}error{{end}}">
+						<label for="captcha">CAPTCHA:</label> {{.Captcha.CreateHtml}}
+						<div class="required ui fluid icon input ">
+							<input id="captcha" name="captcha" value="{{.captcha}}" autocomplete="off">
+							<i class="icon code"></i>
+						</div>
+
+					</div>
+
+					<div class="field">
+
+						<a class="ui submit teal right labeled icon button fluid" onclick="$('#form_signup').submit()">
+									Sign Up
+                                    <i class="icon sign in"></i>
+                                </a>
+
+						<a class="ui blue right labeled icon button fluid" href="{{AppSubURL}}/web/auth/signin">
+                                    Login
+                                    <i class="icon spy"></i>
+                                </a>
+					</div>
+					<div class="ui error message">
+						{{if .Flash.ErrorMsg}}
+						<ul class="list">
+							<li>{{.Flash.ErrorMsg}}</li>
+						</ul>
+						{{end}}
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 </div>
-{{template "base/footer" .}}
+{{template "base/footer_2" .}}
+{{template "base/background" .}}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-suburl="{{AppSubURL}}">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" /> {{if not .PageIsAdmin}}
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<meta name="author" content="Goby" />
+	<meta name="description" content="Goby is a painless self-hosted code push service" />
+	<meta name="keywords" content="golang, code push, react native, self-hosted, goby" /> {{end}}
+	<meta name="referrer" content="no-referrer" />
+	<meta name="_csrf" content="{{.CsrfToken}}" />
+	<meta name="_suburl" content="{{AppSubURL}}" />
+
+	<!-- Open Graph Tags -->
+	{{if .PageIsAdmin}}
+	<meta property="og:url" content="{{AppURL}}" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="{{AppName}}">
+	<meta property="og:description" content="Goby is a painless self-hosted code push servic.">
+	<meta property="og:image" content="{{AppURL}}img/goby-lg.png" />
+	<meta property="og:site_name" content="Goby"> {{end}}
+
+	<link rel="shortcut icon" href="{{AppSubURL}}/img/favicon.ico" />
+
+	<!-- Stylesheet -->
+	<link rel="stylesheet" href="{{AppSubURL}}/assets/font-awesome-4.6.3/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="{{AppSubURL}}/assets/octicons-4.3.0/octicons.min.css" />
+	<link rel="stylesheet" href="{{AppSubURL}}/plugins/lobibox/css/lobibox.css" />
+	<link rel="stylesheet" href="{{AppSubURL}}/plugins/ionicons/css/ionicons.min.css" />
+	<link rel="stylesheet" href="{{AppSubURL}}/plugins/pacejs/pace.css" />
+	<link rel="stylesheet" href="{{AppSubURL}}/plugins/sweetalert2/sweetalert2.min.css" />
+	<link rel="stylesheet" href="{{AppSubURL}}/css/semantic-2.2.9.min.css" />
+	<link rel="stylesheet" href="{{AppSubURL}}/css/goby.css?v={{MD5 AppVer}}" />
+	<title>{{if .Title}}{{.Title}} - {{end}}{{AppName}}</title>
+
+	<meta name="theme-color" content="{{ThemeColorMetaTag}}">
+</head>
+
+<body>
+	<div class="ui container" style="padding-top:10%">

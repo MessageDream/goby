@@ -45,10 +45,10 @@
 		<!--sidebar-->
 		<div class="ui sidebar vertical left menu overlay  borderless visible sidemenu inverted  grey" style="-webkit-transition-duration: 0.1s; transition-duration: 0.1s;"
 		 data-color="grey">
-			<a class="item logo" href="{{AppSubURL}}/">
-				<!--<img src="{{AppSubURL}}/img/favicon.png" alt="{{AppName}}" />
-				<img src="{{AppSubURL}}/img/favicon.png" alt="{{AppName}}" class="displaynone" />-->
-			</a>
+			 <a class="item logo" href="{{AppSubURL}}/">
+				<img src="{{AppSubURL}}/img/logo.png" alt="stagblogo" />
+				<img src="{{AppSubURL}}/img/thumblogo.png" alt="stagblogo" class="displaynone" />
+            </a>
 			<div class="ui accordion inverted">
 				<a class="title item{{if .PageIsApps}} active{{end}}" href="{{AppSubURL}}/web/app/list">
 					 <i class="ion-ios-lightbulb titleIcon icon"></i> <span class="colhidden">Apps</span></a>
@@ -73,10 +73,7 @@
                     </a> {{if .IsSigned}}
 					<div class="right menu colhidden">
 						<div class="ui dropdown item">
-							<span class="text">
-								<i class="user icon"></i> 
-									<i class="dropdown icon"></i>
-								</span>
+							<img class="ui mini circular image" src="{{AppSubURL}}/img/avatar_default.jpg" alt="label-image" />
 							<div class="menu" tabindex="-1">
 								<div class="ui header">
 									已登录用户 <strong>{{.SignedUser.UserName}}</strong>

@@ -156,6 +156,7 @@ func SignInPost(ctx *context.HTMLContext, form forms.SignInForm) {
 	u, err := userService.Signin(form.UserName, form.Password)
 	if err != nil {
 		if err == ErrUserNameOrPasswordInvalide || err == ErrUserNotExist {
+			ctx.Data["Err_UserName"] = true
 			ctx.RenderWithErr("用户名或密码不正确。", SIGNIN, &form)
 		} else {
 			ctx.Handle(500, "userService.Signin", err)
