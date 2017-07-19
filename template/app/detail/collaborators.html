@@ -225,11 +225,12 @@
     </div>-->
     {{$user := .SignedUser}}
     {{$owner := .Owner}}
+    {{$condition1 := ne $user.Email $owner}}
     <div class="sixteen wide tablet six wide computer column">
       <div class="ui segments">
         <div class="ui segment stackable">
           <strong>Collaborators</strong>
-          <button id="col_add" class="ui blueli right floated button">
+          <button id="col_add" class="ui {{if $condition1}} disabled {{end}} blueli right floated button">
             <i class="ui add icon"></i>
             Add
           </button>
@@ -239,7 +240,7 @@
             {{range .Collaborators}}
             <div class="item">
               <div class="ui tiny rounded image">
-                <img src="{{AppSubURL}}/img/goby.png" alt="label-image" />
+                <img src="{{AppSubURL}}/img/avatar_default.jpg" alt="label-image" />
               </div>
               <div class="content">
                 <a class="header" href="#">{{.Email}}</a>
@@ -250,8 +251,8 @@
                   <p></p>
                 </div>
                 <div class="extra">
-                  {{$condition1 := eq $user.Email .Email}}
-                  {{$condition2 := ne $user.Email $owner}}
+                  
+                  {{$condition2 := eq $user.Email .Email}}
                   <button class="ui {{if or $condition1 $condition2 }}disabled{{end}} button redli inverted tiny col_remove" data-email="{{.Email}}" >Remove</button>
                   <button class="ui {{if or $condition1 $condition2 }}disabled{{end}} button greenli inverted tiny col_transfer" data-email="{{.Email}}">Transfer to this guy</button>
                 </div>

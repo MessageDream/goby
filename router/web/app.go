@@ -1,15 +1,13 @@
 package web
 
 import (
+	"github.com/MessageDream/goby/core"
 	"github.com/MessageDream/goby/core/appService"
 	"github.com/MessageDream/goby/core/collaboratorService"
 	"github.com/MessageDream/goby/core/deploymentService"
-	"github.com/MessageDream/goby/model"
 	"github.com/MessageDream/goby/module/context"
 	"github.com/MessageDream/goby/module/form"
 	"github.com/MessageDream/goby/module/infrastructure"
-
-	. "gopkg.in/ahmetb/go-linq.v3"
 )
 
 const (
@@ -39,10 +37,11 @@ func AppCollaboratorsGet(ctx *context.HTMLContext) {
 		ctx.Error(500, err.Error())
 		return
 	}
-	owner := From(cols).Where(func(col interface{}) bool {
-		co := col.(*model.Collaborator)
-		return co.Role == 1
-	}).First().(*model.Collaborator)
+	owner, err := core.OwnerOf(appName)
+	if err != nil {
+		ctx.Error(500, err.Error())
+		return
+	}
 
 	ctx.Data["AppName"] = appName
 	ctx.Data["IsCollaboratorPage"] = true
@@ -59,9 +58,15 @@ func AppDeploymentsGet(ctx *context.HTMLContext) {
 		ctx.Error(500, err.Error())
 		return
 	}
+	owner, err := core.OwnerOf(appName)
+	if err != nil {
+		ctx.Error(500, err.Error())
+		return
+	}
+
 	ctx.Data["AppName"] = appName
 	ctx.Data["IsDeploymentPage"] = true
-	// ctx.Data["Owner"] = owner.Email
+	ctx.Data["Owner"] = owner.Email
 	ctx.Data["Deployments"] = deployments
 	ctx.HTML(200, APP_DETAIL_DEPLOYMENTS)
 }

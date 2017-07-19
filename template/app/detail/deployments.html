@@ -1,30 +1,30 @@
 {{template "base/header" .}}
 <div class="ui equal width left aligned padded grid stackable">
 
-    {{template "app/detail/header" .}}
-    <div class="row">
-        {{$user := .SignedUser}} {{$owner := .Owner}}
-        <div class="sixteen wide tablet seven wide computer column">
-            <div class="ui segments">
-                <div class="ui segment stackable">
-                    <strong>Summary</strong>
-                    <button id="dep_add" class="ui blueli right floated button">
+  {{template "app/detail/header" .}}
+  <div class="row">
+    {{$user := .SignedUser}} {{$owner := .Owner}} {{$condition := ne $user.Email $owner}}
+    <div class="sixteen wide tablet seven wide computer column">
+      <div class="ui segments">
+        <div class="ui segment stackable">
+          <strong>Summary</strong>
+          <button id="dep_add" class="ui {{if $condition}} disabled {{end}} blueli right floated button">
             <i class="ui add icon"></i>
             Add
           </button>
+        </div>
+        <div class="ui segment">
+          <div class="ui items">
+            {{range .Deployments}}
+            <div class="item">
+              <div class="content">
+                <a class="header" href="#">{{.Name}}</a>
+                <div class="meta">
+                  <span class="cinema">{{.Key}}</span>
                 </div>
-                <div class="ui segment">
-                    <div class="ui items">
-                        {{range .Deployments}}
-                        <div class="item">
-                            <div class="content">
-                                <a class="header" href="#">{{.Name}}</a>
-                                <div class="meta">
-                                    <span class="cinema">{{.Key}}</span>
-                                </div>
-                                {{$pkg := .Package}} {{$metrics := .PackageMetrics}}
-                                <div class="description">
-                                    <div class="ui equal width left aligned padded grid stackable">
+                {{$pkg := .Package}} {{$metrics := .PackageMetrics}}
+                <div class="description">
+                  <!-- <div class="ui equal width left aligned padded grid stackable">
                                         <div class="row">
                                             <div class="column">
                                                 <div>Update Metadata</div>
@@ -86,38 +86,106 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="extra">
-                                    <button class="ui button redli inverted tiny dep_delete" data-name="{{.Name}}">Delete</button>
-                                    <button class="ui button {{if not $pkg}}disabled{{end}} greenli inverted tiny dep_promote" data-name="{{.Name}}">Promote</button>
-                                    <button class="ui button {{if not $pkg}}disabled{{end}} blueli inverted tiny dep_rollback" data-name="{{.Name}}">Rollback</button>
-                                    <button class="ui button yellowli inverted tiny dep_new_release" data-name="{{.Name}}">New Release</button>
-                                </div>
+                                    </div> -->
+                  <table class="ui very basic center aligned celled table">
+                    <thead>
+                      <tr>
+                        <th class="left aligned">Update Metadata </th>
+                        <th class="left aligned">Install Metrics</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="left aligned">
+                          <div class="ui list">
+                            <div class="item">
+                              <i class="flag icon"></i>
+                              <div class="content">
+                                Label:&nbsp;&nbsp;{{if $pkg}}{{$pkg.Label}}{{end}}
+                              </div>
                             </div>
-                        </div>
-                        {{end}}
-                    </div>
+                            <div class="item">
+                              <i class="tag icon"></i>
+                              <div class="content">
+                                App Version:&nbsp;&nbsp;{{if $pkg}}{{$pkg.AppVersion}}{{end}}
+                              </div>
+                            </div>
+                            <div class="item">
+                              <i class="maxcdn icon"></i>
+                              <div class="content">
+                                Mandatory:&nbsp;&nbsp;{{if $pkg}}{{$pkg.IsMandatory}}{{end}}
+                              </div>
+                            </div>
+                            <div class="item">
+                              <i class="clock icon"></i>
+                              <div class="content">
+                                Release Time:&nbsp;&nbsp; {{if $pkg}} {{$time := Time $pkg.UploadTime}} {{if $pkg}}{{DateFmtShort $time}}{{end}} {{end}}
+                              </div>
+                            </div>
+                            <div class="item">
+                              <i class="user icon"></i>
+                              <div class="content">
+                                Released By:&nbsp;&nbsp;{{if $pkg}}{{$pkg.ReleasedBy}}{{end}}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="top aligned">
+                          <div class="ui list">
+                            <div class="item">
+                              <i class="attach icon"></i>
+                              <div class="content">
+                                Active:&nbsp;&nbsp;{{if $metrics}}%{{Persent $metrics.Active $metrics.Active}} ({{$metrics.Downloaded}} of {{$metrics.Downloaded}}){{end}}
+                              </div>
+                            </div>
+                            <div class="item">
+                              <i class="download icon"></i>
+                              <div class="content">
+                                Total:&nbsp;&nbsp;{{if $metrics}}{{$metrics.Installed}}{{end}}
+                              </div>
+                            </div>
+                            <div class="item">
+                              <i class="undo icon"></i>
+                              <div class="content">
+                                Rollbacks:&nbsp;&nbsp;{{if $metrics}}{{$metrics.Failed}}{{end}}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
+                <div class="extra">
+                  <button class="ui button {{if $condition}} disabled {{end}}  redli inverted tiny dep_delete" data-name="{{.Name}}">Delete</button>
+                  <button class="ui button {{if not $pkg}}disabled{{end}} greenli inverted tiny dep_promote" data-name="{{.Name}}">Promote</button>
+                  <button class="ui button {{if not $pkg}}disabled{{end}} blueli inverted tiny dep_rollback" data-name="{{.Name}}">Rollback</button>
+                  <button class="ui button yellowli inverted tiny dep_new_release" data-name="{{.Name}}">New Release</button>
+                </div>
+              </div>
             </div>
+            {{end}}
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 
-    <div id="dep_new_release_modal" class="ui standard modal">
-        <div class="header">
-            New Release
-        </div>
-        <div class="content">
-            <form method='post' enctype="multipart/form-data" id="form_dep_release" class="ui form">
-                <div class="two fields">
-                    <div class="field">
-                        <label>App Version</label>
-                        <input placeholder="App Version" name="version" type="text">
-                    </div>
-                    <div class="field">
-                        <label>Rollout</label>
-                        <div class="ui dropdown selection" tabindex="0">
-                            <select name="rollout">
+  <div id="dep_new_release_modal" class="ui standard modal">
+    <div class="header">
+      New Release
+    </div>
+    <div class="content">
+      <form method='post' enctype="multipart/form-data" id="form_dep_release" class="ui form">
+        <div class="two fields">
+          <div class="field">
+            <label>App Version</label>
+            <input placeholder="App Version" name="version" type="text">
+          </div>
+          <div class="field">
+            <label>Rollout</label>
+            <div class="ui dropdown selection" tabindex="0">
+              <select name="rollout">
                                <option value="100">100%</option>
                                <option value="90">90%</option>
                                <option value="80">80%</option>
@@ -129,45 +197,45 @@
                                <option value="20">20%</option>
                                <option value="10">10%</option>
                             </select>
-                            <i class="dropdown icon"></i>
-                            <div class="default text">Platform</div>
-                            <div class="menu" tabindex="0">
-                                <div class="item" data-value="100">100%</div>
-                                <div class="item" data-value="90">90%</div>
-                                <div class="item" data-value="80">80%</div>
-                                <div class="item" data-value="70">70%</div>
-                                <div class="item" data-value="60">60%</div>
-                                <div class="item" data-value="50">50%</div>
-                                <div class="item" data-value="40">40%</div>
-                                <div class="item" data-value="30">30%</div>
-                                <div class="item" data-value="20">20%</div>
-                                <div class="item" data-value="10">10%</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              <i class="dropdown icon"></i>
+              <div class="default text">Platform</div>
+              <div class="menu" tabindex="0">
+                <div class="item" data-value="100">100%</div>
+                <div class="item" data-value="90">90%</div>
+                <div class="item" data-value="80">80%</div>
+                <div class="item" data-value="70">70%</div>
+                <div class="item" data-value="60">60%</div>
+                <div class="item" data-value="50">50%</div>
+                <div class="item" data-value="40">40%</div>
+                <div class="item" data-value="30">30%</div>
+                <div class="item" data-value="20">20%</div>
+                <div class="item" data-value="10">10%</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-                <div class="field">
-                    <label>Package File</label>
-                    <input type="file" name="package" />
-                </div>
-                <div class="field">
-                    <label>Description</label>
-                     <textarea name="desc" rows="3" cols="20"></textarea> 
-                </div>
-                <div class="ui error message release"></div>
-            </form>
+        <div class="field">
+          <label>Package File</label>
+          <input type="file" name="package" />
         </div>
-        <div class="actions">
-            <div class="ui black deny button">
-                取消
-            </div>
-            <div class="ui positive right labeled icon button" id="release_confirm">
-                提交
-                <i class="checkmark icon"></i>
-            </div>
+        <div class="field">
+          <label>Description</label>
+          <textarea name="desc" rows="3" cols="20"></textarea>
         </div>
+        <div class="ui error message release"></div>
+      </form>
     </div>
+    <div class="actions">
+      <div class="ui black deny button">
+        取消
+      </div>
+      <div class="ui positive right labeled icon button" id="release_confirm">
+        提交
+        <i class="checkmark icon"></i>
+      </div>
+    </div>
+  </div>
 
 </div>
 {{template "base/footer" .}}
