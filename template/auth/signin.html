@@ -67,13 +67,18 @@
 						</div>
 					</div>
 					<div class="field {{if .Err_Password}}error{{end}}">
-						<label>
-                                    Password:
-                                </label>
+						<label>Password:</label>
 						<div class="ui fluid icon input ">
 							<input name="password" type="password" value="{{.password}}" autocomplete="off" style="width:100%!important;min-width:100%;width:100%;">
 							<i class="icon key"></i>
 						</div>
+					</div>
+					<div class="inline field">
+						<div class="ui checkbox">
+							<input name="remember" type="checkbox">
+							<label class="coloring blue" for="remember">Remember</label>
+						</div>
+						<a style="float:right" href="{{AppSubURL}}/web/auth/forget_password">Forget Password ?</a>
 					</div>
 					<div class="field">
 
@@ -99,5 +104,4 @@
 		</div>
 	</div>
 </div>
-{{template "base/footer_2" .}}
-{{template "base/background" .}}
+{{template "base/footer_2" .}} {{template "base/background" .}}
