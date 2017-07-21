@@ -541,9 +541,10 @@ func RollbackDeployment(user *model.User, cache cache.Cache, appName, deployment
 		deployment.Name)
 
 	if err != nil {
-		clearCache(cache, deployment.Key, version.AppVersion)
+		return err
 	}
-	return err
+	clearCache(cache, deployment.Key, version.AppVersion)
+	return nil
 }
 
 func PromoteDeployment(user *model.User, cache cache.Cache, appName, sourceDeploymentName, destDeploymentName string) error {
