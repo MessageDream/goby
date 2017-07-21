@@ -452,17 +452,22 @@ var table = $('#table_history').dataTable({
         {
             data: "uploadTime",
             render: function (data, type, row, meta) {
-                var date = new Date(data)
-                return moment(date).format("YYYY-MM-DD hh:mm:ss");
+                return moment(new Date(data)).format("YYYY-MM-DD hh:mm:ss");
             }
         },
         { data: "description" },
         {
             data: "metrics",
             render: function (data, type, row, meta) {
-                return '<div class="ui list"><div class="item"><i class="attach icon"></i><div class="content"> Active:&nbsp;&nbsp;' + (data.totalActive != 0 ? (data.active / data.totalActive / 100) : 0) + '（' + data.active + '&nbsp;&nbsp;of&nbsp;&nbsp;' + data.totalActive + '）' + '</div></div><div class="item"><i class="download icon"></i><div class="content">Total:&nbsp;&nbsp;' + data.installed + '</div></div><div class="item"><i class="undo icon"></i><div class="content">Rollbacks:&nbsp;&nbsp;' + data.failed + ' </div></div></div>';
+                return '<div class="ui list"><div class="item"><i class="attach icon"></i><div class="content"> Active:&nbsp;&nbsp;' + (data.totalActive != 0 ? (data.active / data.totalActive * 100).toFixed(1) : 0) + '%（' + data.active + '&nbsp;of&nbsp;' + data.totalActive + '）' + '</div></div><div class="item"><i class="download icon"></i><div class="content">Total:&nbsp;&nbsp;' + data.installed + '</div></div><div class="item"><i class="undo icon"></i><div class="content">Rollbacks:&nbsp;&nbsp;' + data.failed + ' </div></div></div>';
             }
         }
+        // ,{
+        //    data: "label",
+        //    render:function (data, type, row, meta) {
+        //         return '<button class="ui button blueli inverted tiny pkg_rollback" data-name="'+data+'">Rollback</button>';
+        //     }
+        // }
     ]
 }).api();
 

@@ -102,11 +102,11 @@ func NewFuncMap() []template.FuncMap {
 		"Add": func(a, b uint64) uint64 {
 			return a + b
 		},
-		"Persent": func(a, b uint64) int {
+		"Persent": func(a, b uint64) string {
 			if b == 0 {
-				return 0
+				return "0"
 			}
-			return int(a / b / 100)
+			return fmt.Sprintf("%.1f", float32(a)/float32(b)*100)
 		},
 		"DateFmtLong": func(t time.Time) string {
 			return t.Format(time.RFC1123Z)

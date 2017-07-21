@@ -22,7 +22,7 @@
                 <div class="meta">
                   <span class="cinema">{{.Key}}</span>
                 </div>
-                
+
                 {{$pkg := .Package}} {{$metrics := .PackageMetrics}}
                 <div class="description">
                   {{if $pkg}}
@@ -58,7 +58,7 @@
                             <div class="item">
                               <i class="clock icon"></i>
                               <div class="content">
-                                Release Time:&nbsp;&nbsp;  {{$time := Time $pkg.UploadTime}} {{DateFmtShort $time}}
+                                Release Time:&nbsp;&nbsp; {{$time := Time $pkg.UploadTime}} {{DateFmtShort $time}}
                               </div>
                             </div>
                             <div class="item">
@@ -74,7 +74,7 @@
                             <div class="item">
                               <i class="attach icon"></i>
                               <div class="content">
-                                Active:&nbsp;&nbsp;{{if $metrics}}%{{Persent $metrics.Active $metrics.TotalActive}} ({{$metrics.Active}} of {{$metrics.TotalActive}}){{end}}
+                                Active:&nbsp;&nbsp;{{if $metrics}}{{Persent $metrics.Active $metrics.TotalActive}}%（{{$metrics.Active}} of {{$metrics.TotalActive}}）{{end}}
                               </div>
                             </div>
                             <div class="item">
@@ -94,9 +94,7 @@
                       </tr>
                     </tbody>
                   </table>
-                  {{else}}
-                    No Packge Released
-                  {{end}}
+                  {{else}} No Packge Released {{end}}
                 </div>
                 <div class="extra">
                   <button class="ui button {{if $condition}} disabled {{end}}  redli inverted tiny dep_delete" data-name="{{.Name}}">Delete</button>
@@ -116,8 +114,8 @@
         <div class="ui segment stackable">
           <strong>History</strong>
           <div id="menu_history" class="ui left pointing right floated labeled icon dropdown button" tabindex="0">
-            <i class="filter icon"></i>
-            <span class="text">Production</span>
+            <i class="filter icon"></i> {{range $idx,$v:= .Deployments}} {{if eq $idx 0}}
+            <span class="text">{{.Name}}</span> {{end}} {{end}}
             <div class="menu" tabindex="-1">
               {{range $idx,$v:= .Deployments}}
               <div class="item {{if eq $idx 0}}active selected{{end}}" data-value="{{$v.Name}}">
@@ -140,6 +138,7 @@
                 <th>Release Time</th>
                 <th>Description </th>
                 <th>Install Metrics</th>
+                <!-- <th>Operation</th> -->
               </tr>
             </thead>
           </table>
