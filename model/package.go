@@ -74,10 +74,10 @@ func (self *Package) FindPrePackages(number int, isAsc bool) ([]*Package, error)
 
 }
 
-func (self *Package) FindPackagesByVersionIDAndReleaseMethods(methods []string, number int, isAsc bool) ([]*Package, error) {
+func (self *Package) FindPackagesByVersionIDAndReleaseMethods(number int, isAsc bool, methods ...string) ([]*Package, error) {
 
 	packages := make([]*Package, 0, number)
-	sess := x.Where("deploy_version_id = ?", self.DeployVersionID).In("release_method", &methods)
+	sess := x.Where("deploy_version_id = ?", self.DeployVersionID).In("release_method", methods)
 	if isAsc {
 		sess = sess.Asc("id")
 	} else {
@@ -92,7 +92,7 @@ func (self *Package) FindPackagesByVersionIDAndReleaseMethods(methods []string, 
 
 type PackageDiff struct {
 	ID                     uint64 `xorm:"pk autoincr"`
-	PackageID              uint64 `xorm:"notnull default(0)"`
+	OriginalPackageHash    string
 	DiffAgainstPackageHash string
 	DiffBlobURL            string
 	DiffSize               int64     `xorm:"notnull default(0)"`
@@ -106,7 +106,7 @@ func (self *PackageDiff) Update(engine Engine, specFields ...string) error {
 }
 
 func (self *PackageDiff) Exist() (bool, error) {
-	exi, err := x.Where("id!=?", 0).Get(&PackageDiff{PackageID: self.PackageID, DiffAgainstPackageHash: self.DiffAgainstPackageHash})
+	exi, err := x.Where("id!=?", 0).Get(&PackageDiff{OriginalPackageHash: self.OriginalPackageHash, DiffAgainstPackageHash: self.DiffAgainstPackageHash})
 	return exi, err
 }
 

@@ -193,10 +193,12 @@ func createPackage(deployment *model.Deployment,
 	}
 
 	if exist, err := pkgCheck.Exist(); err != nil || exist {
-		if exist {
+		if err != nil {
+			return nil, err
+		}
+		if exist && releaseMethod != "Rollback" {
 			return nil, ErrDeploymentPackageAlreadyExist
 		}
-		return nil, err
 	}
 
 	result, err := model.Transaction(func(sess *xorm.Session) (interface{}, error) {
@@ -316,7 +318,7 @@ func createDiffPackage(originalPackage *model.Package) ([]*model.PackageDiff, er
 
 func createOneDiffPackage(originalPackage, prePackage *model.Package) (*model.PackageDiff, error) {
 	pkgDiff := &model.PackageDiff{
-		PackageID:              originalPackage.ID,
+		OriginalPackageHash:    originalPackage.Hash,
 		DiffAgainstPackageHash: prePackage.Hash,
 	}
 
@@ -474,7 +476,7 @@ func createOneDiffPackage(originalPackage, prePackage *model.Package) (*model.Pa
 	}()
 
 	diffPkg := &model.PackageDiff{
-		PackageID:              originalPackage.ID,
+		OriginalPackageHash:    originalPackage.Hash,
 		DiffAgainstPackageHash: prePackage.Hash,
 		DiffBlobURL:            zipURLPath,
 		DiffSize:               diffSize,

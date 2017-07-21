@@ -28,10 +28,11 @@ type Package struct {
 }
 
 type PackageMetrics struct {
-	Active     uint64 `json:"active"`
-	Downloaded uint64 `json:"downloaded"`
-	Failed     uint64 `json:"failed"`
-	Installed  uint64 `json:"installed"`
+	Active      uint64 `json:"active"`
+	TotalActive uint64 `json:"totalActive"`
+	Downloaded  uint64 `json:"downloaded"`
+	Failed      uint64 `json:"failed"`
+	Installed   uint64 `json:"installed"`
 }
 
 type UpdatePackageInfo struct {

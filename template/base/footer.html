@@ -1,22 +1,70 @@
 {{/*
 <html>
+
 <body>
 	<div>
-*/}}
+		*/}}
 	</div>
-	<footer>
+	<!--<footer>
 		<div class="ui container">
 			<div class="ui left">
-				© 2017 Goby version: {{AppVer}} {{if ShowFooterTemplateLoadTime}}页面: <strong>{{LoadTimes .PageStartTime}}</strong> 模板: <strong>{{call .TmplLoadTimes}}</strong>{{end}}
+				© 2017 Goby version: {{AppVer}} {{if ShowFooterTemplateLoadTime}}页面: <strong>{{LoadTimes .PageStartTime}}</strong> 模板:
+				<strong>{{call .TmplLoadTimes}}</strong>{{end}}
 			</div>
 			<div class="ui right links">
 				{{if .ShowFooterBranding}}
-					<a target="_blank" href="https://github.com/MessageDream/goby"><i class="fa fa-github-square"></i><span class="sr-only">GitHub</span></a>
-				{{end}}
+				<a target="_blank" href="https://github.com/MessageDream/goby"><i class="fa fa-github-square"></i><span class="sr-only">GitHub</span></a>				{{end}}
 				<a target="_blank" href="https://github.com/MessageDream/goby">网址</a>
 				<span class="version">{{GoVer}}</span>
 			</div>
 		</div>
-	</footer>
+	</footer>-->
+
+<!-- JavaScript -->
+	<script src="{{AppSubURL}}/js/jquery-1.11.3.min.js"></script>
+	<script src="{{AppSubURL}}/js/semantic-2.2.9.min.js"></script>
+	<script src="{{AppSubURL}}/plugins/lobibox/js/notifications.js"></script>
+	<script src="{{AppSubURL}}/plugins/cookie/js.cookie.js"></script>
+	<script src="{{AppSubURL}}/plugins/nicescrool/jquery.nicescroll.min.js"></script>
+	<script src="{{AppSubURL}}/plugins/sweetalert2/sweetalert2.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js" integrity="sha256-1hjUhpc44NwiNg8OwMu2QzJXhD8kcj+sJA3aCQZoUjg=" crossorigin="anonymous"></script>
+	<script src="{{AppSubURL}}/js/goby.js?v={{MD5 AppVer}}"></script>
+	<script>
+		notifyactions();
+		function notifyactions() {
+			var notify = $("#notify");
+			if (notify && $(notify).attr("data-message") !== '') {
+
+				var a, b, c, d, e, f, g, h, i, j, k;
+				d = $(notify).attr("data-size");
+				e = $(notify).attr("data-message");
+				c = $(notify).attr("data-type");
+				f = $(notify).attr("data-icon");
+				g = $(notify).attr("data-title");
+				h = $(notify).attr("data-image");
+				i = $(notify).attr("data-sound");
+				a = $(notify).attr("data-show-animation");
+				b = $(notify).attr("data-hide-animation");
+				j = $(notify).attr("data-position");
+				k = $(notify).attr("data-delay");
+				Lobibox.notify(c, {
+					size: d,
+					rounded: false,
+					delayIndicator: true,
+					msg: e,
+					icon: f,
+					title: g,
+					showClass: a,
+					hideClass: b,
+					sound: i,
+					img: h,
+					delay: k
+				});
+
+				 $(notify).attr("data-message",'');	
+			}
+		}
+	</script>
 </body>
+
 </html>

@@ -28,6 +28,17 @@ func OwnerCan(uid uint64, name string) (*model.Collaborator, error) {
 	return col, nil
 }
 
+func OwnerOf(name string) (*model.Collaborator, error) {
+	col, err := model.FindOwnerByAppName(name)
+	if err != nil || col == nil {
+		if err != nil {
+			return nil, err
+		}
+		return nil, ErrAppNotExist
+	}
+	return col, nil
+}
+
 func CollaboratorOf(uid uint64, name string) (*model.Collaborator, error) {
 	col, err := model.FindCollaboratorByAppNameAndUID(name, uid)
 

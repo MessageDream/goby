@@ -75,13 +75,31 @@ func FindCollaboratorsByAppIDs(appIds []uint64) ([]*Collaborator, error) {
 	return cols, x.In("app_id", appIds).Find(&cols)
 }
 
+func FindOwnerByAppName(appName string) (*Collaborator, error) {
+	col := &Collaborator{}
+
+	exsit, err := x.Sql(`SELECT b.* FROM app AS a 
+	INNER JOIN collaborator AS b 
+	ON a.id = b.app_id
+	WHERE a.name = ? AND b.Role = 1 AND a.deleted_at IS NULL AND b.deleted_at IS NULL 
+    LIMIT 1`, appName).Get(col)
+
+	if err != nil {
+		return nil, err
+	}
+	if !exsit {
+		return nil, nil
+	}
+	return col, nil
+}
+
 func FindCollaboratorByAppNameAndUID(appName string, uid uint64) (*Collaborator, error) {
 	col := &Collaborator{}
 
 	exsit, err := x.Sql(`SELECT b.* FROM app AS a 
 	INNER JOIN collaborator AS b 
 	ON a.id = b.app_id
-	WHERE a.name = ? and b.uid = ? AND a.deleted_at IS NULL AND b.deleted_at IS NULL 
+	WHERE a.name = ? AND b.uid = ? AND a.deleted_at IS NULL AND b.deleted_at IS NULL 
     LIMIT 1`, appName, uid).Get(col)
 
 	if err != nil {

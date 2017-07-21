@@ -1,0 +1,221 @@
+{{template "base/header" .}}
+<div class="ui equal width left aligned padded grid stackable">
+
+  {{template "app/detail/header" .}}
+  <div class="row">
+    {{$user := .SignedUser}} {{$owner := .Owner}} {{$condition := ne $user.Email $owner}}
+    <div class="sixteen wide tablet seven wide computer column">
+      <div class="ui segments">
+        <div class="ui segment stackable">
+          <strong>Summary</strong>
+          <button id="dep_add" class="ui {{if $condition}} disabled {{end}} blueli right floated button">
+            <i class="ui add icon"></i>
+            Add
+          </button>
+        </div>
+        <div class="ui segment">
+          <div class="ui items">
+            {{range .Deployments}}
+            <div class="item">
+              <div class="content">
+                <a class="header" href="#">{{.Name}}</a>
+                <div class="meta">
+                  <span class="cinema">{{.Key}}</span>
+                </div>
+
+                {{$pkg := .Package}} {{$metrics := .PackageMetrics}}
+                <div class="description">
+                  {{if $pkg}}
+                  <table class="ui very basic center aligned celled table">
+                    <thead>
+                      <tr>
+                        <th class="left aligned">Update Metadata </th>
+                        <th class="left aligned">Install Metrics</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="left aligned">
+                          <div class="ui list">
+                            <div class="item">
+                              <i class="flag icon"></i>
+                              <div class="content">
+                                Label:&nbsp;&nbsp;{{$pkg.Label}}
+                              </div>
+                            </div>
+                            <div class="item">
+                              <i class="tag icon"></i>
+                              <div class="content">
+                                App Version:&nbsp;&nbsp;{{$pkg.AppVersion}}
+                              </div>
+                            </div>
+                            <div class="item">
+                              <i class="maxcdn icon"></i>
+                              <div class="content">
+                                Mandatory:&nbsp;&nbsp;{{$pkg.IsMandatory}}
+                              </div>
+                            </div>
+                            <div class="item">
+                              <i class="clock icon"></i>
+                              <div class="content">
+                                Release Time:&nbsp;&nbsp; {{$time := Time $pkg.UploadTime}} {{DateFmtShort $time}}
+                              </div>
+                            </div>
+                            <div class="item">
+                              <i class="user icon"></i>
+                              <div class="content">
+                                Released By:&nbsp;&nbsp;{{$pkg.ReleasedBy}}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="top aligned">
+                          <div class="ui list">
+                            <div class="item">
+                              <i class="attach icon"></i>
+                              <div class="content">
+                                Active:&nbsp;&nbsp;{{if $metrics}}{{Persent $metrics.Active $metrics.TotalActive}}%（{{$metrics.Active}} of {{$metrics.TotalActive}}）{{end}}
+                              </div>
+                            </div>
+                            <div class="item">
+                              <i class="download icon"></i>
+                              <div class="content">
+                                Total:&nbsp;&nbsp;{{if $metrics}}{{$metrics.Installed}}{{end}}
+                              </div>
+                            </div>
+                            <div class="item">
+                              <i class="undo icon"></i>
+                              <div class="content">
+                                Rollbacks:&nbsp;&nbsp;{{if $metrics}}{{$metrics.Failed}}{{end}}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  {{else}} No Packge Released {{end}}
+                </div>
+                <div class="extra">
+                  <button class="ui button {{if $condition}} disabled {{end}}  redli inverted tiny dep_delete" data-name="{{.Name}}">Delete</button>
+                  <button class="ui button {{if not $pkg}}disabled{{end}} greenli inverted tiny dep_promote" data-name="{{.Name}}">Promote</button>
+                  <button class="ui button {{if not $pkg}}disabled{{end}} blueli inverted tiny dep_rollback" data-name="{{.Name}}">Rollback</button>
+                  <button class="ui button yellowli inverted tiny dep_new_release" data-name="{{.Name}}">New Release</button>
+                </div>
+              </div>
+            </div>
+            {{end}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sixteen wide tablet nine wide computer column">
+      <div class="ui segments">
+        <div class="ui segment stackable">
+          <strong>History</strong>
+          <div id="menu_history" class="ui left pointing right floated labeled icon dropdown button" tabindex="0">
+            <i class="filter icon"></i> {{range $idx,$v:= .Deployments}} {{if eq $idx 0}}
+            <span class="text">{{.Name}}</span> {{end}} {{end}}
+            <div class="menu" tabindex="-1">
+              {{range $idx,$v:= .Deployments}}
+              <div class="item {{if eq $idx 0}}active selected{{end}}" data-value="{{$v.Name}}">
+                <!-- <i class="bookmark icon"></i>  -->
+                {{$v.Name}}
+              </div>
+              {{end}}
+            </div>
+          </div>
+          <div class="clearfix"> </div>
+        </div>
+        <div class="ui segment">
+          <table id="table_history" class="ui very basic center aligned celled table">
+            <thead>
+              <tr>
+                <th>Label</th>
+                <th>App Version</th>
+                <th>Mandatory</th>
+                <th>Release Method</th>
+                <th>Release Time</th>
+                <th>Description </th>
+                <th>Install Metrics</th>
+                <!-- <th>Operation</th> -->
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="dep_new_release_modal" class="ui standard modal">
+    <div class="header">
+      New Release
+    </div>
+    <div class="content">
+      <form method='post' enctype="multipart/form-data" id="form_dep_release" class="ui form">
+        <div class="two fields">
+          <div class="field">
+            <label>App Version</label>
+            <input placeholder="App Version" name="version" type="text">
+          </div>
+          <div class="field">
+            <label>Rollout</label>
+            <div class="ui dropdown selection" tabindex="0">
+              <select name="rollout">
+                               <option value="100">100%</option>
+                               <option value="90">90%</option>
+                               <option value="80">80%</option>
+                               <option value="70">70%</option>
+                               <option value="60">60%</option>
+                               <option value="50">50%</option>
+                               <option value="40">40%</option>
+                               <option value="30">30%</option>
+                               <option value="20">20%</option>
+                               <option value="10">10%</option>
+                            </select>
+              <i class="dropdown icon"></i>
+              <div class="default text">Platform</div>
+              <div class="menu" tabindex="0">
+                <div class="item" data-value="100">100%</div>
+                <div class="item" data-value="90">90%</div>
+                <div class="item" data-value="80">80%</div>
+                <div class="item" data-value="70">70%</div>
+                <div class="item" data-value="60">60%</div>
+                <div class="item" data-value="50">50%</div>
+                <div class="item" data-value="40">40%</div>
+                <div class="item" data-value="30">30%</div>
+                <div class="item" data-value="20">20%</div>
+                <div class="item" data-value="10">10%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Package File</label>
+          <input type="file" name="package" />
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <textarea name="desc" rows="3" cols="20"></textarea>
+        </div>
+        <div class="ui error message release"></div>
+      </form>
+    </div>
+    <div class="actions">
+      <div class="ui black deny button">
+        取消
+      </div>
+      <div class="ui positive right labeled icon button" id="release_confirm">
+        提交
+        <i class="checkmark icon"></i>
+      </div>
+    </div>
+  </div>
+
+</div>
+{{template "base/footer" .}}
+<link rel="stylesheet" href="{{AppSubURL}}/plugins/datatable/dataTables.semanticui.css"></link>
+<script src="{{AppSubURL}}/plugins/datatable/jquery.dataTables.js"></script>
+<script src="{{AppSubURL}}/plugins/datatable/dataTables.semanticui.js"></script>
+<script src="{{AppSubURL}}/js/app.js?v={{MD5 AppVer}}"></script>

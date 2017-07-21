@@ -110,23 +110,23 @@ func HTMLContexter() macaron.Handler {
 			Session: sess,
 		}
 
+		ctx.Auth()
+
 		link := ctx.Req.RequestURI
 		i := strings.Index(link, "?")
 		if i > -1 {
 			link = link[:i]
 		}
 		ctx.Data["Link"] = link
-
 		ctx.Data["PageStartTime"] = time.Now()
-
-		ctx.Auth()
-
-		ctx.Data["CsrfToken"] = x.GetToken()
-		ctx.Data["CsrfTokenHtml"] = template.HTML(`<input type="hidden" name="_csrf" value="` + x.GetToken() + `">`)
-		log.Trace("Session ID: %s", sess.ID())
-		log.Trace("CSRF Token: %v", ctx.Data["CsrfToken"])
-
 		ctx.Data["ShowRegistrationButton"] = !disableRegistration
+		csrfToken := x.GetToken()
+		ctx.Data["CsrfToken"] = csrfToken
+		ctx.Data["CsrfTokenHtml"] = template.HTML(`<input type="hidden" name="_csrf" value="` + csrfToken + `">`)
+
+		log.Trace("Session ID: %s", sess.ID())
+		log.Trace("CSRF Token: %v", csrfToken)
+
 		c.Map(ctx)
 	}
 }

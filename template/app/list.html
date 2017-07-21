@@ -1,61 +1,89 @@
 {{template "base/header" .}}
-<div class="ui container">
-  <table class="ui striped table">
-    <thead>
-      <tr>
-          <th >名称 </th>
-          <th >成员</th>
-          <th >部署 </th>
-          <th class="center aligned">操作 </th>
-      </tr>
-    </thead>
-    <tbody>
-        {{range .Apps}}
-      <tr>
-        <td ><i class="apple icon"></i>{{.Name}}</td>
-        <td >
+<div class="ui aligned padded five column grid stackable">
+  {{range .Apps}}
+  <div class="column">
+    <div class="ui segment">
+      <a href="{{AppSubURL}}/web/app/detail/{{.Name}}/deployments" class="ui link card">
+        <div class="content">
+          <img class="right floated mini ui image" src="{{AppSubURL}}/img/goby.png">
+          <div class="header">
+            {{.Name}}
+          </div>
+          <div class="meta">
+            {{range $k,$v := .Collaborators}} {{if eq .Permission "Owner"}} {{$k}} {{end}} {{end}}
+          </div>
+        </div>
+        <div class="content">
           <div class="ui list">
-            {{range $k,$v := .Collaborators}}
             <div class="item">
-              <i class="{{if eq .Permission "Owner"}}user{{else}}child{{end}} icon"></i>
+              <i class="users icon"></i>
               <div class="content">
-                {{if .IsCurrentAccount}}
-                  Self
-                {{else}}
-                  {{$k}}
-                {{end}}
+                {{len .Collaborators}} Collaborators
               </div>
             </div>
-            {{end}}
-          </div>
-        </td>
-        <td >
-          <div class="ui list">
-            {{range .Deployments}}
             <div class="item">
               <i class="tag icon"></i>
-              <div class="content">{{.}} </div>
+              <div class="content">
+                {{len .Deployments}} Deployments
+              </div>
             </div>
-              {{end}}
           </div>
-        </td>
-        <td class="right aligned">
-            <button class="ui blue icon {{if not .IsOwner}}disabled{{end}} button">
-              <i class="fork icon"></i>
-              添加部署
-            </button>
-            <button class="ui green icon {{if not .IsOwner}}disabled{{end}} button">
-              <i class="add user icon"></i>
-              添加成员
-            </button>
-            <button class="ui pink icon {{if not .IsOwner}}disabled{{end}} button">
-              <i class="trash icon"></i>
-              移除
-            </button>
-        </td>
-      </tr>
-      {{end}}
-    </tbody>
-  </table>
+        </div>
+      </a>
+    </div>
+  </div>
+  {{end}}
+
+  <div class="column">
+    <div id="app_add" class="ui segment button">
+      <img src="{{AppSubURL}}/img/add.png">
+    </div>
+  </div>
 </div>
+
+<div id="app_add_modal" class="ui standard modal">
+  <div class="header">
+    Create App
+  </div>
+  <div class="content">
+    <form method='post' action='{{AppSubURL}}/web/app/add' class="ui form form_app_add">
+      {{.CsrfTokenHtml}}
+      <div class="two fields">
+        <div class="field">
+          <label>App Name</label>
+          <input placeholder="App Name" name="name" type="text">
+        </div>
+        <div class="field">
+          <label>Platform</label>
+          <div class="ui dropdown selection" tabindex="0">
+            <select name="platform">
+                  <option value="">Platform</option>
+                  <option value="ios">iOS</option>
+                  <option value="android">Android</option>
+              </select>
+            <i class="dropdown icon"></i>
+            <div class="default text">Platform</div>
+            <div class="menu" tabindex="-1">
+              <div class="item" data-value="ios">iOS</div>
+              <div class="item" data-value="android">Android</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ui error message"></div>
+    </form>
+  </div>
+  <div class="actions">
+    <div class="ui black deny button">
+      Cancel
+    </div>
+    <div class="ui positive right labeled icon button">
+      Submit
+      <i class="checkmark icon"></i>
+    </div>
+  </div>
+</div>
+</div>
+
 {{template "base/footer" .}}
+<script src="{{AppSubURL}}/js/app.js?v={{MD5 AppVer}}"></script>

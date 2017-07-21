@@ -5,7 +5,6 @@ import (
 	"io"
 	"os"
 	"path"
-	"strconv"
 	"strings"
 
 	"github.com/go-macaron/cache"
@@ -274,7 +273,7 @@ func ReleaseDeployment(user *model.User,
 		manifesURLPath,
 		zipURLPath,
 		"Upload",
-		strconv.FormatUint(user.ID, 10)+"&"+user.Email,
+		user.Email,
 		description,
 		"",
 		"")
@@ -507,7 +506,7 @@ func RollbackDeployment(user *model.User, cache cache.Cache, appName, deployment
 			DeployVersionID: version.ID,
 		}
 
-		pkgs, err := rollbackPkg.FindPackagesByVersionIDAndReleaseMethods([]string{"Upload", "Promote"}, 2, false)
+		pkgs, err := rollbackPkg.FindPackagesByVersionIDAndReleaseMethods(2, false, "Upload", "Promote")
 		if err != nil {
 			return err
 		}
@@ -536,15 +535,16 @@ func RollbackDeployment(user *model.User, cache cache.Cache, appName, deployment
 		rollbackPkg.ManifestBlobURL,
 		rollbackPkg.BlobURL,
 		"Rollback",
-		strconv.FormatUint(user.ID, 10)+"&"+user.Email,
+		user.Email,
 		rollbackPkg.Description,
 		rollbackPkg.Label,
 		deployment.Name)
 
 	if err != nil {
-		clearCache(cache, deployment.Key, version.AppVersion)
+		return err
 	}
-	return err
+	clearCache(cache, deployment.Key, version.AppVersion)
+	return nil
 }
 
 func PromoteDeployment(user *model.User, cache cache.Cache, appName, sourceDeploymentName, destDeploymentName string) error {
@@ -599,7 +599,7 @@ func PromoteDeployment(user *model.User, cache cache.Cache, appName, sourceDeplo
 		sourcePkg.ManifestBlobURL,
 		sourcePkg.BlobURL,
 		"Promote",
-		strconv.FormatUint(user.ID, 10)+"&"+user.Email,
+		user.Email,
 		sourcePkg.Description,
 		sourcePkg.Label,
 		sourceDeployment.Name)

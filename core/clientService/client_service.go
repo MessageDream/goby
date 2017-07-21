@@ -72,7 +72,7 @@ func UpdateCheck(cache cache.Cache, deploymentKey, appVersion, label, packageHas
 	checkResult.PackageSize = pkg.Size
 
 	pkgDiff := &model.PackageDiff{
-		PackageID:              pkg.ID,
+		OriginalPackageHash:    pkg.Hash,
 		DiffAgainstPackageHash: packageHash,
 	}
 
