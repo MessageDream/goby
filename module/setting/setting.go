@@ -311,7 +311,7 @@ func loadLogConfig() {
 
 func loadCacheConfig() {
 	CacheAdapter = Cfg.Section("cache").Key("ADAPTER").In("memory", []string{"memory", "redis", "memcache"})
-	CacheClientCheckUpdateTimeOut = Cfg.Section("cache").Key("CLIENT_CHECK_UPDATE_DATA_TIME_OUT").MustInt64(6 * 60 * 60 * 1000)
+	CacheClientCheckUpdateTimeOut = Cfg.Section("cache").Key("CLIENT_CHECK_UPDATE_DATA_TIME_OUT").MustInt64(12 * 60 * 60 * 1000)
 	CacheTokenTimeOut = Cfg.Section("cache").Key("TOKEN_DATA_TIME_OUT").MustInt64(60 * 60 * 1000)
 	if EnableRedis {
 		log.Info("Redis Supported")
