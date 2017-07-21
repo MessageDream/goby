@@ -22,71 +22,10 @@
                 <div class="meta">
                   <span class="cinema">{{.Key}}</span>
                 </div>
+                
                 {{$pkg := .Package}} {{$metrics := .PackageMetrics}}
                 <div class="description">
-                  <!-- <div class="ui equal width left aligned padded grid stackable">
-                                        <div class="row">
-                                            <div class="column">
-                                                <div>Update Metadata</div>
-
-                                                <div class="ui list">
-                                                    <div class="item">
-                                                        <i class="flag icon"></i>
-                                                        <div class="content">
-                                                            Label:&nbsp;&nbsp;{{if $pkg}}{{$pkg.Label}}{{end}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <i class="tag icon"></i>
-                                                        <div class="content">
-                                                            App Version:&nbsp;&nbsp;{{if $pkg}}{{$pkg.AppVersion}}{{end}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <i class="maxcdn icon"></i>
-                                                        <div class="content">
-                                                            Mandatory:&nbsp;&nbsp;{{if $pkg}}{{$pkg.IsMandatory}}{{end}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <i class="clock icon"></i>
-                                                        <div class="content">
-                                                            Release Time:&nbsp;&nbsp; {{if $pkg}} {{$time := Time $pkg.UploadTime}} {{if $pkg}}{{DateFmtShort $time}}{{end}} {{end}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <i class="user icon"></i>
-                                                        <div class="content">
-                                                            Released By:&nbsp;&nbsp;{{if $pkg}}{{$pkg.ReleasedBy}}{{end}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="column">
-                                                <div> Install Metrics</div>
-                                                <div class="ui list">
-                                                    <div class="item">
-                                                        <i class="attach icon"></i>
-                                                        <div class="content">
-                                                            Active:&nbsp;&nbsp;{{if $metrics}}%{{Persent $metrics.Active $metrics.Active}} ({{$metrics.Downloaded}} of {{$metrics.Downloaded}}){{end}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <i class="download icon"></i>
-                                                        <div class="content">
-                                                            Total:&nbsp;&nbsp;{{if $metrics}}{{$metrics.Installed}}{{end}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <i class="undo icon"></i>
-                                                        <div class="content">
-                                                            Rollbacks:&nbsp;&nbsp;{{if $metrics}}{{$metrics.Failed}}{{end}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
+                  {{if $pkg}}
                   <table class="ui very basic center aligned celled table">
                     <thead>
                       <tr>
@@ -101,31 +40,31 @@
                             <div class="item">
                               <i class="flag icon"></i>
                               <div class="content">
-                                Label:&nbsp;&nbsp;{{if $pkg}}{{$pkg.Label}}{{end}}
+                                Label:&nbsp;&nbsp;{{$pkg.Label}}
                               </div>
                             </div>
                             <div class="item">
                               <i class="tag icon"></i>
                               <div class="content">
-                                App Version:&nbsp;&nbsp;{{if $pkg}}{{$pkg.AppVersion}}{{end}}
+                                App Version:&nbsp;&nbsp;{{$pkg.AppVersion}}
                               </div>
                             </div>
                             <div class="item">
                               <i class="maxcdn icon"></i>
                               <div class="content">
-                                Mandatory:&nbsp;&nbsp;{{if $pkg}}{{$pkg.IsMandatory}}{{end}}
+                                Mandatory:&nbsp;&nbsp;{{$pkg.IsMandatory}}
                               </div>
                             </div>
                             <div class="item">
                               <i class="clock icon"></i>
                               <div class="content">
-                                Release Time:&nbsp;&nbsp; {{if $pkg}} {{$time := Time $pkg.UploadTime}} {{if $pkg}}{{DateFmtShort $time}}{{end}} {{end}}
+                                Release Time:&nbsp;&nbsp;  {{$time := Time $pkg.UploadTime}} {{DateFmtShort $time}}
                               </div>
                             </div>
                             <div class="item">
                               <i class="user icon"></i>
                               <div class="content">
-                                Released By:&nbsp;&nbsp;{{if $pkg}}{{$pkg.ReleasedBy}}{{end}}
+                                Released By:&nbsp;&nbsp;{{$pkg.ReleasedBy}}
                               </div>
                             </div>
                           </div>
@@ -135,7 +74,7 @@
                             <div class="item">
                               <i class="attach icon"></i>
                               <div class="content">
-                                Active:&nbsp;&nbsp;{{if $metrics}}%{{Persent $metrics.Active $metrics.Active}} ({{$metrics.Downloaded}} of {{$metrics.Downloaded}}){{end}}
+                                Active:&nbsp;&nbsp;{{if $metrics}}%{{Persent $metrics.Active $metrics.TotalActive}} ({{$metrics.Active}} of {{$metrics.TotalActive}}){{end}}
                               </div>
                             </div>
                             <div class="item">
@@ -155,6 +94,9 @@
                       </tr>
                     </tbody>
                   </table>
+                  {{else}}
+                    No Packge Released
+                  {{end}}
                 </div>
                 <div class="extra">
                   <button class="ui button {{if $condition}} disabled {{end}}  redli inverted tiny dep_delete" data-name="{{.Name}}">Delete</button>
@@ -166,6 +108,41 @@
             </div>
             {{end}}
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="sixteen wide tablet nine wide computer column">
+      <div class="ui segments">
+        <div class="ui segment stackable">
+          <strong>History</strong>
+          <div id="menu_history" class="ui left pointing right floated labeled icon dropdown button" tabindex="0">
+            <i class="filter icon"></i>
+            <span class="text">Production</span>
+            <div class="menu" tabindex="-1">
+              {{range $idx,$v:= .Deployments}}
+              <div class="item {{if eq $idx 0}}active selected{{end}}" data-value="{{$v.Name}}">
+                <!-- <i class="bookmark icon"></i>  -->
+                {{$v.Name}}
+              </div>
+              {{end}}
+            </div>
+          </div>
+          <div class="clearfix"> </div>
+        </div>
+        <div class="ui segment">
+          <table id="table_history" class="ui very basic center aligned celled table">
+            <thead>
+              <tr>
+                <th>Label</th>
+                <th>App Version</th>
+                <th>Mandatory</th>
+                <th>Release Method</th>
+                <th>Release Time</th>
+                <th>Description </th>
+                <th>Install Metrics</th>
+              </tr>
+            </thead>
+          </table>
         </div>
       </div>
     </div>
@@ -239,4 +216,7 @@
 
 </div>
 {{template "base/footer" .}}
+<link rel="stylesheet" href="{{AppSubURL}}/plugins/datatable/dataTables.semanticui.css"></link>
+<script src="{{AppSubURL}}/plugins/datatable/jquery.dataTables.js"></script>
+<script src="{{AppSubURL}}/plugins/datatable/dataTables.semanticui.js"></script>
 <script src="{{AppSubURL}}/js/app.js?v={{MD5 AppVer}}"></script>

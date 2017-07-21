@@ -5,9 +5,12 @@ import (
 	"github.com/MessageDream/goby/core/appService"
 	"github.com/MessageDream/goby/core/collaboratorService"
 	"github.com/MessageDream/goby/core/deploymentService"
+	"github.com/MessageDream/goby/model/dto"
 	"github.com/MessageDream/goby/module/context"
 	"github.com/MessageDream/goby/module/form"
 	"github.com/MessageDream/goby/module/infrastructure"
+
+	. "gopkg.in/ahmetb/go-linq.v3"
 )
 
 const (
@@ -58,6 +61,26 @@ func AppDeploymentsGet(ctx *context.HTMLContext) {
 		ctx.Error(500, err.Error())
 		return
 	}
+	From(deployments).ForEach(func(item interface{}) {
+		it := item.(*dto.Deployment)
+		metrics, err := deploymentService.GetDeploymentMetrics(ctx.User.ID, appName, it.Name)
+		if err != nil {
+			ctx.Error(500, err.Error())
+			return
+		}
+		if it.Package != nil {
+			totalActive := getTotalActiveFromDeploymentMetrics(metrics)
+			metric := metrics[it.Package.Label]
+			it.PackageMetrics = &dto.PackageMetrics{
+				Active:      metric.Active,
+				Downloaded:  metric.Downloaded,
+				Failed:      metric.Failed,
+				Installed:   metric.Installed,
+				TotalActive: totalActive,
+			}
+		}
+	})
+
 	owner, err := core.OwnerOf(appName)
 	if err != nil {
 		ctx.Error(500, err.Error())
@@ -69,6 +92,16 @@ func AppDeploymentsGet(ctx *context.HTMLContext) {
 	ctx.Data["Owner"] = owner.Email
 	ctx.Data["Deployments"] = deployments
 	ctx.HTML(200, APP_DETAIL_DEPLOYMENTS)
+}
+
+func getTotalActiveFromDeploymentMetrics(metrics map[string]*dto.PackageMetrics) uint64 {
+	var totalActive uint64 = 0
+	From(metrics).ForEach(func(item interface{}) {
+		it := item.(KeyValue)
+		totalActive += metrics[it.Key.(string)].Active
+	})
+
+	return totalActive
 }
 
 //create app

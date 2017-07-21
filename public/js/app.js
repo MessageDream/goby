@@ -357,3 +357,118 @@ $(".ui.dep_new_release").on("click", function () {
     }).modal("show");
 });
 
+
+
+function fetchHistory(data, callback, settings) {
+    var app_name = $('#app_name').attr('data-name');
+    var dep_name = $('#menu_history').dropdown('get text');
+
+    var returnData = {
+        draw: data.draw
+    };
+
+
+    var pkgs = new Promise(function (resolve, reject) {
+        $.ajax({
+            url: '/apps/' + app_name + '/deployments/' + dep_name + '/history',
+            type: 'GET',
+            success: function (data, textStatus) {
+                resolve(data.history);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                reject(XMLHttpRequest.responseJSON.message);
+            }
+        });
+    });
+
+    var pkgMetrics = new Promise(function (resolve, reject) {
+        $.ajax({
+            url: '/apps/' + app_name + '/deployments/' + dep_name + '/metrics',
+            type: 'GET',
+            success: function (data, textStatus) {
+                resolve(data.metrics);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                reject(XMLHttpRequest.responseJSON.message);
+            }
+        });
+    });
+
+    Promise.all([pkgs, pkgMetrics]).then(function (arr) {
+        var histories = arr[0];
+        var metrics = arr[1];
+        var totalActive = getTotalActiveFromDeploymentMetrics(metrics);
+        histories.forEach(function (packageObject) {
+            if (metrics[packageObject.label]) {
+                packageObject.metrics = {
+                    active: metrics[packageObject.label].active,
+                    downloaded: metrics[packageObject.label].downloaded,
+                    failed: metrics[packageObject.label].failed,
+                    installed: metrics[packageObject.label].installed,
+                    totalActive: totalActive
+                };
+            }
+        });
+        return histories;
+    }).then(function (his) {
+        returnData.recordsTotal = his.length;
+        returnData.recordsFiltered = his.length;
+        returnData.data = his;
+        if (callback) {
+            callback(returnData);
+        }
+    }).catch(function (err) {
+        returnData.error = err;
+        if (callback) {
+            callback(returnData);
+        }
+    });
+}
+
+function getTotalActiveFromDeploymentMetrics(metrics) {
+    var totalActive = 0;
+    Object.keys(metrics).forEach((label) => {
+        totalActive += metrics[label].active;
+    });
+
+    return totalActive;
+}
+
+// $(document).ready(function () {
+var table = $('#table_history').dataTable({
+    "ordering": false,
+    "paging": false,
+    "searching": false,
+    "initComplete": function () {
+        // table = this.api();
+        // table.draw();
+    },
+    "ajax": fetchHistory,
+    "columns": [
+        { data: "label" },
+        { data: "appVersion" },
+        { data: "isMandatory" },
+        { data: "releaseMethod" },
+        {
+            data: "uploadTime",
+            render: function (data, type, row, meta) {
+                var date = new Date(data)
+                return moment(date).format("YYYY-MM-DD hh:mm:ss");
+            }
+        },
+        { data: "description" },
+        {
+            data: "metrics",
+            render: function (data, type, row, meta) {
+                return '<div class="ui list"><div class="item"><i class="attach icon"></i><div class="content"> Active:&nbsp;&nbsp;' + (data.totalActive != 0 ? (data.active / data.totalActive / 100) : 0) + '（' + data.active + '&nbsp;&nbsp;of&nbsp;&nbsp;' + data.totalActive + '）' + '</div></div><div class="item"><i class="download icon"></i><div class="content">Total:&nbsp;&nbsp;' + data.installed + '</div></div><div class="item"><i class="undo icon"></i><div class="content">Rollbacks:&nbsp;&nbsp;' + data.failed + ' </div></div></div>';
+            }
+        }
+    ]
+}).api();
+
+$('#menu_history').dropdown({
+    onChange: function (value, text, $selectedItem) {
+        table.ajax.reload();
+    }
+});
+// });
