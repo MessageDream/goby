@@ -51,14 +51,15 @@
 							<i class="icon key"></i>
 						</div>
 					</div>
+					{{if .EnableCaptcha}}
 					<div class="inline field {{if .Err_Captcha}}error{{end}}">
 						<label for="captcha">CAPTCHA:</label> {{.Captcha.CreateHtml}}
 						<div class="required ui fluid icon input ">
 							<input id="captcha" name="captcha" value="{{.captcha}}" autocomplete="off">
 							<i class="icon code"></i>
 						</div>
-
 					</div>
+					{{end}}
 
 					<div class="field">
 
@@ -84,5 +85,12 @@
 		</div>
 	</div>
 </div>
-{{template "base/footer_2" .}}
-{{template "base/background" .}}
+{{template "base/footer_2" .}} {{template "base/background" .}}
+<script>
+	document.onkeydown = function keyListener(e) {
+		if (e.keyCode == 13) {
+			$('#form_signup').submit();
+		}
+	}
+
+</script>
