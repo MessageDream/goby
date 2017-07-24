@@ -357,7 +357,43 @@ $(".ui.dep_new_release").on("click", function () {
     }).modal("show");
 });
 
+function rollbackTo(row) {
 
+    var app_name = $('#app_name').attr('data-name');
+    var dep_name = $('#menu_history').dropdown('get text');
+    var label_name = $(row).attr('data-name');
+
+    swal({
+        text: "Are you sure to rollback to this label",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes',
+        preConfirm: function () {
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: '/apps/' + app_name + '/deployments/' + dep_name + '/rollback/' + label_name,
+                    type: 'POST',
+                    success: function (data, textStatus) {
+                        resolve({ dep: label_name, label: label_name });
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        reject(XMLHttpRequest.responseJSON.message);
+                    }
+                });
+            })
+        }
+    }).then(function (info) {
+        swal({
+            title: 'Rolled Back',
+            text: 'The release of ' + info.dep + 'has been rolled back to ' + info.label,
+            type: 'success'
+        }).then(function () {
+            document.location.reload()
+        });
+    }).catch(alertError);
+}
 
 function fetchHistory(data, callback, settings) {
     var app_name = $('#app_name').attr('data-name');
@@ -398,7 +434,9 @@ function fetchHistory(data, callback, settings) {
         var histories = arr[0];
         var metrics = arr[1];
         var totalActive = getTotalActiveFromDeploymentMetrics(metrics);
-        histories.forEach(function (packageObject) {
+        histories.sort(function (a, b) {
+            return b.uploadTime - a.uploadTime;
+        }).forEach(function (packageObject) {
             if (metrics[packageObject.label]) {
                 packageObject.metrics = {
                     active: metrics[packageObject.label].active,
@@ -447,7 +485,7 @@ var table = $('#table_history').dataTable({
     "columns": [
         { data: "label" },
         { data: "appVersion" },
-        { data: "isMandatory" },
+        // { data: "isMandatory" },
         { data: "releaseMethod" },
         {
             data: "uploadTime",
@@ -461,13 +499,13 @@ var table = $('#table_history').dataTable({
             render: function (data, type, row, meta) {
                 return '<div class="ui list"><div class="item"><i class="attach icon"></i><div class="content"> Active:&nbsp;&nbsp;' + (data.totalActive != 0 ? (data.active / data.totalActive * 100).toFixed(1) : 0) + '%（' + data.active + '&nbsp;of&nbsp;' + data.totalActive + '）' + '</div></div><div class="item"><i class="download icon"></i><div class="content">Total:&nbsp;&nbsp;' + data.installed + '</div></div><div class="item"><i class="undo icon"></i><div class="content">Rollbacks:&nbsp;&nbsp;' + data.failed + ' </div></div></div>';
             }
+        },
+        {
+            data: "label",
+            render: function (data, type, row, meta) {
+                return '<button class="ui button ' + (row.appVersion ? ' disabled ' : ' ') + ' blueli inverted tiny pkg_rollback" onclick="rollbackTo(this)" data-name="' + data + '">Rollback to this</button>';
+            }
         }
-        // ,{
-        //    data: "label",
-        //    render:function (data, type, row, meta) {
-        //         return '<button class="ui button blueli inverted tiny pkg_rollback" data-name="'+data+'">Rollback</button>';
-        //     }
-        // }
     ]
 }).api();
 
