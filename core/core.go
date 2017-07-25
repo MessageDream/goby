@@ -76,6 +76,7 @@ const (
 	INTENT_ERROR_CODE_USER_ACTIVATE_VERIFY_FAILED
 
 	INTENT_ERROR_CODE_USER_USERNAME_OR_PWD_INVALID
+	INTENT_ERROR_CODE_USER_FORBIDDEN
 )
 
 var (
@@ -91,6 +92,7 @@ var (
 	ErrUserAlreadyActivated            = WrapIntentError(errors.New("User has been activated before"), INTENT_ERROR_CODE_USER_ACTIVATE_HAS_ACTIVATED)
 	ErrUserActivateTimeLimitCodeLength = WrapIntentError(errors.New("Time limit code length is too short"), INTENT_ERROR_CODE_USER_ACTIVATE_TIME_LIMIT_LENGTH)
 	ErrUserActivateVerifyFailed        = WrapIntentError(errors.New("Active code is invalid"), INTENT_ERROR_CODE_USER_ACTIVATE_VERIFY_FAILED)
+	ErrUserForbidden                   = WrapIntentError(errors.New("User is forbidden"), INTENT_ERROR_CODE_USER_FORBIDDEN)
 )
 
 //Token

@@ -86,11 +86,11 @@ func Active(code string) (*model.User, error) {
 		return nil, err
 	}
 
-	if user.IsActive {
+	if user.Status != model.USER_STATUS_UN_ACTIVE {
 		return nil, ErrUserAlreadyActivated
 	}
 
-	user.IsActive = true
+	user.Status = model.USER_STATUS_NORMAL
 	user.GenerateRands()
 	if err := user.Update(nil, "is_active", "rands"); err != nil {
 		return nil, err
@@ -99,7 +99,7 @@ func Active(code string) (*model.User, error) {
 	return user, nil
 }
 
-func Create(uname, pwd, email string, isActive, isAdmin bool) (*model.User, error) {
+func Create(uname, pwd, email string, status int, isAdmin bool) (*model.User, error) {
 
 	if err := isUsableName(reservedUsernames, reservedUserPatterns, uname); err != nil {
 		return nil, err
@@ -110,7 +110,7 @@ func Create(uname, pwd, email string, isActive, isAdmin bool) (*model.User, erro
 		LowerName: strings.ToLower(uname),
 		Password:  pwd,
 		Email:     email,
-		IsActive:  isActive,
+		Status:    status,
 		IsAdmin:   isAdmin,
 	}
 	if exist, err := user.Exist(); err != nil || exist {
@@ -155,7 +155,7 @@ func GetByRands(rands string) (*model.User, error) {
 	return user, nil
 }
 
-func GetByUserName(uname string) (*model.User, error) {
+func SignInWithUserName(uname string) (*model.User, error) {
 	user := &model.User{LowerName: strings.ToLower(uname)}
 
 	if exist, err := user.Get(); err != nil || !exist {
@@ -164,10 +164,15 @@ func GetByUserName(uname string) (*model.User, error) {
 		}
 		return nil, err
 	}
+
+	if user.Status == model.USER_STATUS_FORBIDDEN {
+		return nil, ErrUserForbidden
+	}
+
 	return user, nil
 }
 
-func Signin(emailOrName, pwd string) (*model.User, error) {
+func SignIn(emailOrName, pwd string) (*model.User, error) {
 	var user *model.User
 	if strings.Contains(emailOrName, "@") {
 		if !infrastructure.VerifyEmail(emailOrName) || len(pwd) <= 0 {
@@ -192,6 +197,9 @@ func Signin(emailOrName, pwd string) (*model.User, error) {
 	if !user.ValidatePassword(pwd) {
 		return nil, ErrUserNameOrPasswordInvalide
 	}
+	if user.Status == model.USER_STATUS_FORBIDDEN {
+		return nil, ErrUserForbidden
+	}
 	return user, nil
 }
 
@@ -213,12 +221,11 @@ func QueryUsers(uid uint64, pageIndex, pageCount int, email string) (*dto.Pager,
 			role = 1
 		}
 		return &dto.UserDetail{
-			Email:       u.Email,
-			UserName:    u.UserName,
-			Role:        role,
-			IsActive:    u.IsActive,
-			IsForbidden: u.IsForbidden,
-			JoinedAt:    u.CreatedAt,
+			Email:    u.Email,
+			UserName: u.UserName,
+			Role:     role,
+			Status:   u.Status,
+			JoinedAt: u.CreatedAt,
 		}
 	}).ToSlice(&results)
 

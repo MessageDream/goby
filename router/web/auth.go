@@ -67,7 +67,12 @@ func SignUpPost(ctx *context.HTMLContext, cpt *captcha.Captcha, form forms.SignU
 		return
 	}
 
-	u, err := userService.Create(form.UserName, form.Password, form.Email, !setting.Service.RegisterEmailConfirm, false)
+	status := model.USER_STATUS_UN_ACTIVE
+	if !setting.Service.RegisterEmailConfirm {
+		status = model.USER_STATUS_NORMAL
+	}
+
+	u, err := userService.Create(form.UserName, form.Password, form.Email, status, false)
 
 	if err != nil {
 		switch err {
@@ -153,13 +158,16 @@ func SignInPost(ctx *context.HTMLContext, form forms.SignInForm) {
 		return
 	}
 
-	u, err := userService.Signin(form.UserName, form.Password)
+	u, err := userService.SignIn(form.UserName, form.Password)
 	if err != nil {
 		if err == ErrUserNameOrPasswordInvalide || err == ErrUserNotExist {
 			ctx.Data["Err_UserName"] = true
 			ctx.RenderWithErr("用户名或密码不正确。", SIGNIN, &form)
+		} else if err == ErrUserForbidden {
+			ctx.Data["Err_UserName"] = true
+			ctx.RenderWithErr(err.Error(), SIGNIN, &form)
 		} else {
-			ctx.Handle(500, "userService.Signin", err)
+			ctx.Handle(500, "userService.SignIn", err)
 		}
 		return
 	}
@@ -202,7 +210,7 @@ func ActivateGet(ctx *context.HTMLContext) {
 	code := ctx.Query("code")
 	if len(code) == 0 {
 		ctx.Data["IsActivatePage"] = true
-		if ctx.User.IsActive {
+		if ctx.User.Status != model.USER_STATUS_UN_ACTIVE {
 			ctx.Error(404)
 			return
 		}
@@ -271,12 +279,12 @@ func AutoSignIn(ctx *context.HTMLContext) (bool, error) {
 		}
 	}()
 
-	u, err := userService.GetByUserName(uname)
+	u, err := userService.SignInWithUserName(uname)
 	if err != nil {
 		if err != ErrUserNotExist {
 			return false, fmt.Errorf("GetUserByName: %v", err)
 		}
-		return false, nil
+		return false, err
 	}
 
 	if val, ok := ctx.GetSuperSecureCookie(u.Rands+u.Password, setting.CookieRememberName); !ok || val != u.UserName {

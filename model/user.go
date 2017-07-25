@@ -19,20 +19,25 @@ import (
 	"github.com/go-xorm/xorm"
 )
 
+const (
+	USER_STATUS_UN_ACTIVE = iota
+	USER_STATUS_NORMAL
+	USER_STATUS_FORBIDDEN
+)
+
 type User struct {
-	ID          uint64 `xorm:"pk autoincr"`
-	Email       string `xorm:"unique notnull"`
-	Password    string `xorm:"notnull"`
-	Rands       string `xorm:"index"`
-	UserName    string
-	LowerName   string `xorm:"unique notnull"`
-	IsAdmin     bool   `xorm:"notnull default(0)"`
-	IsActive    bool   `xorm:"notnull default(0)"`
-	IsForbidden bool   `xorm:"notnull default(0)"`
-	Salt        string
-	CreatedAt   time.Time `xorm:"created"`
-	UpdatedAt   time.Time `xorm:"updated"`
-	DeletedAt   time.Time `xorm:"deleted"`
+	ID        uint64 `xorm:"pk autoincr"`
+	Email     string `xorm:"unique notnull"`
+	Password  string `xorm:"notnull"`
+	Rands     string `xorm:"index"`
+	UserName  string
+	LowerName string `xorm:"unique notnull"`
+	IsAdmin   bool   `xorm:"notnull default(0)"`
+	Status    int    `xorm:"notnull default(0)"`
+	Salt      string
+	CreatedAt time.Time `xorm:"created"`
+	UpdatedAt time.Time `xorm:"updated"`
+	DeletedAt time.Time `xorm:"deleted"`
 }
 
 func (self *User) EncodePasswd() {

@@ -48,11 +48,27 @@ var admin_users_table = $('#table_users').dataTable({
     "columns": [
         { data: 'userName' },
         { data: 'email' },
-        { data: 'isActive' },
         {
             data: 'role',
             render: function (data, type, row, meta) {
                 return data == 1 ? 'admin' : 'member';
+            }
+        },
+        {
+            data: 'status',
+            render: function (data, type, row, meta) {
+                switch (data) {
+                    case 0:
+                        return 'Inactive'
+                        break;
+                    case 1:
+                        return 'Normal'
+                    case 2:
+                        return 'Forbidden'
+                        break;
+                    default:
+                        return 'Unknown'
+                }
             }
         },
         {
@@ -64,11 +80,11 @@ var admin_users_table = $('#table_users').dataTable({
         {
             data: 'email',
             render: function (data, type, row, meta) {
-                if (!row.isActive) {
+                if (row.status == 0) {
                     return '<button class="ui button redli inverted tiny admin_user_active" style="margin-bottom:0px;" onclick="active(this)" data-email="' + data + '">Active</button>';
                 } else {
-                    var roleButton = '<button class="ui button greenli inverted tiny admin_user_role" style="margin-bottom:0px;"  onclick="changeRole(this)" data-role="' + row.role + '" data-email="' + data + '">' + (row.role == 1 ? 'To Member' : 'To Admin') + '</button>';
-                    var forbiddenButton = '<button class="ui button blueli inverted tiny admin_user_forbidden" style="margin-bottom:0px;" onclick="forbid(this)" data-forbidden="' + row.isForbidden + '" data-email="' + data + '">' + (row.isForbidden == 1 ? 'Unforbidden' : 'Forbidden') + '</button>';
+                    var roleButton = '<button class="ui button greenli inverted tiny admin_user_role" style="margin-bottom:0px;"  onclick="changeRole(this)" data-role="' + row.role + '" data-email="' + data + '">' + (row.role == 1 ? 'As Member' : 'As the administrator') + '</button>';
+                    var forbiddenButton = '<button class="ui button blueli inverted tiny admin_user_forbidden" style="margin-bottom:0px;" onclick="forbid(this)" data-forbidden="' + row.status + '" data-email="' + data + '">' + (row.status == 2 ? 'Unforbidden' : 'Forbidden') + '</button>';
                     return '<div class="ui bottom aligned">' + roleButton + forbiddenButton + '</div>';
                 }
             }

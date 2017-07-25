@@ -3,6 +3,7 @@ package router
 import (
 	"path"
 
+	"github.com/MessageDream/goby/model"
 	"github.com/MessageDream/goby/module/context"
 	"github.com/MessageDream/goby/module/infrastructure"
 	"github.com/MessageDream/goby/module/setting"
@@ -15,7 +16,7 @@ const (
 
 func Home(ctx *context.HTMLContext) {
 	if ctx.IsSigned {
-		if !ctx.User.IsActive && setting.Service.RegisterEmailConfirm {
+		if ctx.User.Status == model.USER_STATUS_UN_ACTIVE && setting.Service.RegisterEmailConfirm {
 			ctx.Data["Title"] = "激活您的账户"
 			ctx.HTML(200, ACTIVATE)
 			return

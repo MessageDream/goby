@@ -64,8 +64,10 @@ func (ctx *APIContext) Auth() {
 	if len(token) > 0 {
 		u, err := checkAccessToken(token, ctx.Cache)
 		if err != nil {
+			ctx.SignError = err
 			return
 		}
+
 		ctx.User = u
 		ctx.IsSigned = true
 		ctx.IsBasicAuth = true
@@ -118,6 +120,7 @@ func APIContexter() macaron.Handler {
 		ctx := &APIContext{
 			Context: c,
 		}
+		ctx.Auth()
 		c.Map(ctx)
 	}
 }

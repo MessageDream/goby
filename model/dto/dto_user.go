@@ -34,10 +34,9 @@ type Pager struct {
 }
 
 type UserDetail struct {
-	Email       string    `json:"email"`
-	UserName    string    `json:"userName"`
-	Role        int       `json:"role"`
-	IsActive    bool      `json:"isActive"`
-	IsForbidden bool      `json:"isForbidden"`
-	JoinedAt    time.Time `json:"joinedTime"`
+	Email    string    `json:"email"`
+	UserName string    `json:"userName"`
+	Role     int       `json:"role"`
+	Status   int       `json:"status"`
+	JoinedAt time.Time `json:"joinedTime"`
 }

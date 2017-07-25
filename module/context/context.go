@@ -50,6 +50,7 @@ type Context struct {
 	*macaron.Context
 	Cache       cache.Cache
 	User        *model.User
+	SignError   error
 	IsSigned    bool
 	IsBasicAuth bool
 }

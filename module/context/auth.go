@@ -5,7 +5,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/MessageDream/goby/module/infrastructure"
+	"github.com/MessageDream/goby/model"
 
 	"github.com/go-macaron/csrf"
 	"gopkg.in/macaron.v1"
@@ -48,17 +48,12 @@ func APIToggle(options *ToggleOptions) macaron.Handler {
 		}
 
 		if options.SignInRequire {
-			ctx.Auth()
 			if !ctx.IsSigned {
-				ctx.Status(401)
-				return
-
-			} else if !ctx.User.IsActive && registerEmailConfirm {
-				ctx.JSON(200, infrastructure.ApiJsonError{
-					Message: "You should active your account",
-					Status:  401,
-				})
-				return
+				if ctx.SignError != nil {
+					ctx.Error(ctx.SignError)
+				} else {
+					ctx.Status(403)
+				}
 			}
 		}
 
@@ -85,14 +80,17 @@ func Toggle(options *ToggleOptions) macaron.Handler {
 		}
 
 		if options.SignInRequire {
-
 			if !ctx.IsSigned {
+				if ctx.SignError != nil {
+					ctx.Error(403, ctx.SignError.Error())
+					return
+				}
 				es := url.QueryEscape(ctx.Req.RequestURI)
 				ctx.SetCookie("redirect_to", es)
 				ctx.Redirect(path.Join(subURL, "/web/auth/signin"))
 				return
 
-			} else if !ctx.User.IsActive && registerEmailConfirm {
+			} else if registerEmailConfirm && ctx.User.Status == model.USER_STATUS_UN_ACTIVE {
 				ctx.Data["Title"] = "激活您的账户"
 				ctx.HTML(200, "auth/activate")
 				return

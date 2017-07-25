@@ -290,7 +290,7 @@ func InstallPost(ctx *context.HTMLContext, form forms.InstallForm) {
 	GlobalInit()
 
 	// Create admin account.
-	if _, err := userService.Create(form.AdminName, form.AdminPasswd, form.AdminEmail, true, true); err != nil {
+	if _, err := userService.Create(form.AdminName, form.AdminPasswd, form.AdminEmail, model.USER_STATUS_NORMAL, true); err != nil {
 		if err != nil {
 			setting.InstallLock = false
 			ctx.RenderWithErr(fmt.Sprintf("管理员帐户设置不正确:%v", err), INSTALL, &form)
