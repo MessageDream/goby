@@ -61,6 +61,13 @@ func APIToggle(options *ToggleOptions) macaron.Handler {
 				return
 			}
 		}
+
+		if options.AdminRequire {
+			if !ctx.User.IsAdmin {
+				ctx.Status(403)
+				return
+			}
+		}
 	}
 }
 
@@ -90,6 +97,7 @@ func Toggle(options *ToggleOptions) macaron.Handler {
 				ctx.HTML(200, "auth/activate")
 				return
 			}
+
 		}
 
 		if options.AdminRequire {
@@ -99,5 +107,10 @@ func Toggle(options *ToggleOptions) macaron.Handler {
 			}
 			ctx.Data["PageIsAdmin"] = true
 		}
+
+		if ctx.User != nil && ctx.User.IsAdmin {
+			ctx.Data["IsAdmin"] = true
+		}
+
 	}
 }

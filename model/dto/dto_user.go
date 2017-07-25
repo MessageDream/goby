@@ -24,3 +24,20 @@ type Collaborator struct {
 	IsCurrentAccount bool   `json:"isCurrentAccount"`
 	Permission       string `json:"permission"`
 }
+
+type Pager struct {
+	PageIndex      int         `json:"pageIndex"`
+	PageCount      int         `json:"pageCount"`
+	TotalCount     int64       `json:"totalCount"`
+	TotalPageCount int64       `json:"totalPageCount"`
+	Data           interface{} `json:"data"`
+}
+
+type UserDetail struct {
+	Email       string    `json:"email"`
+	UserName    string    `json:"userName"`
+	Role        int       `json:"role"`
+	IsActive    bool      `json:"isActive"`
+	IsForbidden bool      `json:"isForbidden"`
+	JoinedAt    time.Time `json:"joinedTime"`
+}

@@ -7,9 +7,11 @@ import (
 	"unicode/utf8"
 
 	"github.com/Unknwon/com"
+	. "gopkg.in/ahmetb/go-linq.v3"
 
 	. "github.com/MessageDream/goby/core"
 	"github.com/MessageDream/goby/model"
+	"github.com/MessageDream/goby/model/dto"
 	"github.com/MessageDream/goby/module/infrastructure"
 	"github.com/MessageDream/goby/module/setting"
 )
@@ -191,4 +193,40 @@ func Signin(emailOrName, pwd string) (*model.User, error) {
 		return nil, ErrUserNameOrPasswordInvalide
 	}
 	return user, nil
+}
+
+func QueryUsers(uid uint64, pageIndex, pageCount int, email string) (*dto.Pager, error) {
+	if pageCount > 100 {
+		pageCount = 100
+	}
+	pager, err := model.QueryUsers(uid, pageIndex, pageCount, email)
+	if err != nil {
+		return nil, err
+	}
+
+	var results []*dto.UserDetail
+
+	From(pager.Data).Select(func(item interface{}) interface{} {
+		u := item.(*model.User)
+		var role = 0
+		if u.IsAdmin {
+			role = 1
+		}
+		return &dto.UserDetail{
+			Email:       u.Email,
+			UserName:    u.UserName,
+			Role:        role,
+			IsActive:    u.IsActive,
+			IsForbidden: u.IsForbidden,
+			JoinedAt:    u.CreatedAt,
+		}
+	}).ToSlice(&results)
+
+	return &dto.Pager{
+		TotalCount:     pager.TotalCount,
+		TotalPageCount: pager.TotalPageCount,
+		PageIndex:      pager.PageIndex,
+		PageCount:      pager.PageCount,
+		Data:           results,
+	}, nil
 }

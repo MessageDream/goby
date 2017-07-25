@@ -852,7 +852,7 @@ ul {
     clear: both;
     padding-top: 0.755em;
 }
-.dataTables_filter input {
+ /* .dataTables_filter input {
     background: #fff none repeat scroll 0 0;
     border: 1px solid rgba(34, 36, 38, 0.15);
     border-radius: 0.285714rem;
@@ -871,7 +871,8 @@ ul {
     -o-transition: background-color 0.1s ease 0s, box-shadow 0.1s ease 0s, border-color 0.1s ease 0s;
     -webkit-transition: background-color 0.1s ease 0s, box-shadow 0.1s ease 0s, border-color 0.1s ease 0s;
     transition: background-color 0.1s ease 0s, box-shadow 0.1s ease 0s, border-color 0.1s ease 0s;
-}
+}  */
+
 /* =============Datatable Page Css============= */
 /* MOBIL PAGE SETTINGS*/
 /* Desktops and laptops ----------- */

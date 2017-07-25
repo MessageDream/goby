@@ -11,24 +11,28 @@ import (
 	"github.com/Unknwon/com"
 	"golang.org/x/crypto/pbkdf2"
 
+	"math"
+
 	"github.com/MessageDream/goby/model/dto"
 	"github.com/MessageDream/goby/module/infrastructure"
 	"github.com/MessageDream/goby/module/mailer"
+	"github.com/go-xorm/xorm"
 )
 
 type User struct {
-	ID        uint64 `xorm:"pk autoincr"`
-	Email     string `xorm:"unique notnull"`
-	Password  string `xorm:"notnull"`
-	Rands     string `xorm:"index"`
-	UserName  string
-	LowerName string `xorm:"unique notnull"`
-	IsAdmin   bool   `xorm:"notnull default(0)"`
-	IsActive  bool   `xorm:"notnull default(0)"`
-	Salt      string
-	CreatedAt time.Time `xorm:"created"`
-	UpdatedAt time.Time `xorm:"updated"`
-	DeletedAt time.Time `xorm:"deleted"`
+	ID          uint64 `xorm:"pk autoincr"`
+	Email       string `xorm:"unique notnull"`
+	Password    string `xorm:"notnull"`
+	Rands       string `xorm:"index"`
+	UserName    string
+	LowerName   string `xorm:"unique notnull"`
+	IsAdmin     bool   `xorm:"notnull default(0)"`
+	IsActive    bool   `xorm:"notnull default(0)"`
+	IsForbidden bool   `xorm:"notnull default(0)"`
+	Salt        string
+	CreatedAt   time.Time `xorm:"created"`
+	UpdatedAt   time.Time `xorm:"updated"`
+	DeletedAt   time.Time `xorm:"deleted"`
 }
 
 func (self *User) EncodePasswd() {
@@ -122,6 +126,40 @@ func (self *User) Convert() interface{} {
 func FindUserByIDs(ids []uint64) ([]*User, error) {
 	users := make([]*User, 0, 10)
 	return users, x.In("id", ids).Find(&users)
+}
+
+func QueryUsers(currentUserID uint64, pageIndex, pageCount int, email string) (*dto.Pager, error) {
+	users := make([]*User, 0, 50)
+	var sess *xorm.Session
+	if len(email) != 0 {
+		sess = x.Where("id > ? and id != ? and email like ?", 1, currentUserID, "%"+email+"%")
+	} else {
+		sess = x.Where("id > ? and id != ?", 1, currentUserID)
+	}
+	total, err := sess.Count(new(User))
+	if err != nil {
+		return nil, err
+	}
+
+	if len(email) != 0 {
+		sess = x.Where("id > ? and id != ? and email like ?", 1, currentUserID, "%"+email+"%")
+	} else {
+		sess = x.Where("id > ? and id != ?", 1, currentUserID)
+	}
+
+	err = sess.Desc("created_at").Limit(pageCount, pageIndex*pageCount).Find(&users)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.Pager{
+		TotalCount:     total,
+		TotalPageCount: int64(math.Ceil(float64(total) / float64(pageCount))),
+		PageIndex:      pageIndex,
+		PageCount:      pageCount,
+		Data:           users,
+	}, nil
+
 }
 
 type mailerUser struct {

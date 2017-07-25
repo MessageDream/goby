@@ -1,0 +1,75 @@
+{{template "base/header" .}}
+<div class="ui equal width left aligned padded grid stackable">
+    <div class="row">
+        <div class="sixteen wide tablet sixteen wide computer column">
+            <div class="ui segments">
+                <div class="ui segment stackable">
+                    <strong>Users</strong>
+                    <button class="ui button blueli inverted tiny right floated" id="user_add">
+              <i class="ui add icon"></i>
+              Add
+            </button>
+                </div>
+
+                <div class="ui segment left aligned">
+                    <table id="table_users" class="ui very basic center aligned celled table">
+                        <thead>
+                            <tr>
+                                <th>User Name</th>
+                                <th>Email</th>
+                                <th>Is Active</th>
+                                <th>Role</th>
+                                <th>Joined Time </th>
+                                <th class="center aligned">Operation</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="user_add_modal" class="ui standard modal">
+        <div class="header">
+            Add Key
+        </div>
+        <div class="content">
+            <form method='post' id="form_key_add" class="ui form">
+                {{.CsrfTokenHtml}}
+                <div class="two fields">
+                    <div class="field">
+                        <label>Email</label>
+                        <input placeholder="Email" name="email" type="text">
+                    </div>
+                    <div class="field">
+                        <label>Role</label>
+                        <div class="ui dropdown selection" tabindex="0">
+                            <select name="role">
+                               <option value="0">member</option>
+                               <option value="1">admin</option>
+                              
+                            </select>
+                            <i class="dropdown icon"></i>
+                            <div class="menu" tabindex="0">
+                                <div class="item" data-value="0">member</div>
+                                <div class="item" data-value="1">admin</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="form_add_user_error" class="ui error message"></div>
+            </form>
+        </div>
+        <div class="actions">
+            <div class="ui black deny button">
+                取消
+            </div>
+            <div id="key_confirm" class="ui positive right labeled icon button">
+                提交
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div>
+</div>
+{{template "base/footer" .}}
+<script src="{{AppSubURL}}/js/admin.js?v={{MD5 AppVer}}"></script>
