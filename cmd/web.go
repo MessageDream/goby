@@ -171,7 +171,10 @@ func runWeb(cliCtx *cli.Context) {
 
 		m.Group("/admin/api", func() {
 			m.Get("/users/:pageIndex/:pageCount", web.UsersQuery)
-		})
+			m.Post("/users/add", web.UserAddPost)
+			m.Patch("/users/:email/status", web.UserPatch)
+			m.Patch("/users/:email/role", web.UserPatch)
+		}, reqAdmin)
 
 		m.Group("/admin", func() {
 			m.Get("/users", web.UsersGet)
@@ -179,6 +182,7 @@ func runWeb(cliCtx *cli.Context) {
 
 	})
 
+	//cli
 	m.Group("/auth", func() {
 		m.Combo("/login").Get(auth.SignInGet)
 		m.Combo("/register").Get(auth.SignUpGet)

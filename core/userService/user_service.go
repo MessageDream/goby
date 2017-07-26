@@ -237,3 +237,33 @@ func QueryUsers(uid uint64, pageIndex, pageCount int, email string) (*dto.Pager,
 		Data:           results,
 	}, nil
 }
+
+func UpdateRole(email string, role int) error {
+
+	user := &model.User{Email: email}
+	if exist, err := user.Get(); err != nil || !exist {
+		if !exist {
+			return ErrUserNotExist
+		}
+		return err
+	}
+
+	user.IsAdmin = role == 1
+
+	return user.Update(nil, "is_admin")
+}
+
+func UpdateStatus(email string, status int) error {
+
+	user := &model.User{Email: email}
+	if exist, err := user.Get(); err != nil || !exist {
+		if !exist {
+			return ErrUserNotExist
+		}
+		return err
+	}
+
+	user.Status = status
+
+	return user.Update(nil, "status")
+}
