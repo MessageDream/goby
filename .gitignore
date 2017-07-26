@@ -8,3 +8,4 @@ log
 vendor
 debug
 npm-debug.log
+*.zip
