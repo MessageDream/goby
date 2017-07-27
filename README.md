@@ -7,16 +7,16 @@ As we know microsoft CodePush cloud is slow in China, we can use goby to build o
 [![Go Report Card](https://goreportcard.com/badge/github.com/MessageDream/goby)](https://goreportcard.com/report/github.com/MessageDream/goby)
 ## INSTALL FROM BINARY
 #### Linux
-* [386](https://github.com/MessageDream/goby/releases/download/v0.1.0/goby-v0.1.0-linux-386.zip)
-* [amd64](https://github.com/MessageDream/goby/releases/download/v0.1.0/goby-v0.1.0-linux-amd64.zip)
+* [386](https://github.com/MessageDream/goby/releases/download/v0.1.1/goby-v0.1.1-linux-386.zip)
+* [amd64](https://github.com/MessageDream/goby/releases/download/v0.1.1/goby-v0.1.1-linux-amd64.zip)
 
 #### Windows
-* [386](https://github.com/MessageDream/goby/releases/download/v0.1.0/goby-v0.1.0-windows-386.zip)
-* [amd64](https://github.com/MessageDream/goby/releases/download/v0.1.0/goby-v0.1.0-windows-amd64.zip)
+* [386](https://github.com/MessageDream/goby/releases/download/v0.1.1/goby-v0.1.1-windows-386.zip)
+* [amd64](https://github.com/MessageDream/goby/releases/download/v0.1.1/goby-v0.1.1-windows-amd64.zip)
 
 #### Darwin
-* [386](https://github.com/MessageDream/goby/releases/download/v0.1.0/goby-v0.1.0-darwin-386.zip)
-* [amd64](https://github.com/MessageDream/goby/releases/download/v0.1.0/goby-v0.1.0-darwin-amd64.zip)
+* [386](https://github.com/MessageDream/goby/releases/download/v0.1.1/goby-v0.1.1-darwin-386.zip)
+* [amd64](https://github.com/MessageDream/goby/releases/download/v0.1.1/goby-v0.1.1-darwin-amd64.zip)
 
 
 ```shell

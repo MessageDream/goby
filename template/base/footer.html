@@ -5,29 +5,20 @@
 	<div>
 		*/}}
 	</div>
-	<!--<footer>
-		<div class="ui container">
-			<div class="ui left">
-				© 2017 Goby version: {{AppVer}} {{if ShowFooterTemplateLoadTime}}页面: <strong>{{LoadTimes .PageStartTime}}</strong> 模板:
-				<strong>{{call .TmplLoadTimes}}</strong>{{end}}
-			</div>
-			<div class="ui right links">
-				{{if .ShowFooterBranding}}
-				<a target="_blank" href="https://github.com/MessageDream/goby"><i class="fa fa-github-square"></i><span class="sr-only">GitHub</span></a>				{{end}}
-				<a target="_blank" href="https://github.com/MessageDream/goby">网址</a>
-				<span class="version">{{GoVer}}</span>
-			</div>
-		</div>
-	</footer>-->
 
-<!-- JavaScript -->
+	<link rel="stylesheet" href="{{AppSubURL}}/plugins/datatable/dataTables.semanticui.css"></link>
+	<link href="{{AppSubURL}}/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+	<!-- JavaScript -->
 	<script src="{{AppSubURL}}/js/jquery-1.11.3.min.js"></script>
 	<script src="{{AppSubURL}}/js/semantic-2.2.9.min.js"></script>
 	<script src="{{AppSubURL}}/plugins/lobibox/js/notifications.js"></script>
 	<script src="{{AppSubURL}}/plugins/cookie/js.cookie.js"></script>
 	<script src="{{AppSubURL}}/plugins/nicescrool/jquery.nicescroll.min.js"></script>
 	<script src="{{AppSubURL}}/plugins/sweetalert2/sweetalert2.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js" integrity="sha256-1hjUhpc44NwiNg8OwMu2QzJXhD8kcj+sJA3aCQZoUjg=" crossorigin="anonymous"></script>
+	<script src="{{AppSubURL}}/plugins/datatable/jquery.dataTables.js"></script>
+	<script src="{{AppSubURL}}/plugins/datatable/dataTables.semanticui.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js" integrity="sha256-1hjUhpc44NwiNg8OwMu2QzJXhD8kcj+sJA3aCQZoUjg="
+	 crossorigin="anonymous"></script>
 	<script src="{{AppSubURL}}/js/goby.js?v={{MD5 AppVer}}"></script>
 	<script>
 		notifyactions();
@@ -61,7 +52,7 @@
 					delay: k
 				});
 
-				 $(notify).attr("data-message",'');	
+				$(notify).attr("data-message", '');
 			}
 		}
 	</script>

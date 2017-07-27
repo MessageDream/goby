@@ -1,4 +1,4 @@
- <!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 
 <head data-suburl="{{AppSubURL}}">
@@ -24,13 +24,13 @@
 	<link rel="shortcut icon" href="{{AppSubURL}}/img/favicon.ico" />
 
 	<!-- Stylesheet -->
-	<link rel="stylesheet" href="{{AppSubURL}}/assets/font-awesome-4.6.3/css/font-awesome.min.css"/>
-	<link rel="stylesheet" href="{{AppSubURL}}/plugins/lobibox/css/lobibox.css"/>
-	<link rel="stylesheet" href="{{AppSubURL}}/plugins/ionicons/css/ionicons.min.css"/>
-	<link rel="stylesheet" href="{{AppSubURL}}/plugins/pacejs/pace.css"/>
-	<link rel="stylesheet" href="{{AppSubURL}}/plugins/sweetalert2/sweetalert2.min.css"/>
-	<link rel="stylesheet" href="{{AppSubURL}}/css/semantic-2.2.9.min.css"/>
-	<link rel="stylesheet" href="{{AppSubURL}}/css/goby.css?v={{MD5 AppVer}}"/>
+	<link rel="stylesheet" href="{{AppSubURL}}/assets/font-awesome-4.6.3/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="{{AppSubURL}}/plugins/lobibox/css/lobibox.css" />
+	<link rel="stylesheet" href="{{AppSubURL}}/plugins/ionicons/css/ionicons.min.css" />
+	<link rel="stylesheet" href="{{AppSubURL}}/plugins/pacejs/pace.css" />
+	<link rel="stylesheet" href="{{AppSubURL}}/plugins/sweetalert2/sweetalert2.min.css" />
+	<link rel="stylesheet" href="{{AppSubURL}}/css/semantic-2.2.9.min.css" />
+	<link rel="stylesheet" href="{{AppSubURL}}/css/goby.css?v={{MD5 AppVer}}" />
 	<title>{{if .Title}}{{.Title}} - {{end}}{{AppName}}</title>
 
 	<meta name="theme-color" content="{{ThemeColorMetaTag}}">
@@ -44,16 +44,29 @@
 		<!--sidebar-->
 		<div class="ui sidebar vertical left menu overlay  borderless visible sidemenu inverted  grey" style="-webkit-transition-duration: 0.1s; transition-duration: 0.1s;"
 		 data-color="grey">
-			 <a class="item logo" href="{{AppSubURL}}/">
-				<img src="{{AppSubURL}}/img/logo.png" alt="stagblogo" />
-				<img src="{{AppSubURL}}/img/thumblogo.png" alt="stagblogo" class="displaynone" />
+			<a class="item logo" href="{{AppSubURL}}/">
+				<img src="{{AppSubURL}}/img/logo.png" alt="gobylogo" />
+				<img src="{{AppSubURL}}/img/thumblogo.png" alt="gobylogo" class="displaynone" />
             </a>
 			<div class="ui accordion inverted">
+				{{if .IsAdmin}}
+				<div class="title {{if .PageIsAdminUsers}} active {{end}} item">
+					<i class="ion-ios-settings titleIcon icon"></i>
+					<i class="dropdown icon"></i> Admin Panel
+				</div>
+				<div class="content {{if .PageIsAdminUsers}} active {{end}}">
+					<a class="item {{if .PageIsAdminUsers}} transition visible {{end}}" href="{{AppSubURL}}/web/admin/users">
+                    User Manager
+					</a>
+				</div>
+				{{end}}
 				<a class="title item{{if .PageIsApps}} active{{end}}" href="{{AppSubURL}}/web/app/list">
 					 <i class="ion-ios-lightbulb titleIcon icon"></i> <span class="colhidden">Apps</span></a>
 				<a class="title item{{if .PageIsAccessKeys}} active{{end}}" href="{{AppSubURL}}/web/access_key/list">
 					 <i class="ion-key titleIcon icon"></i> <span class="colhidden">Keys</span>
 					</a>
+
+
 				<div class="ui divider"></div>
 
 				<a class="title item" target="_blank" href="https://github.com/MessageDream/goby/issues" rel="noreferrer">
@@ -69,8 +82,7 @@
 				<div class="ui menu icon borderless grid" style="height: 57px;" data-color="inverted white">
 					<a class="item labeled openbtn">
                         <i class="ion-navicon-round big icon"></i>
-					</a>
-					{{if .IsSigned}}
+					</a> {{if .IsSigned}}
 					<div class="right menu colhidden">
 						<div class="ui dropdown item">
 							<img class="ui mini circular image" src="{{AppSubURL}}/img/avatar_default.jpg" alt="label-image" />
@@ -115,8 +127,7 @@
 						<a class="item{{if .PageIsSignUp}} active{{end}}" href="{{AppSubURL}}/web/auth/signup">
 							<i class="user icon large"></i>
 							 <strong>注册</strong>
-						</a> 
-						{{end}}
+						</a> {{end}}
 						<a class="item{{if .PageIsSignIn}} active{{end}}" href="{{AppSubURL}}/web/auth/signin?redirect_to={{.Link}}">
 							<i class="large sign in icon "></i>
 							<strong> 登陆 </strong>

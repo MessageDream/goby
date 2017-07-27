@@ -7,9 +7,11 @@ import (
 	"unicode/utf8"
 
 	"github.com/Unknwon/com"
+	. "gopkg.in/ahmetb/go-linq.v3"
 
 	. "github.com/MessageDream/goby/core"
 	"github.com/MessageDream/goby/model"
+	"github.com/MessageDream/goby/model/dto"
 	"github.com/MessageDream/goby/module/infrastructure"
 	"github.com/MessageDream/goby/module/setting"
 )
@@ -84,11 +86,11 @@ func Active(code string) (*model.User, error) {
 		return nil, err
 	}
 
-	if user.IsActive {
+	if user.Status != model.USER_STATUS_UN_ACTIVE {
 		return nil, ErrUserAlreadyActivated
 	}
 
-	user.IsActive = true
+	user.Status = model.USER_STATUS_NORMAL
 	user.GenerateRands()
 	if err := user.Update(nil, "is_active", "rands"); err != nil {
 		return nil, err
@@ -97,7 +99,7 @@ func Active(code string) (*model.User, error) {
 	return user, nil
 }
 
-func Create(uname, pwd, email string, isActive, isAdmin bool) (*model.User, error) {
+func Create(uname, pwd, email string, status int, isAdmin bool) (*model.User, error) {
 
 	if err := isUsableName(reservedUsernames, reservedUserPatterns, uname); err != nil {
 		return nil, err
@@ -108,7 +110,7 @@ func Create(uname, pwd, email string, isActive, isAdmin bool) (*model.User, erro
 		LowerName: strings.ToLower(uname),
 		Password:  pwd,
 		Email:     email,
-		IsActive:  isActive,
+		Status:    status,
 		IsAdmin:   isAdmin,
 	}
 	if exist, err := user.Exist(); err != nil || exist {
@@ -153,7 +155,7 @@ func GetByRands(rands string) (*model.User, error) {
 	return user, nil
 }
 
-func GetByUserName(uname string) (*model.User, error) {
+func SignInWithUserName(uname string) (*model.User, error) {
 	user := &model.User{LowerName: strings.ToLower(uname)}
 
 	if exist, err := user.Get(); err != nil || !exist {
@@ -162,10 +164,15 @@ func GetByUserName(uname string) (*model.User, error) {
 		}
 		return nil, err
 	}
+
+	if user.Status == model.USER_STATUS_FORBIDDEN {
+		return nil, ErrUserForbidden
+	}
+
 	return user, nil
 }
 
-func Signin(emailOrName, pwd string) (*model.User, error) {
+func SignIn(emailOrName, pwd string) (*model.User, error) {
 	var user *model.User
 	if strings.Contains(emailOrName, "@") {
 		if !infrastructure.VerifyEmail(emailOrName) || len(pwd) <= 0 {
@@ -190,5 +197,73 @@ func Signin(emailOrName, pwd string) (*model.User, error) {
 	if !user.ValidatePassword(pwd) {
 		return nil, ErrUserNameOrPasswordInvalide
 	}
+	if user.Status == model.USER_STATUS_FORBIDDEN {
+		return nil, ErrUserForbidden
+	}
 	return user, nil
+}
+
+func QueryUsers(uid uint64, pageIndex, pageCount int, email string) (*dto.Pager, error) {
+	if pageCount > 100 {
+		pageCount = 100
+	}
+	pager, err := model.QueryUsers(uid, pageIndex, pageCount, email)
+	if err != nil {
+		return nil, err
+	}
+
+	var results []*dto.UserDetail
+
+	From(pager.Data).Select(func(item interface{}) interface{} {
+		u := item.(*model.User)
+		var role = 0
+		if u.IsAdmin {
+			role = 1
+		}
+		return &dto.UserDetail{
+			Email:    u.Email,
+			UserName: u.UserName,
+			Role:     role,
+			Status:   u.Status,
+			JoinedAt: u.CreatedAt,
+		}
+	}).ToSlice(&results)
+
+	return &dto.Pager{
+		TotalCount:     pager.TotalCount,
+		TotalPageCount: pager.TotalPageCount,
+		PageIndex:      pager.PageIndex,
+		PageCount:      pager.PageCount,
+		Data:           results,
+	}, nil
+}
+
+func UpdateRole(email string, role int) error {
+
+	user := &model.User{Email: email}
+	if exist, err := user.Get(); err != nil || !exist {
+		if !exist {
+			return ErrUserNotExist
+		}
+		return err
+	}
+
+	user.IsAdmin = role == 1
+
+	return user.Update(nil, "is_admin")
+}
+
+func UpdateStatus(email string, status int) error {
+
+	user := &model.User{Email: email}
+	if exist, err := user.Get(); err != nil || !exist {
+		if !exist {
+			return ErrUserNotExist
+		}
+		return err
+	}
+
+	user.Status = status
+
+	return user.Update(nil, "status")
 }

@@ -78,8 +78,9 @@ func (ctx *HTMLContext) Auth() {
 		if enableReverseProxyAuth {
 			webAuthUser := ctx.Req.Header.Get(reverseProxyAuthUser)
 			if len(webAuthUser) > 0 {
-				u, err := userService.GetByUserName(webAuthUser)
+				u, err := userService.SignInWithUserName(webAuthUser)
 				if err != nil {
+					ctx.SignError = err
 					return
 				}
 				ctx.User = u

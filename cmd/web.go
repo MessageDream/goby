@@ -142,6 +142,7 @@ func runWeb(cliCtx *cli.Context) {
 	reqSignIn := context.Toggle(&context.ToggleOptions{SignInRequire: true})
 	ignSignIn := context.Toggle(&context.ToggleOptions{SignInRequire: setting.Service.RequireSignInView})
 	reqSignOut := context.Toggle(&context.ToggleOptions{SignOutRequire: true})
+	reqAdmin := context.Toggle(&context.ToggleOptions{SignInRequire: true, AdminRequire: true})
 	bindIgnErr := binding.BindIgnErr
 
 	apiBind := binding.Bind
@@ -168,8 +169,20 @@ func runWeb(cliCtx *cli.Context) {
 			m.Combo("/list").Get(web.AccessKeysGet)
 		}, reqSignIn)
 
+		m.Group("/admin/api", func() {
+			m.Get("/users/:pageIndex/:pageCount", web.UsersQuery)
+			m.Post("/users/add", web.UserAddPost)
+			m.Patch("/users/:email/status", web.UserPatch)
+			m.Patch("/users/:email/role", web.UserPatch)
+		}, reqAdmin)
+
+		m.Group("/admin", func() {
+			m.Get("/users", web.UsersGet)
+		}, reqAdmin)
+
 	})
 
+	//cli
 	m.Group("/auth", func() {
 		m.Combo("/login").Get(auth.SignInGet)
 		m.Combo("/register").Get(auth.SignUpGet)

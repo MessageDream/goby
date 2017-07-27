@@ -134,6 +134,10 @@ func checkToken(token string) (*model.User, *model.UserToken, error) {
 		return nil, nil, err
 	}
 
+	if user.Status == model.USER_STATUS_FORBIDDEN {
+		return nil, nil, ErrUserForbidden
+	}
+
 	tok := &model.UserToken{UID: user.ID, Token: token}
 
 	if exist, err := tok.GetUnexpired(); err != nil || !exist {
