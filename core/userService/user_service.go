@@ -3,6 +3,7 @@ package userService
 import (
 	"encoding/hex"
 	"fmt"
+	"strconv"
 	"strings"
 	"unicode/utf8"
 
@@ -43,12 +44,12 @@ func isUsableName(names, patterns []string, name string) error {
 	return nil
 }
 
-func verifyActiveCode(code string) (*model.User, error) {
+func VerifyActiveCode(code string) (*model.User, error) {
 	minutes := setting.Service.ActiveCodeLives
 	limitLength := infrastructure.TimeLimitCodeLength
 
 	if len(code) <= limitLength {
-		return nil, ErrUserActivateTimeLimitCodeLength
+		return nil, ErrUserActivateVerifyFailed
 	}
 
 	hexStr := code[limitLength:]
@@ -68,7 +69,7 @@ func verifyActiveCode(code string) (*model.User, error) {
 		return nil, er
 	}
 	if !exist {
-		return nil, ErrUserNotExist
+		return nil, ErrUserActivateVerifyFailed
 	}
 
 	data := com.ToStr(user.ID) + user.Email + user.LowerName + user.Password + user.Rands
@@ -80,8 +81,40 @@ func verifyActiveCode(code string) (*model.User, error) {
 	return nil, ErrUserActivateVerifyFailed
 }
 
+func ChangePwd(oldPwd, pwd string) error {
+	return nil
+}
+
+func ResetPwd(saltCode, pwd string) error {
+	saltID := strings.Split(saltCode, "&")
+	if len(saltID) < 2 {
+		return ErrUserActivateVerifyFailed
+	}
+	uid, err := strconv.ParseUint(saltID[1], 10, 64)
+	if err != nil {
+		return ErrUserActivateVerifyFailed
+	}
+	user := &model.User{
+		ID:   uid,
+		Salt: saltID[0],
+	}
+
+	if exist, err := user.Get(); err != nil || !exist {
+		if !exist {
+			return ErrUserActivateVerifyFailed
+		}
+		return err
+	}
+
+	user.Password = pwd
+	user.GenerateSalt()
+	user.EncodePasswd()
+
+	return user.Update(nil, "password", "salt")
+}
+
 func Active(code string) (*model.User, error) {
-	user, err := verifyActiveCode(code)
+	user, err := VerifyActiveCode(code)
 	if err != nil {
 		return nil, err
 	}
@@ -132,6 +165,19 @@ func Create(uname, pwd, email string, status int, isAdmin bool) (*model.User, er
 
 func GetByID(uid uint64) (*model.User, error) {
 	user := &model.User{ID: uid}
+
+	if exist, err := user.Get(); err != nil || !exist {
+		if !exist {
+			return nil, ErrUserNotExist
+		}
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func GetByEmail(email string) (*model.User, error) {
+	user := &model.User{Email: email}
 
 	if exist, err := user.Get(); err != nil || !exist {
 		if !exist {

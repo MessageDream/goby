@@ -3,32 +3,41 @@
 	<div class="row">
 		<div class="sixteen wide tablet six wide computer column">
 			<div class="ui left aligned segment">
-			<form class="ui form" action="{{.Link}}" method="post">
-				{{.CsrfTokenHtml}}
-				<input name="code" type="hidden" value="{{.Code}}">
-				<h2 class="ui top attached header">
-					重置密码
-				</h2>
-				<div class="ui attached segment">
-					{{template "base/alert" .}}
-					{{if .IsResetForm}}
-						<div class="required inline field {{if .Err_Password}}error{{end}}">
+				<form class="ui form" action="{{.Link}}" method="post">
+					{{.CsrfTokenHtml}}
+					<input name="code" type="hidden" value="{{.Code}}">
+					<h3 class="ui top attached header center aligned">
+						重置密码
+					</h3>
+					<div class="ui attached segment">
+						{{template "base/alert" .}} {{if .IsResetForm}}
+						<input type="hidden" name="code" value="{{.Code}}" />
+						<div class="required  field {{if .Err_Password}}error{{end}}">
 							<label for="password">密码</label>
-							<input id="password" name="password" type="password"  value="{{.password}}" autofocus required>
+							<input id="password" name="password" type="password" value="{{.password}}" autofocus required>
 						</div>
 						<div class="ui divider"></div>
-						<div class="inline field">
+						<div class=" field">
 							<label></label>
-							<button class="ui blue button">单击此处重置密码</button>
+							<button class="ui blue button" style="width:100%">单击此处重置密码</button>
 						</div>
-					{{else}}
-						<p class="center">=对不起，您的确认代码已过期或已失效</p>
-					{{end}}
-				</div>
-			</form>
-		</div>
+						{{else}}
+						{{if .IsResetSuccess}}
+						<p class="center">密码重置成功，即将返回登陆页面。。。</p>
+						<script>
+							var timer = setTimeout(function() {
+								clearTimeout(timer);
+								document.location.href = '/web/auth/signin';
+							}, 3000);
+						</script> 	
+						{{else}}
+						<p class="center">对不起，您的确认代码已过期或已失效</p>
+						{{end}}
+						{{end}}
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 </div>
-{{template "base/footer_no_nav" .}}
-{{template "base/background" .}}
+{{template "base/footer_no_nav" .}} {{template "base/background" .}}

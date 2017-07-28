@@ -3,35 +3,38 @@
 	<div class="row">
 		<div class="sixteen wide tablet six wide computer column">
 			<div class="ui left aligned segment">
-			<form class="ui form" action="{{.Link}}" method="post">
-				{{.CsrfTokenHtml}}
-				<h2 class="ui top attached header">
-				忘记密码	
-				</h2>
-				<div class="ui attached segment">
-					{{template "base/alert" .}}
-					{{if .IsResetSent}}
-						<p>一封新的确认邮件已经被发送至 <b>{{.SignedUser.Email}}</b>，请检查您的收件箱并在 {{.Hours | Str2html}} 小时内完成确认注册操作</p>
-					{{else if .IsResetRequest}}
-						<div class="required inline field {{if .Err_Email}}error{{end}}">
-							<label for="email">邮箱</label>
-							<input id="email" name="email" type="email"  value="{{.Email}}" autofocus required>
+				<form class="ui form" action="{{.Link}}" method="post">
+					{{.CsrfTokenHtml}}
+					<h3 class="ui top attached header center aligned">
+						Find Password
+					</h3>
+					<div class="ui attached segment">
+						{{template "base/alert" .}} {{if .IsResetSent}}
+						<p>一封新的确认邮件已经被发送至 <b>{{.Email}}</b>，请检查您的收件箱并在 {{.Hours | Str2html}} 小时内完成确认注册操作</p>
+						<input type="hidden" name="email" value="{{.Email}}"/>
+						<div class="field">
+							<label></label>
+							<button class="ui blue button" style="width:100%">单击此处（重新）发送您的密码重置邮件</button>
+						</div>
+						{{else if .IsResetRequest}}
+						<div class="required field {{if .Err_Email}}error{{end}}">
+							<label for="email">Email:</label>
+							<input id="email" name="email" type="email" value="{{.Email}}" placeholder="Email" autofocus required>
 						</div>
 						<div class="ui divider"></div>
-						<div class="inline field">
+						<div class="field">
 							<label></label>
-							<button class="ui blue button">单击此处（重新）发送您的密码重置邮件</button>
+							<button class="ui blue button" style="width:100%">单击此处（重新）发送您的密码重置邮件</button>
 						</div>
-					{{else if .IsResetDisable}}
+						{{else if .IsResetDisable}}
 						<p class="center">对不起，注册邮箱确认功能已被关闭</p>
-					{{else if .ResendLimited}}
+						{{else if .ResendLimited}}
 						<p class="center">对不起，您请求发送激活邮件过于频繁，请等待 3 分钟后再试</p>
-					{{end}}
-				</div>
-			</form>
-		</div>
+						{{end}}
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 </div>
-{{template "base/footer_no_nav" .}}
-{{template "base/background" .}}
+{{template "base/footer_no_nav" .}} {{template "base/background" .}}

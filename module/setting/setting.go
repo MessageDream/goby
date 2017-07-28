@@ -232,7 +232,7 @@ var Service struct {
 	DisableRegistration    bool
 	RequireSignInView      bool
 	EnableCacheAvatar      bool
-	EnableNotifyMail       bool
+	EnableResetPwdMail     bool
 	EnableReverseProxyAuth bool
 	ActiveCodeLives        int
 	ResetPwdCodeLives      int
@@ -379,10 +379,10 @@ func loadServiceConfig() {
 	Service.RequireSignInView = sec.Key("REQUIRE_SIGNIN_VIEW").MustBool()
 	Service.EnableCacheAvatar = sec.Key("ENABLE_CACHE_AVATAR").MustBool()
 	Service.EnableReverseProxyAuth = sec.Key("ENABLE_REVERSE_PROXY_AUTHENTICATION").MustBool()
-	Service.EnableCaptcha = sec.Key("ENABLE_CAPTCHA").MustBool()
+	Service.EnableCaptcha = sec.Key("ENABLE_CAPTCHA").MustBool(true)
 
-	Service.RegisterEmailConfirm = sec.Key("REGISTER_EMAIL_CONFIRM").MustBool()
-	Service.EnableNotifyMail = sec.Key("REGISTER_EMAIL_CONFIRM").MustBool()
+	Service.RegisterEmailConfirm = sec.Key("REGISTER_EMAIL_CONFIRM").MustBool(true)
+	Service.EnableResetPwdMail = sec.Key("ENABLE_RESET_PWD_EMAIL").MustBool(true)
 }
 
 func loadAttachmentConfig() {

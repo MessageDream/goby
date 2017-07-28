@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 	"path"
+	"strconv"
 
 	"github.com/go-macaron/captcha"
 	log "gopkg.in/clog.v1"
@@ -20,9 +21,11 @@ import (
 )
 
 const (
-	SIGNUP   infrastructure.TplName = "auth/signup"
-	SIGNIN   infrastructure.TplName = "auth/signin"
-	ACTIVATE infrastructure.TplName = "auth/activate"
+	SIGNUP    infrastructure.TplName = "auth/signup"
+	SIGNIN    infrastructure.TplName = "auth/signin"
+	ACTIVATE  infrastructure.TplName = "auth/activate"
+	FIND_PWD  infrastructure.TplName = "auth/forgot_passwd"
+	RESET_PWD infrastructure.TplName = "auth/reset_passwd"
 )
 
 func SignUpGet(ctx *context.HTMLContext) {
@@ -308,4 +311,87 @@ func createToken(user *model.User) {
 	if _, err := tokenService.Create(user, creator, creator+"-auto", setting.AppName+"-auto", 0); err != nil {
 		log.Warn("tokenService.Create:%v", err)
 	}
+}
+
+func FindPwdGet(ctx *context.HTMLContext) {
+	if !setting.Service.EnableResetPwdMail {
+		ctx.Data["IsResetDisable"] = true
+	} else {
+		ctx.Data["IsResetRequest"] = true
+	}
+	ctx.HTML(200, FIND_PWD)
+}
+
+func FindPwdPost(ctx *context.HTMLContext, form forms.EmailForm) {
+
+	// ctx.Data["ResendLimited"] = true
+
+	email := form.Email
+
+	if !infrastructure.VerifyEmail(email) {
+		ctx.Data["Err_Email"] = true
+		ctx.RenderWithErr("Email address format is not correct", FIND_PWD, &form)
+	}
+
+	user, err := userService.GetByEmail(email)
+	if err != nil {
+		switch err {
+		case ErrUserNotExist: //不存在也提示已发送
+			break
+			return
+		default:
+			ctx.Handle(500, "userService.GetByEmail", err)
+			return
+		}
+	}
+
+	if err == nil {
+		mailer.SendResetPasswordMail(ctx.Context.Context, model.NewMailerUser(user, setting.Service.ActiveCodeLives))
+	}
+
+	ctx.Data["IsResetSent"] = true
+	ctx.Data["Email"] = email
+	ctx.Data["Hours"] = strconv.Itoa(setting.Service.ActiveCodeLives / 60)
+	ctx.HTML(200, FIND_PWD)
+}
+
+func ResetPwdGet(ctx *context.HTMLContext) {
+
+	code := ctx.Query("code")
+	if len(code) == 0 {
+		ctx.Status(404)
+		return
+	}
+	user, err := userService.VerifyActiveCode(code)
+	if err != nil {
+		ctx.Data["IsResetForm"] = false
+		ctx.HTML(200, RESET_PWD)
+		return
+	}
+
+	ctx.Data["IsResetForm"] = true
+	ctx.Data["Code"] = user.Salt + "&" + strconv.FormatUint(user.ID, 10)
+	ctx.HTML(200, RESET_PWD)
+}
+
+func ResetPwdPost(ctx *context.HTMLContext, form forms.PwdForm) {
+	code := form.Code
+	pwd := form.Password
+	if len(code) == 0 {
+		ctx.Data["IsResetForm"] = false
+		ctx.HTML(200, RESET_PWD)
+		return
+	}
+
+	if err := userService.ResetPwd(code, pwd); err != nil {
+		if err == ErrUserActivateVerifyFailed {
+			ctx.Data["IsResetForm"] = false
+			ctx.HTML(200, RESET_PWD)
+			return
+		}
+		ctx.Error(500, err.Error())
+		return
+	}
+	ctx.Data["IsResetSuccess"] = true
+	ctx.HTML(200, RESET_PWD)
 }

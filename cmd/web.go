@@ -156,6 +156,8 @@ func runWeb(cliCtx *cli.Context) {
 			m.Combo("/signin").Get(web.SignInGet).Post(bindIgnErr(forms.SignInForm{}), web.SignInPost)
 			m.Get("/signout", web.SignOutGet)
 			m.Get("/activate", web.ActivateGet)
+			m.Combo("/forget_password").Get(web.FindPwdGet).Post(bindIgnErr(forms.EmailForm{}), web.FindPwdPost)
+			m.Combo("/reset_password").Get(web.ResetPwdGet).Post(bindIgnErr(forms.PwdForm{}),web.ResetPwdPost)
 		}, ignSignIn)
 
 		m.Group("/app", func() {

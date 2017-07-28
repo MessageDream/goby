@@ -19,14 +19,14 @@
                                     Email or Username:
                                 </label>
 						<div class="ui fluid icon input ">
-							<input name="user_name" type="email" value="{{.user_name}}" autofocus autocomplete="off" style="width:100%!important;min-width:100%;width:100%;">
+							<input name="user_name" type="email" value="{{.user_name}}" autofocus autocomplete style="width:100%!important;min-width:100%;width:100%;">
 							<i class="icon mail outline"></i>
 						</div>
 					</div>
 					<div class="field {{if .Err_Password}}error{{end}}">
 						<label>Password:</label>
 						<div class="ui fluid icon input ">
-							<input name="password" type="password" value="{{.password}}" autocomplete="off" style="width:100%!important;min-width:100%;width:100%;">
+							<input name="password" type="password" value="{{.password}}" autofocus autocomplete="off" style="width:100%!important;min-width:100%;width:100%;">
 							<i class="icon key"></i>
 						</div>
 					</div>

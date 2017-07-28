@@ -83,3 +83,20 @@ type ChangePasswordForm struct {
 func (f *ChangePasswordForm) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
 	return validate(errs, ctx.Data, f)
 }
+
+type EmailForm struct {
+	Email string `form:"email" binding:"Required;Email;MaxSize(50)"`
+}
+
+func (f *EmailForm) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
+	return validate(errs, ctx.Data, f)
+}
+
+type PwdForm struct {
+	Password string `form:"password" binding:"Required;MinSize(6);MaxSize(255)"`
+	Code     string `form:"code"`
+}
+
+func (f *PwdForm) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
+	return validate(errs, ctx.Data, f)
+}
